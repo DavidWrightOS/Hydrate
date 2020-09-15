@@ -15,6 +15,7 @@
 		63A6A135251067F2009417CB /* UIColor+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63A6A134251067F2009417CB /* UIColor+Extension.swift */; };
 		63A6A13725106964009417CB /* UIView+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63A6A13625106964009417CB /* UIView+Extension.swift */; };
 		63A6A139251069E8009417CB /* Date+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63A6A138251069E8009417CB /* Date+Extension.swift */; };
+		63A6A13D25107716009417CB /* WaterAnimationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63A6A13C25107716009417CB /* WaterAnimationView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -28,6 +29,7 @@
 		63A6A134251067F2009417CB /* UIColor+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+Extension.swift"; sourceTree = "<group>"; };
 		63A6A13625106964009417CB /* UIView+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+Extension.swift"; sourceTree = "<group>"; };
 		63A6A138251069E8009417CB /* Date+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+Extension.swift"; sourceTree = "<group>"; };
+		63A6A13C25107716009417CB /* WaterAnimationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WaterAnimationView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -60,6 +62,7 @@
 		63A6A11A251051D9009417CB /* Hydrate */ = {
 			isa = PBXGroup;
 			children = (
+				63A6A13A251070FC009417CB /* Views */,
 				63A6A13025105ED5009417CB /* View Controllers */,
 				63A6A1332510677A009417CB /* Utilities */,
 				63A6A12F251056A0009417CB /* Resources */,
@@ -95,6 +98,14 @@
 				63A6A138251069E8009417CB /* Date+Extension.swift */,
 			);
 			path = Utilities;
+			sourceTree = "<group>";
+		};
+		63A6A13A251070FC009417CB /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				63A6A13C25107716009417CB /* WaterAnimationView.swift */,
+			);
+			path = Views;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -170,6 +181,7 @@
 				63A6A13225105EF2009417CB /* MainViewController.swift in Sources */,
 				63A6A11C251051D9009417CB /* AppDelegate.swift in Sources */,
 				63A6A11E251051D9009417CB /* SceneDelegate.swift in Sources */,
+				63A6A13D25107716009417CB /* WaterAnimationView.swift in Sources */,
 				63A6A13725106964009417CB /* UIView+Extension.swift in Sources */,
 				63A6A135251067F2009417CB /* UIColor+Extension.swift in Sources */,
 				63A6A139251069E8009417CB /* Date+Extension.swift in Sources */,
