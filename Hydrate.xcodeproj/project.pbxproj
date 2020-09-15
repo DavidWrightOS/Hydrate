@@ -52,13 +52,21 @@
 		63A6A11A251051D9009417CB /* Hydrate */ = {
 			isa = PBXGroup;
 			children = (
+				63A6A12F251056A0009417CB /* Resources */,
+			);
+			path = Hydrate;
+			sourceTree = "<group>";
+		};
+		63A6A12F251056A0009417CB /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				63A6A129251051DA009417CB /* Info.plist */,
 				63A6A11B251051D9009417CB /* AppDelegate.swift */,
 				63A6A11D251051D9009417CB /* SceneDelegate.swift */,
 				63A6A124251051DA009417CB /* Assets.xcassets */,
 				63A6A126251051DA009417CB /* LaunchScreen.storyboard */,
-				63A6A129251051DA009417CB /* Info.plist */,
 			);
-			path = Hydrate;
+			path = Resources;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -270,7 +278,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 3BQB6FYF6S;
-				INFOPLIST_FILE = Hydrate/Info.plist;
+				INFOPLIST_FILE = Hydrate/Resources/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -288,7 +296,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 3BQB6FYF6S;
-				INFOPLIST_FILE = Hydrate/Info.plist;
+				INFOPLIST_FILE = Hydrate/Resources/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
