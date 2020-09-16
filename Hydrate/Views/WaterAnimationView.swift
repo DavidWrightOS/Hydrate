@@ -127,9 +127,9 @@ private extension WaterAnimationView {
     }
     
     func animateWaterLevel() {
-        guard background.frame.origin.y > 0 else { return }
-        
         let waterLevelYPosition = bounds.maxY * (1 - waterLevelHeight)
+        
+        guard background.frame.origin.y > 0 || waterLevelYPosition > 0 else { return }
         
         UIView.animate(withDuration: 0.4, delay: 0, options: .curveEaseInOut, animations: {
             self.background.frame.origin.y = max(waterLevelYPosition, 0)
