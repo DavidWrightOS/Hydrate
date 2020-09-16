@@ -20,6 +20,7 @@ extension UIColor {
     static let disabledButtonColor = UIColor(hex: 0x5D5F66)
     static let markerLabelColor = UIColor(hex: 0xd8d8d8).withAlphaComponent(0.4) // UndeadWhite40
     static let markerLineColor = UIColor(hex: 0xd8d8d8).withAlphaComponent(0.2) // UndeadWhite20
+    static let waterColor = UIColor.sicklySmurfBlue.withAlphaComponent(0.5).cgColor
     
     // Create a UIColor from RGB
     convenience init(red: Int, green: Int, blue: Int, a: CGFloat = 1.0) {

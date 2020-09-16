@@ -9,6 +9,8 @@
 import UIKit
 
 class WaterAnimationView: UIView {
+    
+    // MARK: - Public Properties
 
     var waterLevelHeight: CGFloat = 0.0 {
         didSet {
@@ -16,13 +18,35 @@ class WaterAnimationView: UIView {
         }
     }
     
+    // MARK: - Initializers
+     
+     override init(frame: CGRect = .zero) {
+         super.init(frame: frame)
+         configure()
+     }
+
+     required init?(coder: NSCoder) {
+         super.init(coder: coder)
+         configure()
+     }
+
+     override func willMove(toSuperview newSuperview: UIView?) {
+         super.willMove(toSuperview: newSuperview)
+         
+         if newSuperview == nil {
+             displayLink?.invalidate()
+         }
+    }
+    
+    // MARK: - Private Properties
+    
     private weak var displayLink: CADisplayLink?
     private var startTime: CFTimeInterval = 0
     private let waveAmplitude: CGFloat = 6.5
     private let waveSpeedFactor: CGFloat = 1.25
-
     private let delay: CGFloat = .pi / 2.0
-    private let waterColor: CGColor = UIColor.sicklySmurfBlue.withAlphaComponent(0.5).cgColor
+    
+    // MARK: - Private UI Components
     
     private lazy var background: UIView = {
         let background = UIView()
@@ -34,36 +58,18 @@ class WaterAnimationView: UIView {
 
     private lazy var waveLayerForeground: CAShapeLayer = {
         let shapeLayer = CAShapeLayer()
-        shapeLayer.fillColor = waterColor
+        shapeLayer.fillColor = UIColor.waterColor
         return shapeLayer
     }()
     
     private lazy var waveLayerBackground: CAShapeLayer = {
         let shapeLayer = CAShapeLayer()
-        shapeLayer.fillColor = waterColor
+        shapeLayer.fillColor = UIColor.waterColor
         return shapeLayer
     }()
-
-    override init(frame: CGRect = .zero) {
-        super.init(frame: frame)
-
-        configure()
-    }
-
-    required init?(coder: NSCoder) {
-        super.init(coder: coder)
-        
-        configure()
-    }
-
-    override func willMove(toSuperview newSuperview: UIView?) {
-        super.willMove(toSuperview: newSuperview)
-
-        if newSuperview == nil {
-            displayLink?.invalidate()
-        }
-   }
 }
+
+// MARK: - Private Methods
 
 private extension WaterAnimationView {
     
@@ -121,8 +127,12 @@ private extension WaterAnimationView {
     }
     
     func animateWaterLevel() {
+        guard background.frame.origin.y > 0 else { return }
+        
+        let waterLevelYPosition = bounds.maxY * (1 - waterLevelHeight)
+        
         UIView.animate(withDuration: 0.4, delay: 0, options: .curveEaseInOut, animations: {
-            self.background.bounds.origin.y = self.bounds.maxY * self.waterLevelHeight
+            self.background.frame.origin.y = max(waterLevelYPosition, 0)
         }, completion: nil)
     }
 }
