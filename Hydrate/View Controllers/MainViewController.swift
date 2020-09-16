@@ -140,7 +140,7 @@ class MainViewController: UIViewController {
             topControlsStackView.heightAnchor.constraint(equalToConstant: 60)
         ])
     }
-    d    fileprivate func setupIntakeLabels() {
+        fileprivate func setupIntakeLabels() {
         NSLayoutConstraint.activate([
             intakeAmountLabel.centerYAnchor.constraint(equalTo: topControlsStackView.centerYAnchor, constant: -7),
             intakeAmountLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
