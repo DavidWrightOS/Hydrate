@@ -36,6 +36,23 @@ class MainViewController: UIViewController {
         return button
     }()
     
+    fileprivate let customWaterButtons: [UIButton] = {
+        var buttons = [UIButton]()
+        let buttonIntakeAmounts = [8, 12, 16, 20, 32]
+        let buttonDiameter: CGFloat = 80
+        for i in 0..<5 {
+            let button = UIButton()
+            button.translatesAutoresizingMaskIntoConstraints = false
+            button.widthAnchor.constraint(equalToConstant: buttonDiameter).isActive = true
+            button.heightAnchor.constraint(equalToConstant: buttonDiameter).isActive = true
+            button.layer.cornerRadius = buttonDiameter / 2
+            button.backgroundColor = .green
+            button.setTitle("+\(buttonIntakeAmounts[i]) oz.", for: .normal)
+            buttons.append(button)
+        }
+        return buttons
+    }()
+    
     fileprivate let showHistoryButton: UIButton = {
         let button = UIButton()
         button.setImage(UIImage(named: "calendar-button"), for: .normal)
@@ -86,7 +103,6 @@ class MainViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         setupTapGestures()
         setupViews()
     }
@@ -114,6 +130,7 @@ class MainViewController: UIViewController {
         view.addSubview(addWaterIntakeButton)
         
         // Setup subviews
+        setupWaterIntakeButtons()
         setupMeasurementMarkers()
         setupTopControls()
         setupIntakeLabels()
@@ -145,6 +162,15 @@ class MainViewController: UIViewController {
             intakeAmountLabel.centerYAnchor.constraint(equalTo: topControlsStackView.centerYAnchor, constant: -7),
             intakeAmountLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
         ])
+    }
+    
+    fileprivate func setupWaterIntakeButtons() {
+        for button in customWaterButtons {
+            view.addSubview(button)
+            button.center = addWaterIntakeButton.center
+            button.centerYAnchor.constraint(equalTo: addWaterIntakeButton.centerYAnchor).isActive = true
+            button.centerXAnchor.constraint(equalTo: addWaterIntakeButton.centerXAnchor).isActive = true
+        }
     }
     
     fileprivate func updateViews() {
