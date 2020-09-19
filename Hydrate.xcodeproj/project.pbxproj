@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		638DC5852516718200C4D1D9 /* DataViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 638DC5842516718200C4D1D9 /* DataViewController.swift */; };
 		63A6A11C251051D9009417CB /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63A6A11B251051D9009417CB /* AppDelegate.swift */; };
 		63A6A11E251051D9009417CB /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63A6A11D251051D9009417CB /* SceneDelegate.swift */; };
 		63A6A125251051DA009417CB /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 63A6A124251051DA009417CB /* Assets.xcassets */; };
@@ -19,6 +20,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		638DC5842516718200C4D1D9 /* DataViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataViewController.swift; sourceTree = "<group>"; };
 		63A6A118251051D9009417CB /* Hydrate.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Hydrate.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		63A6A11B251051D9009417CB /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		63A6A11D251051D9009417CB /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -86,6 +88,7 @@
 			isa = PBXGroup;
 			children = (
 				63A6A13125105EF2009417CB /* MainViewController.swift */,
+				638DC5842516718200C4D1D9 /* DataViewController.swift */,
 			);
 			path = "View Controllers";
 			sourceTree = "<group>";
@@ -182,6 +185,7 @@
 				63A6A11C251051D9009417CB /* AppDelegate.swift in Sources */,
 				63A6A11E251051D9009417CB /* SceneDelegate.swift in Sources */,
 				63A6A13D25107716009417CB /* WaterAnimationView.swift in Sources */,
+				638DC5852516718200C4D1D9 /* DataViewController.swift in Sources */,
 				63A6A13725106964009417CB /* UIView+Extension.swift in Sources */,
 				63A6A135251067F2009417CB /* UIColor+Extension.swift in Sources */,
 				63A6A139251069E8009417CB /* Date+Extension.swift in Sources */,
