@@ -53,14 +53,14 @@ class MainViewController: UIViewController {
         return buttons
     }()
     
-    fileprivate let showHistoryButton: UIButton = {
+    fileprivate let showDataButton: UIButton = {
         let button = UIButton()
         button.setImage(UIImage(named: "calendar-button"), for: .normal)
         button.tintColor = UIColor.undeadWhite
         button.contentHorizontalAlignment = .center
         button.imageView?.contentMode = .scaleAspectFit
         button.imageEdgeInsets = UIEdgeInsets(top: 10.0, left: 10.0, bottom: 10.0, right: 10.0);
-        button.addTarget(self, action: #selector(handleShowHistoryTapped), for: .touchUpInside)
+        button.addTarget(self, action: #selector(handleShowDataTapped), for: .touchUpInside)
         return button
     }()
     
@@ -146,7 +146,7 @@ class MainViewController: UIViewController {
     }
     
     fileprivate func setupTopControls() {
-        topControlsStackView.addArrangedSubview(showHistoryButton)
+        topControlsStackView.addArrangedSubview(showDataButton)
         topControlsStackView.addArrangedSubview(UIView()) // spacer view
         topControlsStackView.addArrangedSubview(showSettingsButton)
         
@@ -269,8 +269,9 @@ class MainViewController: UIViewController {
     
     // Page Navigation
     
-    @objc fileprivate func handleShowHistoryTapped() {
-        print("DEBUG: Show History View Controller..")
+    @objc fileprivate func handleShowDataTapped() {
+        let dvc = DataViewController()
+        present(dvc, animated: true, completion: nil)
     }
     
     @objc fileprivate func handleShowSettingsTapped() {
