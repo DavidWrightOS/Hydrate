@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		635939C3251888EA00776BB9 /* Hydrate.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 635939C1251888EA00776BB9 /* Hydrate.xcdatamodeld */; };
 		638DC5852516718200C4D1D9 /* DataViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 638DC5842516718200C4D1D9 /* DataViewController.swift */; };
 		638DC58925182EB900C4D1D9 /* DailyLogTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 638DC58825182EB900C4D1D9 /* DailyLogTableViewController.swift */; };
 		63A6A11C251051D9009417CB /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63A6A11B251051D9009417CB /* AppDelegate.swift */; };
@@ -21,6 +22,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		635939C2251888EA00776BB9 /* Hydrate.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Hydrate.xcdatamodel; sourceTree = "<group>"; };
 		638DC5842516718200C4D1D9 /* DataViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataViewController.swift; sourceTree = "<group>"; };
 		638DC58825182EB900C4D1D9 /* DailyLogTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DailyLogTableViewController.swift; sourceTree = "<group>"; };
 		63A6A118251051D9009417CB /* Hydrate.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Hydrate.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -47,6 +49,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		635939C0251888BA00776BB9 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				635939C1251888EA00776BB9 /* Hydrate.xcdatamodeld */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
 		63A6A10F251051D9009417CB = {
 			isa = PBXGroup;
 			children = (
@@ -66,6 +76,7 @@
 		63A6A11A251051D9009417CB /* Hydrate */ = {
 			isa = PBXGroup;
 			children = (
+				635939C0251888BA00776BB9 /* Models */,
 				63A6A13A251070FC009417CB /* Views */,
 				63A6A13025105ED5009417CB /* View Controllers */,
 				63A6A1332510677A009417CB /* Utilities */,
@@ -185,6 +196,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				638DC58925182EB900C4D1D9 /* DailyLogTableViewController.swift in Sources */,
+				635939C3251888EA00776BB9 /* Hydrate.xcdatamodeld in Sources */,
 				63A6A13225105EF2009417CB /* MainViewController.swift in Sources */,
 				63A6A11C251051D9009417CB /* AppDelegate.swift in Sources */,
 				63A6A11E251051D9009417CB /* SceneDelegate.swift in Sources */,
@@ -384,6 +396,19 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		635939C1251888EA00776BB9 /* Hydrate.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				635939C2251888EA00776BB9 /* Hydrate.xcdatamodel */,
+			);
+			currentVersion = 635939C2251888EA00776BB9 /* Hydrate.xcdatamodel */;
+			path = Hydrate.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
 	};
 	rootObject = 63A6A110251051D9009417CB /* Project object */;
 }
