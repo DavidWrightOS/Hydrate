@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		635939C3251888EA00776BB9 /* Hydrate.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 635939C1251888EA00776BB9 /* Hydrate.xcdatamodeld */; };
+		635939C625188A7F00776BB9 /* CoreDataStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 635939C525188A7F00776BB9 /* CoreDataStack.swift */; };
 		638DC5852516718200C4D1D9 /* DataViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 638DC5842516718200C4D1D9 /* DataViewController.swift */; };
 		638DC58925182EB900C4D1D9 /* DailyLogTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 638DC58825182EB900C4D1D9 /* DailyLogTableViewController.swift */; };
 		63A6A11C251051D9009417CB /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63A6A11B251051D9009417CB /* AppDelegate.swift */; };
@@ -23,6 +24,7 @@
 
 /* Begin PBXFileReference section */
 		635939C2251888EA00776BB9 /* Hydrate.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Hydrate.xcdatamodel; sourceTree = "<group>"; };
+		635939C525188A7F00776BB9 /* CoreDataStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataStack.swift; sourceTree = "<group>"; };
 		638DC5842516718200C4D1D9 /* DataViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataViewController.swift; sourceTree = "<group>"; };
 		638DC58825182EB900C4D1D9 /* DailyLogTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DailyLogTableViewController.swift; sourceTree = "<group>"; };
 		63A6A118251051D9009417CB /* Hydrate.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Hydrate.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -53,6 +55,7 @@
 			isa = PBXGroup;
 			children = (
 				635939C1251888EA00776BB9 /* Hydrate.xcdatamodeld */,
+				635939C525188A7F00776BB9 /* CoreDataStack.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -201,6 +204,7 @@
 				63A6A11C251051D9009417CB /* AppDelegate.swift in Sources */,
 				63A6A11E251051D9009417CB /* SceneDelegate.swift in Sources */,
 				63A6A13D25107716009417CB /* WaterAnimationView.swift in Sources */,
+				635939C625188A7F00776BB9 /* CoreDataStack.swift in Sources */,
 				638DC5852516718200C4D1D9 /* DataViewController.swift in Sources */,
 				63A6A13725106964009417CB /* UIView+Extension.swift in Sources */,
 				63A6A135251067F2009417CB /* UIColor+Extension.swift in Sources */,
