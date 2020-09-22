@@ -7,16 +7,37 @@
 //
 
 import UIKit
+import CoreData
 
 class DailyLogTableViewController: UITableViewController {
 
     // MARK: - Properties
+    lazy var  coreDataStack = CoreDataStack.shared
     
+    lazy var fetchedResultsController: NSFetchedResultsController<IntakeEntry> = {
+        let fetchRequest: NSFetchRequest<IntakeEntry> = IntakeEntry.fetchRequest()
+        fetchRequest.sortDescriptors = [NSSortDescriptor(key: #keyPath(IntakeEntry.timestamp), ascending: false)]
+        
+        let fetchedResultsController = NSFetchedResultsController(
+            fetchRequest: fetchRequest,
+            managedObjectContext: coreDataStack.mainContext,
+            sectionNameKeyPath: nil,
+            cacheName: "hydrate")
+        
+        fetchedResultsController.delegate = self
+        return fetchedResultsController
+    }()
     
     // MARK: - Lifecycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        do {
+            try fetchedResultsController.performFetch()
+        } catch let error as NSError {
+            print("Fetching error: \(error), \(error.userInfo)")
+        }
         
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false

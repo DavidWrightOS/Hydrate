@@ -28,19 +28,15 @@ class CoreDataStack {
         return container
     }()
     
-    func saveContext() throws {
+    func saveContext() {
         guard mainContext.hasChanges else { return }
-        
-        var error: Error?
         
         mainContext.performAndWait {
             do {
                 try mainContext.save()
-            } catch let saveError {
-                error = saveError
+            } catch let error as NSError {
+                print("Unresolved error \(error), \(error.userInfo)")
             }
         }
-        
-        if let error = error { throw error }
     }
 }
