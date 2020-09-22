@@ -36,6 +36,16 @@ class DataViewController: UIViewController {
         return containerView
     }()
     
+    fileprivate lazy var tableViewNavigationController: UINavigationController = {
+        let dailyLogTableVC = DailyLogTableViewController()
+        let navController = UINavigationController(rootViewController: dailyLogTableVC)
+        navController.navigationBar.barTintColor = .ravenClawBlue
+        navController.navigationBar.tintColor = .sicklySmurfBlue
+        navController.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.undeadWhite]
+        navController.navigationBar.isTranslucent = false
+        return navController
+    }()
+    
     // MARK: - Lifecycle
     
     override func viewDidLoad() {
@@ -76,6 +86,17 @@ class DataViewController: UIViewController {
                              leading: view.leadingAnchor,
                              bottom: view.bottomAnchor,
                              trailing: view.trailingAnchor)
+        setupTableViewNavigationController()
+    }
+    
+    fileprivate func setupTableViewNavigationController() {
+        addChild(tableViewNavigationController)
+        containerView.addSubview(tableViewNavigationController.view)
+        tableViewNavigationController.didMove(toParent: self)
+        tableViewNavigationController.view.anchor(top: containerView.topAnchor,
+                                                  leading: containerView.leadingAnchor,
+                                                  bottom: containerView.bottomAnchor,
+                                                  trailing: containerView.trailingAnchor)
     }
     
     @objc fileprivate func doneButtonTapped() {
