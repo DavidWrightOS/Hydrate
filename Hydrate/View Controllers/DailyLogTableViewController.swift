@@ -94,18 +94,21 @@ class DailyLogTableViewController: UITableViewController {
 
     // MARK: - Table view data source
     
-    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        3
+    override func numberOfSections(in tableView: UITableView) -> Int {
+        return fetchedResultsController.sections?.count ?? 0
     }
-
+    
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        guard let sectionInfo = fetchedResultsController.sections?[section] else { return 0 }
+        return sectionInfo.numberOfObjects
+    }
+    
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         var cell: UITableViewCell! = tableView.dequeueReusableCell(withIdentifier: "dailyLogCell")
         if cell == nil {
             cell = DailyLogTableViewController.dailyLogCell
         }
-        
-        cell.textLabel?.text = dateFormatter.string(from: Date())
-        cell.detailTextLabel?.text = "0 oz."
+        configure(cell: cell, for: indexPath)
         
         return cell
     }
@@ -120,8 +123,16 @@ class DailyLogTableViewController: UITableViewController {
         }
     }
     
+    func configure(cell: UITableViewCell, for indexPath: IndexPath) {
+        let intakeEntry = fetchedResultsController.object(at: indexPath)
+        cell.textLabel?.text = dateFormatter.string(from: intakeEntry.timestamp!)
+        cell.detailTextLabel?.text = "\(intakeEntry.amount) oz."
+    }
+    
     @objc fileprivate func addDataButtonTapped() {
         print("DEBUG: Add data button tapped..")
+        let _ = IntakeEntry(intakeAmount: 8)
+        self.coreDataStack.saveContext()
     }
 }
 
