@@ -39,10 +39,10 @@ class MainViewController: UIViewController {
     
     fileprivate lazy var customWaterButtons: [UIButton] = {
         var buttons = [UIButton]()
-        buttonIntakeAmounts = [8, 12, 16, 20, 32]
         let buttonDiameter: CGFloat = 60
         for i in 0..<5 {
             let button = UIButton()
+            button.tag = i
             button.translatesAutoresizingMaskIntoConstraints = false
             button.widthAnchor.constraint(equalToConstant: buttonDiameter).isActive = true
             button.heightAnchor.constraint(equalToConstant: buttonDiameter).isActive = true
@@ -51,6 +51,7 @@ class MainViewController: UIViewController {
             button.setTitleColor(#colorLiteral(red: 0.2875679024, green: 0.5309943961, blue: 0.5983251284, alpha: 1), for: .normal)
             button.setTitle("\(buttonIntakeAmounts[i]) oz.", for: .normal)
             button.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .bold)
+            button.addTarget(self, action: #selector(customWaterButtonTapped), for: .touchUpInside)
             buttons.append(button)
         }
         return buttons
@@ -281,12 +282,23 @@ class MainViewController: UIViewController {
         return markerView
     }
     
+    fileprivate func addWater(_ intakeAmount: Int) {
+        totalIntake += intakeAmount
+    }
+    
     // MARK: - UIButton Selectors
     
     // Add Water Button (Short Tap)
     
     @objc fileprivate func handleNormalPress(){
         totalIntake = totalIntake > targetDailyIntake * 2 ? 0 : totalIntake + 12
+    }
+    
+    @objc fileprivate func customWaterButtonTapped(_ sender: UIButton) {
+        guard sender.tag >= 0, sender.tag < buttonIntakeAmounts.count else { return }
+        
+        let intakeAmount = buttonIntakeAmounts[sender.tag]
+        addWater(intakeAmount)
     }
     
     // Page Navigation
