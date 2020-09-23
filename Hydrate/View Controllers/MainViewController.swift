@@ -290,6 +290,7 @@ class MainViewController: UIViewController {
             self.customWaterButtons.forEach { $0.transform = CGAffineTransform(translationX: buttonOffsets[$0.tag].x, y: buttonOffsets[$0.tag].y) }
             self.addWaterIntakeButton.alpha = 0.5
         })
+        isShowingIntakeButtons = true
     }
     
     fileprivate func hideIntakeButtons(selectedButtonIndex: Int? = nil) {
@@ -313,6 +314,7 @@ class MainViewController: UIViewController {
                 self.addWaterIntakeButton.alpha = 1
             })
         }
+        isShowingIntakeButtons = false
     }
     
     // MARK: - UIButton Selectors
@@ -324,10 +326,8 @@ class MainViewController: UIViewController {
     @objc fileprivate func handleNormalPress() {
         if isShowingIntakeButtons {
             hideIntakeButtons()
-            isShowingIntakeButtons = false
         } else {
             showIntakeButtons()
-            isShowingIntakeButtons = true
         }
     }
     
