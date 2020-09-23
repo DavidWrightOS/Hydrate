@@ -77,8 +77,8 @@ class MainViewController: UIViewController {
         return button
     }()
     
-    fileprivate let intakeAmountLabel: UILabel = {
-        let label = UILabel()
+    fileprivate let intakeAmountLabel: AnimatedLabel = {
+        let label = AnimatedLabel()
         label.text = "0 oz."
         label.textAlignment = .center
         label.textColor = .undeadWhite
@@ -278,6 +278,7 @@ class MainViewController: UIViewController {
     }
     
     fileprivate func addWater(_ intakeAmount: Int) {
+        intakeAmountLabel.count(from: Float(totalIntake), to: Float(totalIntake + intakeAmount), duration: 0.4)
         totalIntake += intakeAmount
         hideIntakeButtons()
     }
