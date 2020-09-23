@@ -280,7 +280,6 @@ class MainViewController: UIViewController {
     fileprivate func addWater(_ intakeAmount: Int) {
         intakeAmountLabel.count(from: Float(totalIntake), to: Float(totalIntake + intakeAmount), duration: 0.4)
         totalIntake += intakeAmount
-        hideIntakeButtons()
     }
     
     // MARK: - Animations
@@ -293,11 +292,27 @@ class MainViewController: UIViewController {
         })
     }
     
-    fileprivate func hideIntakeButtons() {
-        UIView.animate(withDuration: 0.35, delay: 0, usingSpringWithDamping: 0.7, initialSpringVelocity: 1, options: .curveEaseIn, animations: {
-            self.customWaterButtons.forEach { $0.transform = .identity }
-            self.addWaterIntakeButton.alpha = 1
-        })
+    fileprivate func hideIntakeButtons(selectedButtonIndex: Int? = nil) {
+        if let selectedButtonIndex = selectedButtonIndex {
+            UIView.animate(withDuration: 0.35, delay: 0, usingSpringWithDamping: 0.7, initialSpringVelocity: 1, options: .curveEaseIn) {
+                for button in self.customWaterButtons where button.tag != selectedButtonIndex {
+                    button.transform = .identity
+                }
+                self.addWaterIntakeButton.alpha = 1
+            }
+            UIView.animate(withDuration: 0.5, delay: 0.5, options: .curveEaseInOut) {
+                self.customWaterButtons[selectedButtonIndex].alpha = 0
+            } completion: { _ in
+                self.customWaterButtons[selectedButtonIndex].transform = .identity
+                self.customWaterButtons[selectedButtonIndex].alpha = 1
+            }
+            
+        } else {
+            UIView.animate(withDuration: 0.35, delay: 0, usingSpringWithDamping: 0.7, initialSpringVelocity: 1, options: .curveEaseIn, animations: {
+                self.customWaterButtons.forEach { $0.transform = .identity }
+                self.addWaterIntakeButton.alpha = 1
+            })
+        }
     }
     
     // MARK: - UIButton Selectors
@@ -321,6 +336,7 @@ class MainViewController: UIViewController {
         
         let intakeAmount = buttonIntakeAmounts[sender.tag]
         addWater(intakeAmount)
+        hideIntakeButtons(selectedButtonIndex: sender.tag)
     }
     
     // Page Navigation
