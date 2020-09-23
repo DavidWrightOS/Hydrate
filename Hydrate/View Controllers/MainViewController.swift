@@ -20,6 +20,7 @@ class MainViewController: UIViewController {
     }
     
     var targetDailyIntake: Int = 96
+    var buttonIntakeAmounts = [8, 12, 16, 20, 32]
     
     var waterLevel: CGFloat {
         CGFloat(totalIntake) / CGFloat(targetDailyIntake) * ((view.bounds.maxY - measurementMarkersView.frame.minY) / view.bounds.maxY)
@@ -36,18 +37,20 @@ class MainViewController: UIViewController {
         return button
     }()
     
-    fileprivate let customWaterButtons: [UIButton] = {
+    fileprivate lazy var customWaterButtons: [UIButton] = {
         var buttons = [UIButton]()
-        let buttonIntakeAmounts = [8, 12, 16, 20, 32]
-        let buttonDiameter: CGFloat = 80
+        buttonIntakeAmounts = [8, 12, 16, 20, 32]
+        let buttonDiameter: CGFloat = 60
         for i in 0..<5 {
             let button = UIButton()
             button.translatesAutoresizingMaskIntoConstraints = false
             button.widthAnchor.constraint(equalToConstant: buttonDiameter).isActive = true
             button.heightAnchor.constraint(equalToConstant: buttonDiameter).isActive = true
             button.layer.cornerRadius = buttonDiameter / 2
-            button.backgroundColor = .green
-            button.setTitle("+\(buttonIntakeAmounts[i]) oz.", for: .normal)
+            button.backgroundColor = .undeadWhite
+            button.setTitleColor(#colorLiteral(red: 0.2875679024, green: 0.5309943961, blue: 0.5983251284, alpha: 1), for: .normal)
+            button.setTitle("\(buttonIntakeAmounts[i]) oz.", for: .normal)
+            button.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .bold)
             buttons.append(button)
         }
         return buttons
@@ -120,7 +123,7 @@ class MainViewController: UIViewController {
     
     fileprivate func setupViews() {
         view.backgroundColor = UIColor.ravenClawBlue
-        waterView = WaterAnimationView(frame: CGRect(origin: .zero, size: view.bounds.size))
+        waterView = WaterAnimationView(frame: view.frame)
         view.addSubview(waterView)
         
         // Add subviews
@@ -159,18 +162,37 @@ class MainViewController: UIViewController {
     }
         fileprivate func setupIntakeLabels() {
         NSLayoutConstraint.activate([
-            intakeAmountLabel.centerYAnchor.constraint(equalTo: topControlsStackView.centerYAnchor, constant: -7),
+            intakeAmountLabel.centerYAnchor.constraint(equalTo: topControlsStackView.centerYAnchor, constant: -4),
             intakeAmountLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
         ])
     }
     
     fileprivate func setupWaterIntakeButtons() {
-        for button in customWaterButtons {
+        let buttonCenterOffsets = intakeButtonOffets(buttonCount: customWaterButtons.count, radius: 90)
+        for (i, button) in customWaterButtons.enumerated() {
             view.addSubview(button)
-            button.center = addWaterIntakeButton.center
-            button.centerYAnchor.constraint(equalTo: addWaterIntakeButton.centerYAnchor).isActive = true
-            button.centerXAnchor.constraint(equalTo: addWaterIntakeButton.centerXAnchor).isActive = true
+            button.centerYAnchor.constraint(equalTo: addWaterIntakeButton.centerYAnchor, constant: buttonCenterOffsets[i].y).isActive = true
+            button.centerXAnchor.constraint(equalTo: addWaterIntakeButton.centerXAnchor, constant: buttonCenterOffsets[i].x).isActive = true
         }
+    }
+    
+    fileprivate func intakeButtonOffets(buttonCount: Int, radius: CGFloat) -> [CGPoint] {
+        var offsets: [CGPoint] = []
+        let startAngleDeg: CGFloat = -200
+        let stopAngleDeg: CGFloat = 20
+        
+        // compute angular distance between buttons
+        let startAngle: CGFloat = startAngleDeg * .pi / 180
+        let stopAngle: CGFloat = stopAngleDeg * .pi / 180
+        let angularStep = (stopAngle - startAngle) / CGFloat(buttonCount - 1)
+        
+        for i in 0 ..< buttonCount {
+            let xOffset = radius * cos(CGFloat(i) * angularStep + startAngle)
+            let yOffset = radius * sin(CGFloat(i) * angularStep + startAngle)
+            offsets.append(CGPoint(x: xOffset, y: yOffset))
+        }
+
+        return offsets
     }
     
     fileprivate func updateViews() {
