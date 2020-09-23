@@ -40,16 +40,14 @@ class MainViewController: UIViewController {
     fileprivate lazy var customWaterButtons: [UIButton] = {
         var buttons = [UIButton]()
         let buttonDiameter: CGFloat = 60
-        for i in 0..<5 {
+        for index in 0..<5 {
             let button = UIButton()
-            button.tag = i
-            button.translatesAutoresizingMaskIntoConstraints = false
-            button.widthAnchor.constraint(equalToConstant: buttonDiameter).isActive = true
-            button.heightAnchor.constraint(equalToConstant: buttonDiameter).isActive = true
+            button.tag = index
+            button.bounds.size = CGSize(width: buttonDiameter, height: buttonDiameter)
             button.layer.cornerRadius = buttonDiameter / 2
             button.backgroundColor = .undeadWhite
             button.setTitleColor(#colorLiteral(red: 0.2875679024, green: 0.5309943961, blue: 0.5983251284, alpha: 1), for: .normal)
-            button.setTitle("\(buttonIntakeAmounts[i]) oz.", for: .normal)
+            button.setTitle("\(buttonIntakeAmounts[index]) oz.", for: .normal)
             button.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .bold)
             button.addTarget(self, action: #selector(customWaterButtonTapped), for: .touchUpInside)
             buttons.append(button)
@@ -131,10 +129,10 @@ class MainViewController: UIViewController {
         view.addSubview(measurementMarkersView)
         view.addSubview(topControlsStackView)
         view.addSubview(intakeAmountLabel)
+        customWaterButtons.forEach { view.addSubview($0) }
         view.addSubview(addWaterIntakeButton)
         
         // Setup subviews
-        setupWaterIntakeButtons()
         setupMeasurementMarkers()
         setupTopControls()
         setupIntakeLabels()
@@ -147,6 +145,8 @@ class MainViewController: UIViewController {
             addWaterIntakeButton.widthAnchor.constraint(equalToConstant: 98),
             addWaterIntakeButton.heightAnchor.constraint(equalToConstant: 98),
         ])
+        
+        //setupWaterIntakeButtons()
     }
     
     fileprivate func setupTopControls() {
@@ -168,13 +168,8 @@ class MainViewController: UIViewController {
         ])
     }
     
-    fileprivate func setupWaterIntakeButtons() {
-        let buttonCenterOffsets = intakeButtonOffets(buttonCount: customWaterButtons.count, radius: 90)
-        for (i, button) in customWaterButtons.enumerated() {
-            view.addSubview(button)
-            button.centerYAnchor.constraint(equalTo: addWaterIntakeButton.centerYAnchor, constant: buttonCenterOffsets[i].y).isActive = true
-            button.centerXAnchor.constraint(equalTo: addWaterIntakeButton.centerXAnchor, constant: buttonCenterOffsets[i].x).isActive = true
-        }
+    override func viewDidLayoutSubviews() {
+        customWaterButtons.forEach { $0.center = self.addWaterIntakeButton.center }
     }
     
     fileprivate func intakeButtonOffets(buttonCount: Int, radius: CGFloat) -> [CGPoint] {
@@ -284,14 +279,40 @@ class MainViewController: UIViewController {
     
     fileprivate func addWater(_ intakeAmount: Int) {
         totalIntake += intakeAmount
+        hideIntakeButtons()
+    }
+    
+    // MARK: - Animations
+    
+    fileprivate func showIntakeButtons() {
+        UIView.animate(withDuration: 0.35, delay: 0, usingSpringWithDamping: 0.7, initialSpringVelocity: 1, options: .curveEaseOut, animations: {
+            let buttonOffsets = self.intakeButtonOffets(buttonCount: self.customWaterButtons.count, radius: 90)
+            self.customWaterButtons.forEach { $0.transform = CGAffineTransform(translationX: buttonOffsets[$0.tag].x, y: buttonOffsets[$0.tag].y) }
+            self.addWaterIntakeButton.alpha = 0.5
+        })
+    }
+    
+    fileprivate func hideIntakeButtons() {
+        UIView.animate(withDuration: 0.35, delay: 0, usingSpringWithDamping: 0.7, initialSpringVelocity: 1, options: .curveEaseIn, animations: {
+            self.customWaterButtons.forEach { $0.transform = .identity }
+            self.addWaterIntakeButton.alpha = 1
+        })
     }
     
     // MARK: - UIButton Selectors
     
     // Add Water Button (Short Tap)
     
-    @objc fileprivate func handleNormalPress(){
-        totalIntake = totalIntake > targetDailyIntake * 2 ? 0 : totalIntake + 12
+    fileprivate var isShowingIntakeButtons = false
+    
+    @objc fileprivate func handleNormalPress() {
+        if isShowingIntakeButtons {
+            hideIntakeButtons()
+            isShowingIntakeButtons = false
+        } else {
+            showIntakeButtons()
+            isShowingIntakeButtons = true
+        }
     }
     
     @objc fileprivate func customWaterButtonTapped(_ sender: UIButton) {
