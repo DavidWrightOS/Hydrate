@@ -46,7 +46,7 @@ class MainViewController: UIViewController {
             button.bounds.size = CGSize(width: buttonDiameter, height: buttonDiameter)
             button.layer.cornerRadius = buttonDiameter / 2
             button.backgroundColor = #colorLiteral(red: 0.1022377216, green: 0.5984256684, blue: 0.8548628818, alpha: 1)
-            button.setTitleColor(.white, for: .normal) // #colorLiteral(red: 0.2875679024, green: 0.5309943961, blue: 0.5983251284, alpha: 1)
+            button.setTitleColor(.white, for: .normal)
             button.setTitle("\(buttonIntakeAmounts[index]) oz.", for: .normal)
             button.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .bold)
             button.addTarget(self, action: #selector(customWaterButtonTapped), for: .touchUpInside)
@@ -146,7 +146,7 @@ class MainViewController: UIViewController {
             addWaterIntakeButton.heightAnchor.constraint(equalToConstant: 98),
         ])
         
-        //setupWaterIntakeButtons()
+        view.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(mainViewTapped)))
     }
     
     fileprivate func setupTopControls() {
@@ -303,6 +303,12 @@ class MainViewController: UIViewController {
             self.addWaterIntakeButton.alpha = 1
         }
         isShowingIntakeButtons = false
+    }
+    
+    @objc fileprivate func mainViewTapped() {
+        if isShowingIntakeButtons {
+            hideIntakeButtons()
+        }
     }
     
     fileprivate func addWaterLabelAnimation(withText text: String, startingCenterPoint: CGPoint) {
