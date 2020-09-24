@@ -45,8 +45,8 @@ class MainViewController: UIViewController {
             button.tag = index
             button.bounds.size = CGSize(width: buttonDiameter, height: buttonDiameter)
             button.layer.cornerRadius = buttonDiameter / 2
-            button.backgroundColor = .undeadWhite
-            button.setTitleColor(#colorLiteral(red: 0.2875679024, green: 0.5309943961, blue: 0.5983251284, alpha: 1), for: .normal)
+            button.backgroundColor = #colorLiteral(red: 0.1022377216, green: 0.5984256684, blue: 0.8548628818, alpha: 1)
+            button.setTitleColor(.white, for: .normal) // #colorLiteral(red: 0.2875679024, green: 0.5309943961, blue: 0.5983251284, alpha: 1)
             button.setTitle("\(buttonIntakeAmounts[index]) oz.", for: .normal)
             button.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .bold)
             button.addTarget(self, action: #selector(customWaterButtonTapped), for: .touchUpInside)
@@ -285,7 +285,7 @@ class MainViewController: UIViewController {
     // MARK: - Animations
     
     fileprivate func showIntakeButtons() {
-        UIView.animate(withDuration: 0.35, delay: 0, usingSpringWithDamping: 0.7, initialSpringVelocity: 1, options: .curveEaseOut, animations: {
+        UIView.animate(withDuration: 0.2, delay: 0, usingSpringWithDamping: 0.9, initialSpringVelocity: 1, options: .curveEaseOut, animations: {
             let buttonOffsets = self.intakeButtonOffets(buttonCount: self.customWaterButtons.count, radius: 90)
             self.customWaterButtons.forEach { $0.transform = CGAffineTransform(translationX: buttonOffsets[$0.tag].x, y: buttonOffsets[$0.tag].y) }
             self.addWaterIntakeButton.alpha = 0.5
@@ -295,26 +295,46 @@ class MainViewController: UIViewController {
     
     fileprivate func hideIntakeButtons(selectedButtonIndex: Int? = nil) {
         if let selectedButtonIndex = selectedButtonIndex {
-            UIView.animate(withDuration: 0.35, delay: 0, usingSpringWithDamping: 0.7, initialSpringVelocity: 1, options: .curveEaseIn) {
-                for button in self.customWaterButtons where button.tag != selectedButtonIndex {
-                    button.transform = .identity
-                }
-                self.addWaterIntakeButton.alpha = 1
-            }
-            UIView.animate(withDuration: 0.5, delay: 0.5, options: .curveEaseInOut) {
-                self.customWaterButtons[selectedButtonIndex].alpha = 0
-            } completion: { _ in
-                self.customWaterButtons[selectedButtonIndex].transform = .identity
-                self.customWaterButtons[selectedButtonIndex].alpha = 1
-            }
-            
-        } else {
-            UIView.animate(withDuration: 0.35, delay: 0, usingSpringWithDamping: 0.7, initialSpringVelocity: 1, options: .curveEaseIn, animations: {
-                self.customWaterButtons.forEach { $0.transform = .identity }
-                self.addWaterIntakeButton.alpha = 1
-            })
+            addWaterLabelAnimation(withText: "+\(buttonIntakeAmounts[selectedButtonIndex])",
+                                   startingCenterPoint: customWaterButtons[selectedButtonIndex].center)
+        }
+        UIView.animate(withDuration: 0.1, delay: 0, options: .curveEaseIn) {
+            self.customWaterButtons.forEach { $0.transform = .identity }
+            self.addWaterIntakeButton.alpha = 1
         }
         isShowingIntakeButtons = false
+    }
+    
+    fileprivate func addWaterLabelAnimation(withText text: String, startingCenterPoint: CGPoint) {
+        let label = UILabel()
+        label.backgroundColor = .clear
+        label.alpha = 1
+        label.text = text
+        label.textAlignment = .center
+        label.textColor = .undeadWhite65
+        label.font = UIFont.boldSystemFont(ofSize: 28)
+        label.center = startingCenterPoint
+        label.center.y -= 60
+        label.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(label)
+        
+        let centerYAnchor: NSLayoutConstraint = label.centerYAnchor.constraint(equalTo: view.topAnchor, constant: startingCenterPoint.y - 60)
+        centerYAnchor.isActive = true
+        label.centerXAnchor.constraint(equalTo: view.leadingAnchor, constant: startingCenterPoint.x).isActive = true
+        view.layoutIfNeeded()
+        
+        UIView.animate(withDuration: 0.1, delay: 0, options: []) {
+            label.alpha = 1
+        }
+        UIView.animate(withDuration: 1.2, delay: 0, options: []) {
+            centerYAnchor.constant -= 60
+            self.view.layoutIfNeeded()
+        }
+        UIView.animate(withDuration: 0.7, delay: 0.5, options: []) {
+            label.alpha = 0
+        } completion: { _ in
+            label.removeFromSuperview()
+        }
     }
     
     // MARK: - UIButton Selectors

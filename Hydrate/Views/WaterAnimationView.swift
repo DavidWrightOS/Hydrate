@@ -131,7 +131,7 @@ private extension WaterAnimationView {
         
         guard background.frame.origin.y > 0 || waterLevelYPosition > 0 else { return }
         
-        UIView.animate(withDuration: 0.4, delay: 0, options: .curveEaseInOut, animations: {
+        UIView.animate(withDuration: 0.75, delay: 0, options: .curveEaseInOut, animations: {
             self.background.frame.origin.y = max(waterLevelYPosition, 0)
         }, completion: nil)
     }
