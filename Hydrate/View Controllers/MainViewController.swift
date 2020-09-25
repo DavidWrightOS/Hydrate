@@ -26,9 +26,9 @@ class MainViewController: UIViewController {
     lazy var intakeButtonOffsets: [CGPoint] = {
         var offsets: [CGPoint] = []
         let buttonCount = intakeButtonAmounts.count
-        let radius: CGFloat = 90
-        let startAngleDeg: CGFloat = -200
-        let stopAngleDeg: CGFloat = 20
+        let radius: CGFloat = 88
+        let startAngleDeg: CGFloat = -190
+        let stopAngleDeg: CGFloat = 10
         
         // compute angular distance between buttons
         let startAngle: CGFloat = startAngleDeg * .pi / 180
@@ -67,17 +67,15 @@ class MainViewController: UIViewController {
             button.tag = index
             button.bounds.size = CGSize(width: buttonDiameter, height: buttonDiameter)
             button.layer.cornerRadius = buttonDiameter / 2
+            button.layer.shadowRadius = 2.0
+            button.layer.shadowOffset = CGSize(width: 0, height: 2.0)
+            button.layer.shadowOpacity = 0.25
             button.backgroundColor = .intakeButtonColor
+            button.alpha = 0.0
             button.setTitleColor(.intakeButtonTextColor, for: .normal)
             button.setTitle("\(intakeButtonAmounts[index]) oz.", for: .normal)
             button.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .bold)
             button.addTarget(self, action: #selector(customWaterButtonTapped), for: .touchUpInside)
-            
-            // Add shadow
-            button.layer.shadowRadius = 2.0
-            button.layer.shadowOffset = CGSize(width: 0, height: 2.0)
-            button.layer.shadowOpacity = 0.25
-            
             buttons.append(button)
         }
         return buttons
@@ -294,24 +292,42 @@ class MainViewController: UIViewController {
     // MARK: - Animations
     
     fileprivate func showIntakeButtons() {
-        UIView.animate(withDuration: 0.2, delay: 0, usingSpringWithDamping: 0.9,
-                       initialSpringVelocity: 1, options: .curveEaseOut, animations: {
-                        self.addWaterIntakeButton.alpha = 0.3
-                        self.customWaterButtons.forEach {
-                            $0.transform = CGAffineTransform(translationX: self.intakeButtonOffsets[$0.tag].x,
-                                                             y: self.intakeButtonOffsets[$0.tag].y) }
+        customWaterButtons.forEach { $0.alpha = 0.0 }
+        let delayStep = 0.05
+        for i in customWaterButtons.indices {
+            let delay: TimeInterval = delayStep * Double(i)
+            UIView.animate(withDuration: 0.35, delay: delay, usingSpringWithDamping: 0.65,
+                           initialSpringVelocity: 1, options: .curveEaseOut, animations: {
+                            self.customWaterButtons[i].transform = CGAffineTransform(translationX: self.intakeButtonOffsets[i].x,
+                                                                                     y: self.intakeButtonOffsets[i].y)
+                            self.customWaterButtons[i].alpha = 1.0
+                           })
+        }
+        UIView.animate(withDuration: 0.35, delay: 0, options: [], animations: {
+                        self.addWaterIntakeButton.alpha = 0.4
                        })
         isShowingIntakeButtons = true
     }
     
     fileprivate func hideIntakeButtons(selectedButtonIndex: Int? = nil) {
         if let selectedButtonIndex = selectedButtonIndex {
-            addWaterLabelAnimation(withText: "+\(intakeButtonAmounts[selectedButtonIndex])",
-                                   startingCenterPoint: customWaterButtons[selectedButtonIndex].center)
+            var buttonCenter = addWaterIntakeButton.center
+            buttonCenter.x += intakeButtonOffsets[selectedButtonIndex].x
+            buttonCenter.y += intakeButtonOffsets[selectedButtonIndex].y
+            addWaterLabelAnimation(withText: "+\(intakeButtonAmounts[selectedButtonIndex])", startingCenterPoint: buttonCenter)
+        }
+        
+        let delayStep = 0.05
+        for i in customWaterButtons.indices {
+            let delay: TimeInterval = delayStep * Double(customWaterButtons.count - i - 1)
+            UIView.animate(withDuration: 0.35, delay: delay, usingSpringWithDamping: 0.65,
+                           initialSpringVelocity: 1, options: .curveEaseIn, animations: {
+                            self.customWaterButtons[i].transform = .identity
+                            self.customWaterButtons[i].alpha = 0.0
+                           })
         }
         
         UIView.animate(withDuration: 0.1, delay: 0, options: .curveEaseIn) {
-            self.customWaterButtons.forEach { $0.transform = .identity }
             self.addWaterIntakeButton.alpha = 1
         }
         
@@ -327,32 +343,38 @@ class MainViewController: UIViewController {
     fileprivate func addWaterLabelAnimation(withText text: String, startingCenterPoint: CGPoint) {
         let label = UILabel()
         label.backgroundColor = .clear
-        label.alpha = 1
+        label.alpha = 0
         label.text = text
         label.textAlignment = .center
         label.textColor = .undeadWhite65
         label.font = UIFont.boldSystemFont(ofSize: 28)
         label.center = startingCenterPoint
-        label.center.y -= 60
         label.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(label)
         
-        let centerYAnchor: NSLayoutConstraint = label.centerYAnchor.constraint(equalTo: view.topAnchor, constant: startingCenterPoint.y - 60)
+        let centerYAnchor: NSLayoutConstraint = label.centerYAnchor.constraint(equalTo: view.topAnchor, constant: startingCenterPoint.y - 30)
         centerYAnchor.isActive = true
         label.centerXAnchor.constraint(equalTo: view.leadingAnchor, constant: startingCenterPoint.x).isActive = true
         view.layoutIfNeeded()
         
-        UIView.animate(withDuration: 0.1, delay: 0, options: []) {
+        UIView.animate(withDuration: 0.1, delay: 0.2, options: [.curveLinear]) {
             label.alpha = 1
+        } completion: { animationDidFinish in
+            guard animationDidFinish else {
+                label.removeFromSuperview()
+                return
+            }
+            
+            UIView.animate(withDuration: 0.6, delay: 0.4, options: []) {
+                label.alpha = 0
+            } completion: { _ in
+                label.removeFromSuperview()
+            }
         }
-        UIView.animate(withDuration: 1.2, delay: 0, options: []) {
+        
+        UIView.animate(withDuration: 1.2, delay: 0.1, options: []) {
             centerYAnchor.constant -= 60
             self.view.layoutIfNeeded()
-        }
-        UIView.animate(withDuration: 0.7, delay: 0.5, options: []) {
-            label.alpha = 0
-        } completion: { _ in
-            label.removeFromSuperview()
         }
     }
     
