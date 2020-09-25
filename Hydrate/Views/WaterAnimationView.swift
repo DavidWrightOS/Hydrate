@@ -58,13 +58,13 @@ class WaterAnimationView: UIView {
 
     private lazy var waveLayerForeground: CAShapeLayer = {
         let shapeLayer = CAShapeLayer()
-        shapeLayer.fillColor = UIColor.waterColor
+        shapeLayer.fillColor = UIColor.waterColor.cgColor
         return shapeLayer
     }()
     
     private lazy var waveLayerBackground: CAShapeLayer = {
         let shapeLayer = CAShapeLayer()
-        shapeLayer.fillColor = UIColor.waterColor
+        shapeLayer.fillColor = UIColor.waterColor.cgColor
         return shapeLayer
     }()
 }

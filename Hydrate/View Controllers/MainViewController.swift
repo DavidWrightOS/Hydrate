@@ -20,7 +20,29 @@ class MainViewController: UIViewController {
     }
     
     var targetDailyIntake: Int = 96
-    var buttonIntakeAmounts = [8, 12, 16, 20, 32]
+    
+    var intakeButtonAmounts = [8, 12, 16, 20, 32]
+    
+    lazy var intakeButtonOffsets: [CGPoint] = {
+        var offsets: [CGPoint] = []
+        let buttonCount = intakeButtonAmounts.count
+        let radius: CGFloat = 90
+        let startAngleDeg: CGFloat = -200
+        let stopAngleDeg: CGFloat = 20
+        
+        // compute angular distance between buttons
+        let startAngle: CGFloat = startAngleDeg * .pi / 180
+        let stopAngle: CGFloat = stopAngleDeg * .pi / 180
+        let angularStep = (stopAngle - startAngle) / CGFloat(buttonCount - 1)
+        
+        for i in 0 ..< buttonCount {
+            let xOffset = radius * cos(CGFloat(i) * angularStep + startAngle)
+            let yOffset = radius * sin(CGFloat(i) * angularStep + startAngle)
+            offsets.append(CGPoint(x: xOffset, y: yOffset))
+        }
+
+        return offsets
+    }()
     
     var waterLevel: CGFloat {
         CGFloat(totalIntake) / CGFloat(targetDailyIntake) * ((view.bounds.maxY - measurementMarkersView.frame.minY) / view.bounds.maxY)
@@ -45,11 +67,18 @@ class MainViewController: UIViewController {
             button.tag = index
             button.bounds.size = CGSize(width: buttonDiameter, height: buttonDiameter)
             button.layer.cornerRadius = buttonDiameter / 2
-            button.backgroundColor = #colorLiteral(red: 0.1022377216, green: 0.5984256684, blue: 0.8548628818, alpha: 1)
-            button.setTitleColor(.white, for: .normal)
-            button.setTitle("\(buttonIntakeAmounts[index]) oz.", for: .normal)
+            button.backgroundColor = UIColor.intakeButtonColor
+            button.setTitleColor(.intakeButtonTextColor, for: .normal)
+            button.setTitle("\(intakeButtonAmounts[index]) oz.", for: .normal)
             button.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .bold)
             button.addTarget(self, action: #selector(customWaterButtonTapped), for: .touchUpInside)
+            
+            // Add shadow
+            button.layer.shadowRadius = buttonDiameter / 2
+            button.layer.shadowColor = UIColor.black.cgColor
+            button.layer.shadowOffset = CGSize(width: 15, height: 15)
+            button.layer.shadowOpacity = 0.5
+            
             buttons.append(button)
         }
         return buttons
@@ -121,7 +150,7 @@ class MainViewController: UIViewController {
     }
     
     fileprivate func setupViews() {
-        view.backgroundColor = UIColor.ravenClawBlue
+        view.backgroundColor = UIColor.backgroundColor
         waterView = WaterAnimationView(frame: view.frame)
         view.addSubview(waterView)
         
@@ -170,25 +199,6 @@ class MainViewController: UIViewController {
     
     override func viewDidLayoutSubviews() {
         customWaterButtons.forEach { $0.center = self.addWaterIntakeButton.center }
-    }
-    
-    fileprivate func intakeButtonOffets(buttonCount: Int, radius: CGFloat) -> [CGPoint] {
-        var offsets: [CGPoint] = []
-        let startAngleDeg: CGFloat = -200
-        let stopAngleDeg: CGFloat = 20
-        
-        // compute angular distance between buttons
-        let startAngle: CGFloat = startAngleDeg * .pi / 180
-        let stopAngle: CGFloat = stopAngleDeg * .pi / 180
-        let angularStep = (stopAngle - startAngle) / CGFloat(buttonCount - 1)
-        
-        for i in 0 ..< buttonCount {
-            let xOffset = radius * cos(CGFloat(i) * angularStep + startAngle)
-            let yOffset = radius * sin(CGFloat(i) * angularStep + startAngle)
-            offsets.append(CGPoint(x: xOffset, y: yOffset))
-        }
-
-        return offsets
     }
     
     fileprivate func updateViews() {
@@ -285,23 +295,27 @@ class MainViewController: UIViewController {
     // MARK: - Animations
     
     fileprivate func showIntakeButtons() {
-        UIView.animate(withDuration: 0.2, delay: 0, usingSpringWithDamping: 0.9, initialSpringVelocity: 1, options: .curveEaseOut, animations: {
-            let buttonOffsets = self.intakeButtonOffets(buttonCount: self.customWaterButtons.count, radius: 90)
-            self.customWaterButtons.forEach { $0.transform = CGAffineTransform(translationX: buttonOffsets[$0.tag].x, y: buttonOffsets[$0.tag].y) }
-            self.addWaterIntakeButton.alpha = 0.5
-        })
+        UIView.animate(withDuration: 0.2, delay: 0, usingSpringWithDamping: 0.9,
+                       initialSpringVelocity: 1, options: .curveEaseOut, animations: {
+                        self.addWaterIntakeButton.alpha = 0.5
+                        self.customWaterButtons.forEach {
+                            $0.transform = CGAffineTransform(translationX: self.intakeButtonOffsets[$0.tag].x,
+                                                             y: self.intakeButtonOffsets[$0.tag].y) }
+                       })
         isShowingIntakeButtons = true
     }
     
     fileprivate func hideIntakeButtons(selectedButtonIndex: Int? = nil) {
         if let selectedButtonIndex = selectedButtonIndex {
-            addWaterLabelAnimation(withText: "+\(buttonIntakeAmounts[selectedButtonIndex])",
+            addWaterLabelAnimation(withText: "+\(intakeButtonAmounts[selectedButtonIndex])",
                                    startingCenterPoint: customWaterButtons[selectedButtonIndex].center)
         }
+        
         UIView.animate(withDuration: 0.1, delay: 0, options: .curveEaseIn) {
             self.customWaterButtons.forEach { $0.transform = .identity }
             self.addWaterIntakeButton.alpha = 1
         }
+        
         isShowingIntakeButtons = false
     }
     
@@ -358,9 +372,9 @@ class MainViewController: UIViewController {
     }
     
     @objc fileprivate func customWaterButtonTapped(_ sender: UIButton) {
-        guard sender.tag >= 0, sender.tag < buttonIntakeAmounts.count else { return }
+        guard sender.tag >= 0, sender.tag < intakeButtonAmounts.count else { return }
         
-        let intakeAmount = buttonIntakeAmounts[sender.tag]
+        let intakeAmount = intakeButtonAmounts[sender.tag]
         addWater(intakeAmount)
         hideIntakeButtons(selectedButtonIndex: sender.tag)
     }
