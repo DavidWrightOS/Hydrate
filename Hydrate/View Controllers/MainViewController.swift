@@ -67,17 +67,16 @@ class MainViewController: UIViewController {
             button.tag = index
             button.bounds.size = CGSize(width: buttonDiameter, height: buttonDiameter)
             button.layer.cornerRadius = buttonDiameter / 2
-            button.backgroundColor = UIColor.intakeButtonColor
+            button.backgroundColor = .intakeButtonColor
             button.setTitleColor(.intakeButtonTextColor, for: .normal)
             button.setTitle("\(intakeButtonAmounts[index]) oz.", for: .normal)
             button.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .bold)
             button.addTarget(self, action: #selector(customWaterButtonTapped), for: .touchUpInside)
             
             // Add shadow
-            button.layer.shadowRadius = buttonDiameter / 2
-            button.layer.shadowColor = UIColor.black.cgColor
-            button.layer.shadowOffset = CGSize(width: 15, height: 15)
-            button.layer.shadowOpacity = 0.5
+            button.layer.shadowRadius = 2.0
+            button.layer.shadowOffset = CGSize(width: 0, height: 2.0)
+            button.layer.shadowOpacity = 0.25
             
             buttons.append(button)
         }
@@ -297,7 +296,7 @@ class MainViewController: UIViewController {
     fileprivate func showIntakeButtons() {
         UIView.animate(withDuration: 0.2, delay: 0, usingSpringWithDamping: 0.9,
                        initialSpringVelocity: 1, options: .curveEaseOut, animations: {
-                        self.addWaterIntakeButton.alpha = 0.5
+                        self.addWaterIntakeButton.alpha = 0.3
                         self.customWaterButtons.forEach {
                             $0.transform = CGAffineTransform(translationX: self.intakeButtonOffsets[$0.tag].x,
                                                              y: self.intakeButtonOffsets[$0.tag].y) }

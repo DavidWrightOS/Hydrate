@@ -19,12 +19,12 @@ extension UIColor {
     static let ravenClawBlue70 = UIColor(hex: 0x727788)
     static let disabledButtonColor = UIColor(hex: 0x5D5F66)
     
+    static let backgroundColor = ravenClawBlue
     static let markerLabelColor = undeadWhite.withAlphaComponent(0.4)
     static let markerLineColor = undeadWhite.withAlphaComponent(0.2)
     static let waterColor = sicklySmurfBlue.withAlphaComponent(0.5)
-    static let intakeButtonColor = #colorLiteral(red: 0, green: 0.2834656835, blue: 0.6651299596, alpha: 1)
-    static let intakeButtonTextColor = undeadWhite
-    static let backgroundColor = ravenClawBlue
+    static let intakeButtonColor = undeadWhite
+    static let intakeButtonTextColor = sicklySmurfBlue
     
     // Create a UIColor from RGB
     convenience init(red: Int, green: Int, blue: Int, a: CGFloat = 1.0) {
