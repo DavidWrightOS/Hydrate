@@ -143,7 +143,11 @@ class MainViewController: UIViewController {
     
     fileprivate func setupTapGestures() {
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleNormalPress))
+        let longGesture = UILongPressGestureRecognizer(target: self, action: #selector(handleLongPress))
+        longGesture.cancelsTouchesInView = false
+        
         addWaterIntakeButton.addGestureRecognizer(tapGesture)
+        addWaterIntakeButton.addGestureRecognizer(longGesture)
     }
     
     fileprivate func setupViews() {
@@ -398,6 +402,33 @@ class MainViewController: UIViewController {
         let intakeAmount = intakeButtonAmounts[sender.tag]
         addWater(intakeAmount)
         hideIntakeButtons(selectedButtonIndex: sender.tag)
+    }
+    
+    // Add Water Button (Long Tap)
+    
+    @objc fileprivate func handleLongPress(sender : UILongPressGestureRecognizer){
+        switch sender.state {
+        case .began: handleGestureBegan(sender: sender)
+        case .ended: handleGestureEnded(sender: sender)
+        default: break
+        }
+    }
+    
+    fileprivate func handleGestureBegan(sender: UILongPressGestureRecognizer) {
+        addWaterIntakeButton.isHighlighted = false
+        addWaterIntakeButton.adjustsImageWhenHighlighted = false
+        UIView.animate(withDuration: 0.5, delay: 0, options: .curveEaseInOut) {
+            self.addWaterIntakeButton.transform = .identity
+        }
+        let generator = UIImpactFeedbackGenerator(style: .heavy)
+        generator.impactOccurred()
+    }
+    
+    fileprivate func handleGestureEnded(sender: UILongPressGestureRecognizer) {
+        addWaterIntakeButton.adjustsImageWhenHighlighted = true
+        guard totalIntake != 0 else { return }
+        let decreaseWaterAmount = max(-16, -totalIntake)
+        addWater(decreaseWaterAmount)
     }
     
     // Page Navigation
