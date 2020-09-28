@@ -26,9 +26,9 @@ class MainViewController: UIViewController {
     lazy var intakeButtonOffsets: [CGPoint] = {
         var offsets: [CGPoint] = []
         let buttonCount = intakeButtonAmounts.count
-        let radius: CGFloat = 88
-        let startAngleDeg: CGFloat = -190
-        let stopAngleDeg: CGFloat = 10
+        let radius: CGFloat = 125
+        let startAngleDeg: CGFloat = -160
+        let stopAngleDeg: CGFloat = -20
         
         // compute angular distance between buttons
         let startAngle: CGFloat = startAngleDeg * .pi / 180
@@ -439,6 +439,7 @@ class MainViewController: UIViewController {
     }
     
     @objc fileprivate func handleShowSettingsTapped() {
-        print("DEBUG: Show Settings View Controller..")
+        let svc = SettingsViewController()
+        present(svc, animated: true, completion: nil)
     }
 }
