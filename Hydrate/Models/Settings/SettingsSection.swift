@@ -33,4 +33,58 @@ enum SettingsSection: Int, CaseIterable, CustomStringConvertible {
         default: return nil
         }
     }
+    
+    var settingOptions: [SettingOption] {
+        switch self {
+        case .notifications: return NotificationSettings.allCases
+        case .appSettings: return AppSettings.allCases
+        case .about: return AboutSettings.allCases
+        }
+    }
+}
+
+// MARK: - Settings TableView Rows
+
+enum NotificationSettings: Int, CaseIterable, SettingOption {
+    case receiveNotifications
+    
+    var containsSwitch: Bool { return true }
+    
+    var description: String {
+        switch self {
+        case .receiveNotifications: return "Receive Notifications"
+        }
+    }
+}
+
+enum AppSettings: Int, CaseIterable, SettingOption {
+    case inAppSounds
+    case hapticFeedback
+    case addToHealthApp
+    
+    var containsSwitch: Bool { return true }
+    
+    var description: String {
+        switch self {
+        case .inAppSounds: return "In App Sounds"
+        case .hapticFeedback: return "Haptic Feedback"
+        case .addToHealthApp: return "Add to Health App"
+        }
+    }
+}
+
+enum AboutSettings: Int, CaseIterable, SettingOption {
+    case reportIssue
+    case rateApp
+    case aboutUs
+    
+    var containsSwitch: Bool { return false }
+    
+    var description: String {
+        switch self {
+        case .reportIssue: return "Report an Issue"
+        case .rateApp: return "Rate the App"
+        case .aboutUs: return "About Us"
+        }
+    }
 }
