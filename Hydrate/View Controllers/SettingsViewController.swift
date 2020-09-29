@@ -23,7 +23,7 @@ class SettingsViewController: UIViewController {
         navigationBar.titleTextAttributes = [.foregroundColor: UIColor.undeadWhite]
         navigationBar.largeTitleTextAttributes = [.foregroundColor: UIColor.undeadWhite]
         navigationBar.isTranslucent = false
-        navigationBar.tintColor = .sicklySmurfBlue
+        navigationBar.tintColor = .actionColor
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(doneButtonTapped))
         return navigationBar
     }()

@@ -142,7 +142,7 @@ extension UITableViewCell {
         let symbolConfiguration = UIImage.SymbolConfiguration(pointSize: 13, weight: UIImage.SymbolWeight.semibold)
         let image = UIImage(systemName: "chevron.right", withConfiguration: symbolConfiguration)
         button.setImage(image, for: .normal)
-        button.tintColor = .sicklySmurfBlue
+        button.tintColor = .actionColor
         self.accessoryView = button
     }
 }

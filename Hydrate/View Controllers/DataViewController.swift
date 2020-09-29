@@ -19,7 +19,7 @@ class DataViewController: UIViewController {
         navigationBar.barTintColor = .ravenClawBlue
         navigationBar.titleTextAttributes = [.foregroundColor: UIColor.undeadWhite]
         navigationBar.isTranslucent = false
-        navigationBar.tintColor = .sicklySmurfBlue
+        navigationBar.tintColor = .actionColor
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(doneButtonTapped))
         return navigationBar
     }()
@@ -40,7 +40,7 @@ class DataViewController: UIViewController {
         let dailyLogTableVC = DailyLogTableViewController()
         let navController = UINavigationController(rootViewController: dailyLogTableVC)
         navController.navigationBar.barTintColor = .ravenClawBlue
-        navController.navigationBar.tintColor = .sicklySmurfBlue
+        navController.navigationBar.tintColor = .actionColor
         navController.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.undeadWhite]
         navController.navigationBar.isTranslucent = false
         return navController

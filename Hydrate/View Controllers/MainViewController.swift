@@ -84,7 +84,7 @@ class MainViewController: UIViewController {
     fileprivate let showDataButton: UIButton = {
         let button = UIButton()
         button.setImage(UIImage(named: "calendar-button"), for: .normal)
-        button.tintColor = UIColor.undeadWhite
+        button.tintColor = UIColor.actionColor
         button.contentHorizontalAlignment = .center
         button.imageView?.contentMode = .scaleAspectFit
         button.imageEdgeInsets = UIEdgeInsets(top: 10.0, left: 10.0, bottom: 10.0, right: 10.0);
@@ -95,7 +95,7 @@ class MainViewController: UIViewController {
     fileprivate let showSettingsButton: UIButton = {
         let button = UIButton()
         button.setImage(UIImage(named: "settings-button"), for: .normal)
-        button.tintColor = UIColor.undeadWhite
+        button.tintColor = UIColor.actionColor
         button.contentHorizontalAlignment = .center
         button.imageView?.contentMode = .scaleAspectFit
         button.imageEdgeInsets = UIEdgeInsets(top: 10.0, left: 10.0, bottom: 10.0, right: 10.0);
