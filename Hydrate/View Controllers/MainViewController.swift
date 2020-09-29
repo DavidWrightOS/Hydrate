@@ -135,6 +135,16 @@ class MainViewController: UIViewController {
         setupViews()
     }
     
+    override func motionEnded(_ motion: UIEvent.EventSubtype, with event: UIEvent?) {
+        if motion == .motionShake {
+            let generator = UINotificationFeedbackGenerator()
+            generator.notificationOccurred(.success)
+            guard totalIntake != 0 else { return }
+            let decreaseWaterAmount = max(-16, -totalIntake)
+            addWater(decreaseWaterAmount)
+        }
+    }
+    
     override var preferredStatusBarStyle: UIStatusBarStyle {
         return .lightContent
     }
@@ -288,7 +298,17 @@ class MainViewController: UIViewController {
         return markerView
     }
     
-    fileprivate func addWater(_ intakeAmount: Int) {
+    fileprivate func addWater(_ intakeAmount: Int, selectedButtonIndex: Int? = nil) {
+        guard intakeAmount != 0 else { return }
+        
+        let buttonIndex = selectedButtonIndex ?? 2
+        var buttonCenter = addWaterIntakeButton.center
+        buttonCenter.x += intakeButtonOffsets[buttonIndex].x
+        buttonCenter.y += intakeButtonOffsets[buttonIndex].y
+        let color: UIColor? = intakeAmount < 0 ? #colorLiteral(red: 0.5971726884, green: 0.2109181469, blue: 0.2735780059, alpha: 0.649614726) : nil
+        let amountText = intakeAmount < 0 ? "\(intakeAmount)" : "+\(intakeAmount)"
+        addWaterLabelAnimation(withText: amountText, startingCenterPoint: buttonCenter, textColor: color)
+        
         intakeAmountLabel.count(from: Float(totalIntake), to: Float(totalIntake + intakeAmount), duration: 0.4)
         totalIntake += intakeAmount
     }
@@ -297,31 +317,24 @@ class MainViewController: UIViewController {
     
     fileprivate func showIntakeButtons() {
         customWaterButtons.forEach { $0.alpha = 0.0 }
-        let delayStep = 0.05
+        let delayStep = 0.0 //0.05
         for i in customWaterButtons.indices {
             let delay: TimeInterval = delayStep * Double(i)
-            UIView.animate(withDuration: 0.35, delay: delay, usingSpringWithDamping: 0.65,
+            UIView.animate(withDuration: 0.25, delay: delay, usingSpringWithDamping: 0.65,
                            initialSpringVelocity: 1, options: .curveEaseOut, animations: {
                             self.customWaterButtons[i].transform = CGAffineTransform(translationX: self.intakeButtonOffsets[i].x,
                                                                                      y: self.intakeButtonOffsets[i].y)
                             self.customWaterButtons[i].alpha = 1.0
                            })
         }
-        UIView.animate(withDuration: 0.35, delay: 0, options: [], animations: {
+        UIView.animate(withDuration: 0.2, delay: 0, options: [], animations: {
                         self.addWaterIntakeButton.alpha = 0.4
                        })
         isShowingIntakeButtons = true
     }
     
     fileprivate func hideIntakeButtons(selectedButtonIndex: Int? = nil) {
-        if let selectedButtonIndex = selectedButtonIndex {
-            var buttonCenter = addWaterIntakeButton.center
-            buttonCenter.x += intakeButtonOffsets[selectedButtonIndex].x
-            buttonCenter.y += intakeButtonOffsets[selectedButtonIndex].y
-            addWaterLabelAnimation(withText: "+\(intakeButtonAmounts[selectedButtonIndex])", startingCenterPoint: buttonCenter)
-        }
-        
-        let delayStep = 0.05
+        let delayStep = 0.0 //0.05
         for i in customWaterButtons.indices {
             let delay: TimeInterval = delayStep * Double(customWaterButtons.count - i - 1)
             UIView.animate(withDuration: 0.35, delay: delay, usingSpringWithDamping: 0.65,
@@ -344,13 +357,13 @@ class MainViewController: UIViewController {
         }
     }
     
-    fileprivate func addWaterLabelAnimation(withText text: String, startingCenterPoint: CGPoint) {
+    fileprivate func addWaterLabelAnimation(withText text: String, startingCenterPoint: CGPoint, textColor: UIColor? = nil) {
         let label = UILabel()
         label.backgroundColor = .clear
         label.alpha = 0
         label.text = text
         label.textAlignment = .center
-        label.textColor = .undeadWhite65
+        label.textColor = textColor ?? .undeadWhite65
         label.font = UIFont.boldSystemFont(ofSize: 28)
         label.center = startingCenterPoint
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -400,7 +413,7 @@ class MainViewController: UIViewController {
         guard sender.tag >= 0, sender.tag < intakeButtonAmounts.count else { return }
         
         let intakeAmount = intakeButtonAmounts[sender.tag]
-        addWater(intakeAmount)
+        addWater(intakeAmount, selectedButtonIndex: sender.tag)
         hideIntakeButtons(selectedButtonIndex: sender.tag)
     }
     

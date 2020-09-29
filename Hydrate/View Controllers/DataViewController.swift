@@ -64,28 +64,21 @@ class DataViewController: UIViewController {
     
     fileprivate func setupNavigationBar() {
         view.addSubview(navigationBar)
-        navigationBar.anchor(top: view.topAnchor,
-                                   leading: view.leadingAnchor,
-                                   bottom: nil,
-                                   trailing: view.trailingAnchor)
+        navigationBar.anchor(top: view.topAnchor, leading: view.leadingAnchor,
+                             bottom: nil, trailing: view.trailingAnchor)
     }
     
     fileprivate func setupChartView() {
         view.addSubview(chartView)
-        
-        chartView.anchor(top: navigationBar.bottomAnchor,
-                         leading: view.leadingAnchor,
-                         bottom: nil,
-                         trailing: view.trailingAnchor,
+        chartView.anchor(top: navigationBar.bottomAnchor, leading: view.leadingAnchor,
+                         bottom: nil, trailing: view.trailingAnchor,
                          size: CGSize(width: view.bounds.width, height: 220))
     }
     
     fileprivate func setupContainerView() {
         view.addSubview(containerView)
-        containerView.anchor(top: chartView.bottomAnchor,
-                             leading: view.leadingAnchor,
-                             bottom: view.bottomAnchor,
-                             trailing: view.trailingAnchor)
+        containerView.anchor(top: chartView.bottomAnchor, leading: view.leadingAnchor,
+                             bottom: view.bottomAnchor, trailing: view.trailingAnchor)
         setupTableViewNavigationController()
     }
     
