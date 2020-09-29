@@ -20,6 +20,7 @@ extension IntakeEntry {
         self.init(context: context)
         self.amount = Int64(intakeAmount)
         self.timestamp = timestamp
+        self.day = timestamp.startOfDay
         self.identifier = identifier
     }
     
