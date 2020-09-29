@@ -18,12 +18,10 @@ class DailyLogTableViewController: UITableViewController {
         let fetchRequest: NSFetchRequest<IntakeEntry> = IntakeEntry.fetchRequest()
         fetchRequest.sortDescriptors = [NSSortDescriptor(key: #keyPath(IntakeEntry.timestamp), ascending: false)]
         
-        let fetchedResultsController = NSFetchedResultsController(
-            fetchRequest: fetchRequest,
-            managedObjectContext: coreDataStack.mainContext,
-            sectionNameKeyPath: nil,
-            cacheName: "hydrate")
-        
+        let fetchedResultsController = NSFetchedResultsController(fetchRequest: fetchRequest,
+                                                                  managedObjectContext: coreDataStack.mainContext,
+                                                                  sectionNameKeyPath: nil,
+                                                                  cacheName: "hydrate")
         fetchedResultsController.delegate = self
         return fetchedResultsController
     }()
@@ -39,11 +37,7 @@ class DailyLogTableViewController: UITableViewController {
             print("Fetching error: \(error), \(error.userInfo)")
         }
         
-        // Uncomment the following line to preserve selection between presentations
-        // self.clearsSelectionOnViewWillAppear = false
-        
         self.navigationItem.rightBarButtonItem = self.editButtonItem
-                
         configureTableView()
         updateViews()
     }
@@ -56,11 +50,11 @@ class DailyLogTableViewController: UITableViewController {
     // MARK: - Private Properties
     
     fileprivate static var dailyLogCell: UITableViewCell {
-        let cell = UITableViewCell(style: .value1, reuseIdentifier: "intakeEntryCell")
+        let cell = UITableViewCell(style: .value1, reuseIdentifier: "dailyLogCell")
         cell.backgroundColor = .ravenClawBlue90
         cell.tintColor = .sicklySmurfBlue
         cell.textLabel?.textColor = .undeadWhite
-        cell.detailTextLabel?.textColor = .undeadWhite
+        cell.detailTextLabel?.textColor = UIColor.undeadWhite.withAlphaComponent(0.35)
         cell.addDisclosureIndicator()
         cell.selectionStyle = .none
         return cell
@@ -125,14 +119,22 @@ class DailyLogTableViewController: UITableViewController {
     
     func configure(cell: UITableViewCell, for indexPath: IndexPath) {
         let intakeEntry = fetchedResultsController.object(at: indexPath)
-        cell.textLabel?.text = dateFormatter.string(from: intakeEntry.timestamp!)
-        cell.detailTextLabel?.text = "\(intakeEntry.amount) oz."
+        cell.textLabel?.text = "\(intakeEntry.amount) oz."
+        cell.detailTextLabel?.text = dateFormatter.string(from: intakeEntry.timestamp!)
     }
     
     @objc fileprivate func addDataButtonTapped() {
         print("DEBUG: Add data button tapped..")
         let _ = IntakeEntry(intakeAmount: 8)
         self.coreDataStack.saveContext()
+    }
+    
+    // MARK: - Table view delegate
+    
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        guard let day = fetchedResultsController.object(at: indexPath).day else { return }
+        let entryTableVC = EntriesTableViewController(for: day)
+        navigationController?.pushViewController(entryTableVC, animated: true)
     }
 }
 
@@ -149,18 +151,16 @@ extension UITableViewCell {
 
 
 // MARK: - NSFetchedResultsControllerDelegate
+
 extension DailyLogTableViewController: NSFetchedResultsControllerDelegate {
     
     func controllerWillChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
         tableView.beginUpdates()
     }
     
-    func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>,
-                    didChange anObject: Any,
-                    at indexPath: IndexPath?,
-                    for type: NSFetchedResultsChangeType,
-                    newIndexPath: IndexPath?) {
-        
+    func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any,
+                    at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
+
         switch type {
         case .insert:
             guard let newIndexPath = newIndexPath else { return }
@@ -181,17 +181,13 @@ extension DailyLogTableViewController: NSFetchedResultsControllerDelegate {
         }
     }
     
-    func controller(_ controller:
-                        NSFetchedResultsController<NSFetchRequestResult>,
+    func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>,
                     didChange sectionInfo: NSFetchedResultsSectionInfo,
-                    atSectionIndex sectionIndex: Int,
-                    for type: NSFetchedResultsChangeType) {
+                    atSectionIndex sectionIndex: Int, for type: NSFetchedResultsChangeType) {
         
         switch type {
-        case .insert:
-            tableView.insertSections(IndexSet(integer: sectionIndex), with: .automatic)
-        case .delete:
-            tableView.deleteSections(IndexSet(integer: sectionIndex), with: .automatic)
+        case .insert: tableView.insertSections(IndexSet(integer: sectionIndex), with: .automatic)
+        case .delete: tableView.deleteSections(IndexSet(integer: sectionIndex), with: .automatic)
         default: break
         }
     }
