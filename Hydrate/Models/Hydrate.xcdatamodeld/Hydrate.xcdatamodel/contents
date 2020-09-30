@@ -1,12 +1,19 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="17192" systemVersion="19H2" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+    <entity name="DailyLog" representedClassName="DailyLog" syncable="YES" codeGenerationType="class">
+        <attribute name="date" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="totalIntake" optional="YES" attributeType="Integer 64" derived="YES" derivationExpression="intakeEntries.amount.@sum" usesScalarValueType="YES"/>
+        <relationship name="intakeEntries" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="IntakeEntry" inverseName="dailyLog" inverseEntity="IntakeEntry"/>
+    </entity>
     <entity name="IntakeEntry" representedClassName="IntakeEntry" syncable="YES" codeGenerationType="class">
         <attribute name="amount" attributeType="Integer 64" usesScalarValueType="YES"/>
         <attribute name="day" attributeType="Date" defaultDateTimeInterval="622793940" usesScalarValueType="NO"/>
         <attribute name="identifier" attributeType="UUID" usesScalarValueType="NO"/>
         <attribute name="timestamp" attributeType="Date" usesScalarValueType="NO"/>
+        <relationship name="dailyLog" maxCount="1" deletionRule="Nullify" destinationEntity="DailyLog" inverseName="intakeEntries" inverseEntity="DailyLog"/>
     </entity>
     <elements>
-        <element name="IntakeEntry" positionX="-45" positionY="0" width="128" height="103"/>
+        <element name="IntakeEntry" positionX="-45" positionY="0" width="128" height="118"/>
+        <element name="DailyLog" positionX="-36" positionY="36" width="128" height="88"/>
     </elements>
 </model>
