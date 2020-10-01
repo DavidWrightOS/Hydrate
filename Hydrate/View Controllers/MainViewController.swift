@@ -7,15 +7,15 @@
 //
 
 import UIKit
+import CoreData
 
 class MainViewController: UIViewController {
     
     // MARK: - Properties
     
-    var totalIntake: Int = 0 {
+    var dailyLog: DailyLog! {
         didSet {
             waterView.waterLevelHeight = waterLevel
-            updateViews()
         }
     }
     
@@ -26,9 +26,9 @@ class MainViewController: UIViewController {
     lazy var intakeButtonOffsets: [CGPoint] = {
         var offsets: [CGPoint] = []
         let buttonCount = intakeButtonAmounts.count
-        let radius: CGFloat = 125
-        let startAngleDeg: CGFloat = -160
-        let stopAngleDeg: CGFloat = -20
+        let radius: CGFloat = 150
+        let startAngleDeg: CGFloat = -145
+        let stopAngleDeg: CGFloat = -35
         
         // compute angular distance between buttons
         let startAngle: CGFloat = startAngleDeg * .pi / 180
@@ -37,16 +37,22 @@ class MainViewController: UIViewController {
         
         for i in 0 ..< buttonCount {
             let xOffset = radius * cos(CGFloat(i) * angularStep + startAngle)
-            let yOffset = radius * sin(CGFloat(i) * angularStep + startAngle)
+            let yOffset = radius * sin(CGFloat(i) * angularStep + startAngle) + 50
             offsets.append(CGPoint(x: xOffset, y: yOffset))
         }
 
         return offsets
     }()
     
+    var totalIntake: Int {
+        Int(dailyLog.totalIntake)
+    }
+    
     var waterLevel: CGFloat {
         CGFloat(totalIntake) / CGFloat(targetDailyIntake) * ((view.bounds.maxY - measurementMarkersView.frame.minY) / view.bounds.maxY)
     }
+    
+    lazy var coreDataStack = CoreDataStack.shared
     
     //MARK: - UI Components
     
@@ -131,8 +137,10 @@ class MainViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         setupTapGestures()
         setupViews()
+        loadDailyLog()
     }
     
     override func motionEnded(_ motion: UIEvent.EventSubtype, with event: UIEvent?) {
@@ -150,6 +158,26 @@ class MainViewController: UIViewController {
     }
     
     //MARK: - Private Methods
+    
+    fileprivate func loadDailyLog() {
+        let date = Date().startOfDay
+        let fetchRequest: NSFetchRequest<DailyLog> = DailyLog.fetchRequest()
+        let datePredicate = NSPredicate(format: "(%K = %@)", #keyPath(DailyLog.date), date as NSDate)
+        fetchRequest.predicate = datePredicate
+        
+        do {
+            let dailyLog = try CoreDataStack.shared.mainContext.fetch(fetchRequest).first
+            if let dailyLog = dailyLog {
+                self.dailyLog = dailyLog
+                return
+            }
+        } catch let error as NSError {
+            print("Error fetching: \(error), \(error.userInfo)")
+        }
+        
+        self.dailyLog = DailyLog(date: date)
+        coreDataStack.saveContext()
+    }
     
     fileprivate func setupTapGestures() {
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleNormalPress))
@@ -176,7 +204,6 @@ class MainViewController: UIViewController {
         setupMeasurementMarkers()
         setupTopControls()
         setupIntakeLabels()
-        updateViews()
         
         // Setup bottom buttons
         NSLayoutConstraint.activate([
@@ -210,10 +237,6 @@ class MainViewController: UIViewController {
     
     override func viewDidLayoutSubviews() {
         customWaterButtons.forEach { $0.center = self.addWaterIntakeButton.center }
-    }
-    
-    fileprivate func updateViews() {
-        intakeAmountLabel.text = "\(totalIntake) oz."
     }
     
     // MARK: - Measurement Markers
@@ -301,6 +324,9 @@ class MainViewController: UIViewController {
     fileprivate func addWater(_ intakeAmount: Int, selectedButtonIndex: Int? = nil) {
         guard intakeAmount != 0 else { return }
         
+        let _ = IntakeEntry(intakeAmount: intakeAmount, dailyLog: dailyLog)
+        coreDataStack.saveContext()
+        
         let buttonIndex = selectedButtonIndex ?? 2
         var buttonCenter = addWaterIntakeButton.center
         buttonCenter.x += intakeButtonOffsets[buttonIndex].x
@@ -310,7 +336,7 @@ class MainViewController: UIViewController {
         addWaterLabelAnimation(withText: amountText, startingCenterPoint: buttonCenter, textColor: color)
         
         intakeAmountLabel.count(from: Float(totalIntake), to: Float(totalIntake + intakeAmount), duration: 0.4)
-        totalIntake += intakeAmount
+        waterView.waterLevelHeight = waterLevel
     }
     
     // MARK: - Animations
@@ -320,14 +346,14 @@ class MainViewController: UIViewController {
         let delayStep = 0.0 //0.05
         for i in customWaterButtons.indices {
             let delay: TimeInterval = delayStep * Double(i)
-            UIView.animate(withDuration: 0.25, delay: delay, usingSpringWithDamping: 0.65,
+            UIView.animate(withDuration: 0.2, delay: delay, usingSpringWithDamping: 0.8,
                            initialSpringVelocity: 1, options: .curveEaseOut, animations: {
                             self.customWaterButtons[i].transform = CGAffineTransform(translationX: self.intakeButtonOffsets[i].x,
                                                                                      y: self.intakeButtonOffsets[i].y)
                             self.customWaterButtons[i].alpha = 1.0
                            })
         }
-        UIView.animate(withDuration: 0.2, delay: 0, options: [], animations: {
+        UIView.animate(withDuration: 0.1, delay: 0, options: [], animations: {
                         self.addWaterIntakeButton.alpha = 0.4
                        })
         isShowingIntakeButtons = true
