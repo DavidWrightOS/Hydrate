@@ -12,12 +12,13 @@ import CoreData
 class DailyLogTableViewController: UITableViewController {
 
     // MARK: - Properties
-    lazy var  coreDataStack = CoreDataStack.shared
     
-    lazy var fetchedResultsController: NSFetchedResultsController<IntakeEntry> = {
-        let fetchRequest: NSFetchRequest<IntakeEntry> = IntakeEntry.fetchRequest()
-        fetchRequest.sortDescriptors = [NSSortDescriptor(key: #keyPath(IntakeEntry.timestamp), ascending: false)]
-        
+    lazy var coreDataStack = CoreDataStack.shared
+    
+    lazy var fetchedResultsController: NSFetchedResultsController<DailyLog> = {
+        let fetchRequest: NSFetchRequest<DailyLog> = DailyLog.fetchRequest()
+        fetchRequest.sortDescriptors = [NSSortDescriptor(key: #keyPath(DailyLog.date), ascending: false)]
+        fetchRequest.fetchBatchSize = 50
         let fetchedResultsController = NSFetchedResultsController(fetchRequest: fetchRequest,
                                                                   managedObjectContext: coreDataStack.mainContext,
                                                                   sectionNameKeyPath: nil,
@@ -31,13 +32,8 @@ class DailyLogTableViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        do {
-            try fetchedResultsController.performFetch()
-        } catch let error as NSError {
-            print("Fetching error: \(error), \(error.userInfo)")
-        }
-        
         self.navigationItem.rightBarButtonItem = self.editButtonItem
+        fetchDailyLogs()
         configureTableView()
         updateViews()
     }
@@ -54,7 +50,7 @@ class DailyLogTableViewController: UITableViewController {
         cell.backgroundColor = .ravenClawBlue90
         cell.tintColor = .sicklySmurfBlue
         cell.textLabel?.textColor = .undeadWhite
-        cell.detailTextLabel?.textColor = UIColor.undeadWhite.withAlphaComponent(0.35)
+        cell.detailTextLabel?.textColor = UIColor.undeadWhite.withAlphaComponent(0.4)
         cell.addDisclosureIndicator()
         cell.selectionStyle = .none
         return cell
@@ -84,6 +80,30 @@ class DailyLogTableViewController: UITableViewController {
         guard isViewLoaded else { return }
         setEditing(false, animated: true)
         tableView.reloadData()
+    }
+    
+    fileprivate func fetchDailyLogs() {
+        do {
+            try fetchedResultsController.performFetch()
+        } catch let error as NSError {
+            print("Fetching error: \(error), \(error.userInfo)")
+        }
+    }
+    
+    fileprivate func fetchDailyLog(for date: Date = Date()) -> DailyLog {
+        let fetchRequest: NSFetchRequest<DailyLog> = DailyLog.fetchRequest()
+        let datePredicate = NSPredicate(format: "(%K = %@)", #keyPath(DailyLog.date), date.startOfDay as NSDate)
+        fetchRequest.predicate = datePredicate
+        
+        do {
+            if let dailyLog = try CoreDataStack.shared.mainContext.fetch(fetchRequest).first {
+                return dailyLog
+            }
+        } catch let error as NSError {
+            print("Error fetching: \(error), \(error.userInfo)")
+        }
+        
+        return DailyLog(date: date.startOfDay)
     }
 
     // MARK: - Table view data source
@@ -118,22 +138,23 @@ class DailyLogTableViewController: UITableViewController {
     }
     
     func configure(cell: UITableViewCell, for indexPath: IndexPath) {
-        let intakeEntry = fetchedResultsController.object(at: indexPath)
-        cell.textLabel?.text = "\(intakeEntry.amount) oz."
-        cell.detailTextLabel?.text = dateFormatter.string(from: intakeEntry.timestamp!)
+        let dailyLog = fetchedResultsController.object(at: indexPath)
+        cell.textLabel?.text = "\(dailyLog.totalIntake) oz."
+        cell.detailTextLabel?.text = dateFormatter.string(from: dailyLog.date!)
     }
     
     @objc fileprivate func addDataButtonTapped() {
         print("DEBUG: Add data button tapped..")
-        let _ = IntakeEntry(intakeAmount: 8)
+        let dailyLog = fetchDailyLog(for: Date())
+        dailyLog.addToIntakeEntries(IntakeEntry(intakeAmount: 8))
         self.coreDataStack.saveContext()
     }
     
     // MARK: - Table view delegate
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        guard let day = fetchedResultsController.object(at: indexPath).day else { return }
-        let entryTableVC = EntriesTableViewController(for: day)
+        let dailyLog = fetchedResultsController.object(at: indexPath)
+        let entryTableVC = EntriesTableViewController(for: dailyLog)
         navigationController?.pushViewController(entryTableVC, animated: true)
     }
 }
