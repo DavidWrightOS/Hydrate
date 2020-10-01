@@ -12,24 +12,15 @@ import CoreData
 class EntriesTableViewController: UITableViewController {
     
     // MARK: - Properties
+    
     lazy var coreDataStack = CoreDataStack.shared
     
-    @propertyWrapper struct BeginingOfDay {
-        private var date: Date
-        init() { self.date = Date() }
-        var wrappedValue: Date {
-            get { return date }
-            set { date = newValue.startOfDay }
-        }
-    }
-    @BeginingOfDay var day: Date
+    var dailyLog: DailyLog!
     
     lazy var fetchedResultsController: NSFetchedResultsController<IntakeEntry> = {
         let fetchRequest: NSFetchRequest<IntakeEntry> = IntakeEntry.fetchRequest()
         fetchRequest.sortDescriptors = [NSSortDescriptor(key: #keyPath(IntakeEntry.timestamp), ascending: false)]
-        fetchRequest.predicate = NSPredicate(format: "(%K >= %@) AND (%K < %@)",
-                                             #keyPath(IntakeEntry.timestamp), day as NSDate,
-                                             #keyPath(IntakeEntry.timestamp), day.startOfNextDay as NSDate)
+        fetchRequest.predicate = NSPredicate(format: "(%K = %@)", #keyPath(IntakeEntry.dailyLog), dailyLog)
         
         let fetchedResultsController = NSFetchedResultsController(fetchRequest: fetchRequest,
                                                                   managedObjectContext: coreDataStack.mainContext,
@@ -41,9 +32,9 @@ class EntriesTableViewController: UITableViewController {
     
     // MARK: - Lifecycle
     
-    init(for day: Date) {
+    init(for dailyLog: DailyLog) {
         super.init(style: .insetGrouped)
-        self.day = day
+        self.dailyLog = dailyLog
     }
     
     required init?(coder: NSCoder) {
@@ -76,7 +67,7 @@ class EntriesTableViewController: UITableViewController {
         cell.backgroundColor = .ravenClawBlue90
         cell.tintColor = .sicklySmurfBlue
         cell.textLabel?.textColor = .undeadWhite
-        cell.detailTextLabel?.textColor = UIColor.undeadWhite.withAlphaComponent(0.35)
+        cell.detailTextLabel?.textColor = UIColor.undeadWhite.withAlphaComponent(0.4)
         cell.selectionStyle = .none
         return cell
     }
@@ -102,7 +93,7 @@ class EntriesTableViewController: UITableViewController {
     // MARK: - Private Methods
     
     fileprivate func configureTableView() {
-        title = dateFormatter.string(from: day)
+        title = dateFormatter.string(from: dailyLog.date!)
         tableView = UITableView(frame: self.tableView.frame, style: .insetGrouped)
         tableView.backgroundColor = .ravenClawBlue
         tableView.separatorColor = .ravenClawBlue
@@ -153,7 +144,7 @@ class EntriesTableViewController: UITableViewController {
     @objc fileprivate func addDataButtonTapped() {
         print("DEBUG: Add data button tapped..")
         let now = Date()
-        let timestamp = now.isInSameDayAs(date: day) ? now : day
+        let timestamp = now.isInSameDayAs(date: dailyLog.date!) ? now : dailyLog.date!
         let _ = IntakeEntry(intakeAmount: 8, timestamp: timestamp)
         self.coreDataStack.saveContext()
     }
