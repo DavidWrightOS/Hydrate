@@ -15,6 +15,7 @@
 		635939C625188A7F00776BB9 /* CoreDataStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 635939C525188A7F00776BB9 /* CoreDataStack.swift */; };
 		635939C925188AE600776BB9 /* IntakeEntry+Convenience.swift in Sources */ = {isa = PBXBuildFile; fileRef = 635939C825188AE600776BB9 /* IntakeEntry+Convenience.swift */; };
 		63769DC22522EF6000E26A48 /* EntriesTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63769DC12522EF6000E26A48 /* EntriesTableViewController.swift */; };
+		63769DC82523F2FB00E26A48 /* DailyLog+Convenience.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63769DC72523F2FB00E26A48 /* DailyLog+Convenience.swift */; };
 		638DC5852516718200C4D1D9 /* DataViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 638DC5842516718200C4D1D9 /* DataViewController.swift */; };
 		638DC58925182EB900C4D1D9 /* DailyLogTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 638DC58825182EB900C4D1D9 /* DailyLogTableViewController.swift */; };
 		63A6A11C251051D9009417CB /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63A6A11B251051D9009417CB /* AppDelegate.swift */; };
@@ -37,6 +38,7 @@
 		635939C525188A7F00776BB9 /* CoreDataStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataStack.swift; sourceTree = "<group>"; };
 		635939C825188AE600776BB9 /* IntakeEntry+Convenience.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "IntakeEntry+Convenience.swift"; sourceTree = "<group>"; };
 		63769DC12522EF6000E26A48 /* EntriesTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EntriesTableViewController.swift; sourceTree = "<group>"; };
+		63769DC72523F2FB00E26A48 /* DailyLog+Convenience.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DailyLog+Convenience.swift"; sourceTree = "<group>"; };
 		638DC5842516718200C4D1D9 /* DataViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataViewController.swift; sourceTree = "<group>"; };
 		638DC58825182EB900C4D1D9 /* DailyLogTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DailyLogTableViewController.swift; sourceTree = "<group>"; };
 		63A6A118251051D9009417CB /* Hydrate.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Hydrate.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -78,6 +80,7 @@
 				635939C1251888EA00776BB9 /* Hydrate.xcdatamodeld */,
 				635939C525188A7F00776BB9 /* CoreDataStack.swift */,
 				635939C825188AE600776BB9 /* IntakeEntry+Convenience.swift */,
+				63769DC72523F2FB00E26A48 /* DailyLog+Convenience.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -232,6 +235,7 @@
 				63A6A11E251051D9009417CB /* SceneDelegate.swift in Sources */,
 				63A6A13D25107716009417CB /* WaterAnimationView.swift in Sources */,
 				635939C625188A7F00776BB9 /* CoreDataStack.swift in Sources */,
+				63769DC82523F2FB00E26A48 /* DailyLog+Convenience.swift in Sources */,
 				638DC5852516718200C4D1D9 /* DataViewController.swift in Sources */,
 				63A6A13725106964009417CB /* UIView+Extension.swift in Sources */,
 				63589F48251FDD9C008CFD48 /* SettingsViewController.swift in Sources */,
