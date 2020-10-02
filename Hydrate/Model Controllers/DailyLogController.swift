@@ -17,7 +17,7 @@ class DailyLogController {
     
     // MARK: - Methods
     
-    fileprivate func dailyLog(for date: Date = Date()) -> DailyLog {
+    func dailyLog(for date: Date = Date()) -> DailyLog {
         let day = date.startOfDay
         let fetchRequest: NSFetchRequest<DailyLog> = DailyLog.fetchRequest()
         let datePredicate = NSPredicate(format: "(%K = %@)", #keyPath(DailyLog.date), day as NSDate)
@@ -38,4 +38,13 @@ class DailyLogController {
         return dailyLog
     }
     
+    func addIntakeEntry(intakeAmount: Int) {
+        IntakeEntry(intakeAmount: intakeAmount)
+        coreDataStack.saveContext()
+    }
+    
+    func delete(_ intakeEntry: IntakeEntry) {
+        coreDataStack.mainContext.delete(intakeEntry)
+        coreDataStack.saveContext()
+    }
 }
