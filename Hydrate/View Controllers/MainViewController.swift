@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import CoreData
 
 class MainViewController: UIViewController {
     
@@ -15,9 +14,11 @@ class MainViewController: UIViewController {
     
     var dailyLog: DailyLog! {
         didSet {
-            waterView.waterLevelHeight = waterLevel
+            updateViews()
         }
     }
+    
+    let dailyLogController = DailyLogController()
     
     var targetDailyIntake: Int = 96
     
@@ -49,7 +50,8 @@ class MainViewController: UIViewController {
     }
     
     var waterLevel: CGFloat {
-        CGFloat(totalIntake) / CGFloat(targetDailyIntake) * ((view.bounds.maxY - measurementMarkersView.frame.minY) / view.bounds.maxY)
+        guard let totalIntake = dailyLog?.totalIntake else { return 0 }
+        return CGFloat(totalIntake) / CGFloat(targetDailyIntake) * ((view.bounds.maxY - measurementMarkersView.frame.minY) / view.bounds.maxY)
     }
     
     lazy var coreDataStack = CoreDataStack.shared
@@ -159,24 +161,12 @@ class MainViewController: UIViewController {
     
     //MARK: - Private Methods
     
+    fileprivate func updateViews() {
+        waterView.waterLevelHeight = waterLevel
+    }
+    
     fileprivate func loadDailyLog() {
-        let date = Date().startOfDay
-        let fetchRequest: NSFetchRequest<DailyLog> = DailyLog.fetchRequest()
-        let datePredicate = NSPredicate(format: "(%K = %@)", #keyPath(DailyLog.date), date as NSDate)
-        fetchRequest.predicate = datePredicate
-        
-        do {
-            let dailyLog = try CoreDataStack.shared.mainContext.fetch(fetchRequest).first
-            if let dailyLog = dailyLog {
-                self.dailyLog = dailyLog
-                return
-            }
-        } catch let error as NSError {
-            print("Error fetching: \(error), \(error.userInfo)")
-        }
-        
-        self.dailyLog = DailyLog(date: date)
-        coreDataStack.saveContext()
+        dailyLog = dailyLogController.fetchDailyLog()
     }
     
     fileprivate func setupTapGestures() {
@@ -336,7 +326,7 @@ class MainViewController: UIViewController {
         addWaterLabelAnimation(withText: amountText, startingCenterPoint: buttonCenter, textColor: color)
         
         intakeAmountLabel.count(from: Float(totalIntake), to: Float(totalIntake + intakeAmount), duration: 0.4)
-        waterView.waterLevelHeight = waterLevel
+        updateViews()
     }
     
     // MARK: - Animations

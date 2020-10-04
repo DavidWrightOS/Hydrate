@@ -13,11 +13,11 @@ class DailyLogController {
     
     // MARK: - Properties
     
-    lazy var coreDataStack = CoreDataStack.shared
+    private lazy var coreDataStack = CoreDataStack.shared
     
     // MARK: - Methods
     
-    func dailyLog(for date: Date = Date()) -> DailyLog {
+    func fetchDailyLog(for date: Date = Date()) -> DailyLog {
         let day = date.startOfDay
         let fetchRequest: NSFetchRequest<DailyLog> = DailyLog.fetchRequest()
         let datePredicate = NSPredicate(format: "(%K = %@)", #keyPath(DailyLog.date), day as NSDate)
