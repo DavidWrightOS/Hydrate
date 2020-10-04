@@ -128,6 +128,14 @@ class DailyLogTableViewController: UITableViewController {
         return cell
     }
     
+    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+        if editingStyle == .delete {
+            
+            let dailyLog = fetchedResultsController.object(at: indexPath)
+            dailyLogController.delete(dailyLog)
+        }
+    }
+    
     override func setEditing(_ editing: Bool, animated: Bool) {
         super.setEditing(editing, animated: animated)
         

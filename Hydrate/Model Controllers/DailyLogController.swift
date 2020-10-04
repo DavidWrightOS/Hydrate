@@ -44,7 +44,14 @@ class DailyLogController {
         coreDataStack.saveContext()
     }
     
-    func delete(_ intakeEntry: IntakeEntry) {
+    func delete(_ dailyLog: DailyLog) {
+        coreDataStack.mainContext.delete(dailyLog)
+        coreDataStack.saveContext()
+    }
+    
+    func delete(_ intakeEntry: IntakeEntry, from dailyLog: DailyLog? = nil) {
+        let dailyLog = dailyLog ?? fetchDailyLog()
+        dailyLog.removeFromIntakeEntries(intakeEntry)
         coreDataStack.mainContext.delete(intakeEntry)
         coreDataStack.saveContext()
     }

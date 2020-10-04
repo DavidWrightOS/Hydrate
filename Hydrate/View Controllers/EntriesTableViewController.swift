@@ -128,6 +128,14 @@ class EntriesTableViewController: UITableViewController {
         return cell
     }
     
+    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+        if editingStyle == .delete {
+            
+            let intakeEntry = fetchedResultsController.object(at: indexPath)
+            dailyLogController.delete(intakeEntry, from: dailyLog)
+        }
+    }
+    
     override func setEditing(_ editing: Bool, animated: Bool) {
         super.setEditing(editing, animated: animated)
         self.navigationItem.leftBarButtonItem = editing ? self.addDataButton : nil
