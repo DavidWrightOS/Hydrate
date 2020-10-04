@@ -314,8 +314,7 @@ class MainViewController: UIViewController {
     fileprivate func addWater(_ intakeAmount: Int, selectedButtonIndex: Int? = nil) {
         guard intakeAmount != 0 else { return }
         
-        let _ = IntakeEntry(intakeAmount: intakeAmount, dailyLog: dailyLog)
-        coreDataStack.saveContext()
+        dailyLogController.add(intakeAmount: intakeAmount, to: dailyLog)
         
         let buttonIndex = selectedButtonIndex ?? 2
         var buttonCenter = addWaterIntakeButton.center

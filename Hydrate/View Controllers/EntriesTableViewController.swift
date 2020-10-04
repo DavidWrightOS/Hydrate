@@ -13,6 +13,8 @@ class EntriesTableViewController: UITableViewController {
     
     // MARK: - Properties
     
+    let dailyLogController = DailyLogController()
+    
     lazy var coreDataStack = CoreDataStack.shared
     
     var dailyLog: DailyLog!
@@ -142,11 +144,7 @@ class EntriesTableViewController: UITableViewController {
     }
     
     @objc fileprivate func addDataButtonTapped() {
-        print("DEBUG: Add data button tapped..")
-        let now = Date()
-        let timestamp = now.isInSameDayAs(date: dailyLog.date!) ? now : dailyLog.date!
-        let _ = IntakeEntry(intakeAmount: 8, timestamp: timestamp)
-        self.coreDataStack.saveContext()
+        dailyLogController.add(intakeAmount: 8, to: dailyLog)
     }
 }
 

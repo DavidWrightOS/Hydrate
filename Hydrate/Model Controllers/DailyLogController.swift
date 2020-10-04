@@ -38,8 +38,9 @@ class DailyLogController {
         return dailyLog
     }
     
-    func addIntakeEntry(intakeAmount: Int) {
-        IntakeEntry(intakeAmount: intakeAmount)
+    func add(intakeAmount: Int, to dailyLog: DailyLog? = nil) {
+        let dailyLog = dailyLog ?? fetchDailyLog()
+        IntakeEntry(intakeAmount: intakeAmount, dailyLog: dailyLog)
         coreDataStack.saveContext()
     }
     

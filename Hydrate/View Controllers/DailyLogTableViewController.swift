@@ -14,6 +14,7 @@ class DailyLogTableViewController: UITableViewController {
     // MARK: - Properties
     
     lazy var coreDataStack = CoreDataStack.shared
+    fileprivate let dailyLogController = DailyLogController()
     
     lazy var fetchedResultsController: NSFetchedResultsController<DailyLog> = {
         let fetchRequest: NSFetchRequest<DailyLog> = DailyLog.fetchRequest()
@@ -144,10 +145,8 @@ class DailyLogTableViewController: UITableViewController {
     }
     
     @objc fileprivate func addDataButtonTapped() {
-        print("DEBUG: Add data button tapped..")
-        let dailyLog = fetchDailyLog(for: Date())
-        dailyLog.addToIntakeEntries(IntakeEntry(intakeAmount: 8))
-        self.coreDataStack.saveContext()
+        let dailyLog = dailyLogController.fetchDailyLog()
+        dailyLogController.add(intakeAmount: 8, to: dailyLog)
     }
     
     // MARK: - Table view delegate
