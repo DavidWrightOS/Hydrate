@@ -12,19 +12,19 @@ class MainViewController: UIViewController {
     
     // MARK: - Properties
     
-    var dailyLog: DailyLog! {
+    fileprivate var dailyLog: DailyLog! {
         didSet {
             updateViews()
         }
     }
     
-    let dailyLogController = DailyLogController()
+    fileprivate let dailyLogController = DailyLogController()
     
-    var targetDailyIntake: Int = 96
+    fileprivate var targetDailyIntake: Int = 96
     
-    var intakeButtonAmounts = [8, 12, 16, 20, 32]
+    fileprivate var intakeButtonAmounts = [8, 12, 16, 20, 32]
     
-    lazy var intakeButtonOffsets: [CGPoint] = {
+    fileprivate lazy var intakeButtonOffsets: [CGPoint] = {
         var offsets: [CGPoint] = []
         let buttonCount = intakeButtonAmounts.count
         let radius: CGFloat = 150
@@ -45,16 +45,16 @@ class MainViewController: UIViewController {
         return offsets
     }()
     
-    var totalIntake: Int {
+    fileprivate var totalIntake: Int {
         Int(dailyLog.totalIntake)
     }
     
-    var waterLevel: CGFloat {
+    fileprivate var waterLevel: CGFloat {
         guard let totalIntake = dailyLog?.totalIntake else { return 0 }
         return CGFloat(totalIntake) / CGFloat(targetDailyIntake) * ((view.bounds.maxY - measurementMarkersView.frame.minY) / view.bounds.maxY)
     }
     
-    lazy var coreDataStack = CoreDataStack.shared
+    fileprivate lazy var coreDataStack = CoreDataStack.shared
     
     //MARK: - UI Components
     
@@ -218,7 +218,8 @@ class MainViewController: UIViewController {
             topControlsStackView.heightAnchor.constraint(equalToConstant: 60)
         ])
     }
-        fileprivate func setupIntakeLabels() {
+    
+    fileprivate func setupIntakeLabels() {
         NSLayoutConstraint.activate([
             intakeAmountLabel.centerYAnchor.constraint(equalTo: topControlsStackView.centerYAnchor, constant: -4),
             intakeAmountLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),

@@ -49,7 +49,7 @@ class SettingsViewController: UIViewController {
 
     // MARK: - Helpers
     
-    func configureNavigationBar() {
+    fileprivate func configureNavigationBar() {
         view.addSubview(navigationBar)
         navigationBar.anchor(top: view.topAnchor,
                              leading: view.leadingAnchor,
@@ -57,7 +57,7 @@ class SettingsViewController: UIViewController {
                              trailing: view.trailingAnchor)
     }
     
-    func configureTableView() {
+    fileprivate func configureTableView() {
         tableView.delegate = self
         tableView.dataSource = self
                 

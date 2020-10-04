@@ -13,10 +13,11 @@ class DailyLogTableViewController: UITableViewController {
 
     // MARK: - Properties
     
-    lazy var coreDataStack = CoreDataStack.shared
     fileprivate let dailyLogController = DailyLogController()
     
-    lazy var fetchedResultsController: NSFetchedResultsController<DailyLog> = {
+    fileprivate lazy var coreDataStack = CoreDataStack.shared
+    
+    fileprivate lazy var fetchedResultsController: NSFetchedResultsController<DailyLog> = {
         let fetchRequest: NSFetchRequest<DailyLog> = DailyLog.fetchRequest()
         fetchRequest.sortDescriptors = [NSSortDescriptor(key: #keyPath(DailyLog.date), ascending: false)]
         fetchRequest.fetchBatchSize = 50
@@ -77,7 +78,7 @@ class DailyLogTableViewController: UITableViewController {
         tableView.separatorColor = .ravenClawBlue
     }
     
-    func updateViews() {
+    fileprivate func updateViews() {
         guard isViewLoaded else { return }
         setEditing(false, animated: true)
         tableView.reloadData()
@@ -146,7 +147,7 @@ class DailyLogTableViewController: UITableViewController {
         }
     }
     
-    func configure(cell: UITableViewCell, for indexPath: IndexPath) {
+    fileprivate func configure(cell: UITableViewCell, for indexPath: IndexPath) {
         let dailyLog = fetchedResultsController.object(at: indexPath)
         cell.textLabel?.text = "\(dailyLog.totalIntake) oz."
         cell.detailTextLabel?.text = dateFormatter.string(from: dailyLog.date!)

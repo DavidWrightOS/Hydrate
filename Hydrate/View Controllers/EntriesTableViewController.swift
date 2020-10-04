@@ -13,13 +13,13 @@ class EntriesTableViewController: UITableViewController {
     
     // MARK: - Properties
     
-    let dailyLogController = DailyLogController()
+    fileprivate let dailyLogController = DailyLogController()
     
-    lazy var coreDataStack = CoreDataStack.shared
+    fileprivate lazy var coreDataStack = CoreDataStack.shared
     
-    var dailyLog: DailyLog!
+    fileprivate var dailyLog: DailyLog!
     
-    lazy var fetchedResultsController: NSFetchedResultsController<IntakeEntry> = {
+    fileprivate lazy var fetchedResultsController: NSFetchedResultsController<IntakeEntry> = {
         let fetchRequest: NSFetchRequest<IntakeEntry> = IntakeEntry.fetchRequest()
         fetchRequest.sortDescriptors = [NSSortDescriptor(key: #keyPath(IntakeEntry.timestamp), ascending: false)]
         fetchRequest.predicate = NSPredicate(format: "(%K = %@)", #keyPath(IntakeEntry.dailyLog), dailyLog)
@@ -101,7 +101,7 @@ class EntriesTableViewController: UITableViewController {
         tableView.separatorColor = .ravenClawBlue
     }
     
-    func updateViews() {
+    fileprivate func updateViews() {
         guard isViewLoaded else { return }
         setEditing(false, animated: true)
         tableView.reloadData()
