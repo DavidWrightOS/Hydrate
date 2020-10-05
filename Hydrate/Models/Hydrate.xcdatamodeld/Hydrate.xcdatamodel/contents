@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="17192" systemVersion="19H2" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
     <entity name="DailyLog" representedClassName="DailyLog" syncable="YES" codeGenerationType="class">
-        <attribute name="date" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="date" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="totalIntake" optional="YES" attributeType="Integer 64" derived="YES" derivationExpression="intakeEntries.amount.@sum" usesScalarValueType="YES"/>
         <relationship name="intakeEntries" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="IntakeEntry" inverseName="dailyLog" inverseEntity="IntakeEntry"/>
     </entity>

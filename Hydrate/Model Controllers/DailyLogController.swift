@@ -42,17 +42,34 @@ class DailyLogController {
         let dailyLog = dailyLog ?? fetchDailyLog()
         IntakeEntry(intakeAmount: intakeAmount, dailyLog: dailyLog)
         coreDataStack.saveContext()
+        sendNotificationIfNeeded(for: dailyLog)
     }
     
     func delete(_ dailyLog: DailyLog) {
         coreDataStack.mainContext.delete(dailyLog)
         coreDataStack.saveContext()
+        sendNotificationIfNeeded(for: dailyLog)
     }
     
     func delete(_ intakeEntry: IntakeEntry, from dailyLog: DailyLog? = nil) {
         let dailyLog = dailyLog ?? fetchDailyLog()
         dailyLog.removeFromIntakeEntries(intakeEntry)
         coreDataStack.mainContext.delete(intakeEntry)
+        if dailyLog.intakeEntries?.count == 0 {
+            coreDataStack.mainContext.delete(dailyLog)
+        }
         coreDataStack.saveContext()
+        sendNotificationIfNeeded(for: dailyLog)
+    }
+    
+    fileprivate func sendNotificationIfNeeded(for dailyLog: DailyLog) {
+        guard let date = dailyLog.date else {
+            NotificationCenter.default.post(Notification(name: .todaysDailyLogDidUpdateNotificationName))
+            return
+        }
+        
+        if date.isInCurrentDay {
+            NotificationCenter.default.post(Notification(name: .todaysDailyLogDidUpdateNotificationName))
+        }
     }
 }

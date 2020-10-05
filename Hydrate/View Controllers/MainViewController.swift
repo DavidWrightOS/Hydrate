@@ -140,6 +140,10 @@ class MainViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(reloadDailyLog),
+                                               name: .todaysDailyLogDidUpdateNotificationName,
+                                               object: nil)
         setupTapGestures()
         setupViews()
         loadDailyLog()
@@ -160,6 +164,11 @@ class MainViewController: UIViewController {
     }
     
     //MARK: - Private Methods
+    
+    @objc fileprivate func reloadDailyLog() {
+        dailyLog = dailyLogController.fetchDailyLog()
+        intakeAmountLabel.countFromCurrent(to: Float(dailyLog.totalIntake), duration: 0.4)
+    }
     
     fileprivate func updateViews() {
         waterView.waterLevelHeight = waterLevel
