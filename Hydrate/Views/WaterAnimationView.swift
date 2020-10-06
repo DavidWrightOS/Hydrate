@@ -10,11 +10,21 @@ import UIKit
 
 class WaterAnimationView: UIView {
     
-    // MARK: - Public Properties
-
-    var waterLevelHeight: CGFloat = 0.0 {
-        didSet {
-            animateWaterLevel()
+    // MARK: - Public
+    
+    func setWaterLevelHeight(_ waterLevel: CGFloat, animated: Bool = true) {
+        waterLevelHeight = waterLevel
+        
+        let waterLevelYPosition = bounds.maxY * (1 - waterLevelHeight)
+        
+        guard background.frame.origin.y > 0 || waterLevelYPosition > 0 else { return }
+        
+        if animated {
+            UIView.animate(withDuration: 0.75, delay: 0, options: .curveEaseInOut, animations: {
+                self.background.frame.origin.y = max(waterLevelYPosition, 0)
+            }, completion: nil)
+        } else {
+            background.frame.origin.y = max(waterLevelYPosition, 0)
         }
     }
     
@@ -40,6 +50,7 @@ class WaterAnimationView: UIView {
     
     // MARK: - Private Properties
     
+    private var waterLevelHeight: CGFloat = 0.0
     private weak var displayLink: CADisplayLink?
     private var startTime: CFTimeInterval = 0
     private let waveAmplitude: CGFloat = 6.5
@@ -124,15 +135,5 @@ private extension WaterAnimationView {
         let elapsed = CACurrentMediaTime() - startTime
         waveLayerForeground.path = wave(at: elapsed)?.cgPath
         waveLayerBackground.path = wave(at: elapsed, delay: delay)?.cgPath
-    }
-    
-    func animateWaterLevel() {
-        let waterLevelYPosition = bounds.maxY * (1 - waterLevelHeight)
-        
-        guard background.frame.origin.y > 0 || waterLevelYPosition > 0 else { return }
-        
-        UIView.animate(withDuration: 0.75, delay: 0, options: .curveEaseInOut, animations: {
-            self.background.frame.origin.y = max(waterLevelYPosition, 0)
-        }, completion: nil)
     }
 }

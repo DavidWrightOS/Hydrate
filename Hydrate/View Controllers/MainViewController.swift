@@ -166,12 +166,13 @@ class MainViewController: UIViewController {
     //MARK: - Private Methods
     
     @objc fileprivate func reloadDailyLog() {
+        let oldTotalIntake = dailyLog.totalIntake
         dailyLog = dailyLogController.fetchDailyLog()
-        intakeAmountLabel.countFromCurrent(to: Float(dailyLog.totalIntake), duration: 0.4)
+        intakeAmountLabel.count(from: Float(oldTotalIntake), to: Float(dailyLog.totalIntake), duration: 0.4)
     }
     
     fileprivate func updateViews() {
-        waterView.waterLevelHeight = waterLevel
+        waterView.setWaterLevelHeight(waterLevel)
     }
     
     fileprivate func loadDailyLog() {
@@ -190,6 +191,7 @@ class MainViewController: UIViewController {
     fileprivate func setupViews() {
         view.backgroundColor = UIColor.backgroundColor
         waterView = WaterAnimationView(frame: view.frame)
+        waterView.setWaterLevelHeight(0, animated: false)
         view.addSubview(waterView)
         
         // Add subviews
