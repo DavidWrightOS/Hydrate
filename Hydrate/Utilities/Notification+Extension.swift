@@ -10,4 +10,5 @@ import Foundation
 
 extension Notification.Name {
     static let todaysDailyLogDidUpdateNotificationName = Notification.Name("todaysDailyLogDidUpdateNotificationKey")
+    static let intakeEntriesDidChangeNotificationName = Notification.Name("intakeEntriesDidChangeNotificationKey")
 }
