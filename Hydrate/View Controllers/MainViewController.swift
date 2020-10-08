@@ -19,7 +19,6 @@ class MainViewController: UIViewController {
     }
     
     fileprivate let dailyLogController = DailyLogController()
-    fileprivate let intakeEntryController = IntakeEntryController()
     
     fileprivate var targetDailyIntake: Int = 96
     
@@ -53,6 +52,10 @@ class MainViewController: UIViewController {
     fileprivate var waterLevel: CGFloat {
         guard let totalIntake = dailyLog?.totalIntake else { return 0 }
         return CGFloat(totalIntake) / CGFloat(targetDailyIntake) * ((view.bounds.maxY - measurementMarkersView.frame.minY) / view.bounds.maxY)
+    }
+    
+    fileprivate var mostRecentIntakeEntryToday: IntakeEntry? {
+        dailyLogController.fetchIntakeEntries(for: dailyLog).first
     }
     
     fileprivate lazy var coreDataStack = CoreDataStack.shared
@@ -150,13 +153,14 @@ class MainViewController: UIViewController {
         loadIntakeEntries()
     }
     
+    // Shake to undo last intake entry
     override func motionEnded(_ motion: UIEvent.EventSubtype, with event: UIEvent?) {
         if motion == .motionShake {
             let generator = UINotificationFeedbackGenerator()
             generator.notificationOccurred(.success)
-            guard intakeEntryController.totalIntake != 0 else { return }
-            let decreaseWaterAmount = max(-16, -intakeEntryController.totalIntake)
-            addWater(decreaseWaterAmount)
+            
+            guard let entryToDelete = mostRecentIntakeEntryToday else { return }
+            undoAddWater(deletingIntakeEntry: entryToDelete)
         }
     }
     
@@ -167,18 +171,18 @@ class MainViewController: UIViewController {
     //MARK: - Private Methods
     
     @objc fileprivate func reloadIntakeEntries() {
-        let oldTotalIntake = intakeEntryController.totalIntake
-        intakeEntryController.loadIntakeEntries()
-        intakeAmountLabel.count(from: Float(oldTotalIntake), to: Float(intakeEntryController.totalIntake), duration: 0.4)
+        let oldTotalIntake = dailyLog?.totalIntake ?? 0
+        dailyLog = dailyLogController.fetchDailyLog()
+        intakeAmountLabel.count(from: Float(oldTotalIntake), to: Float(dailyLog.totalIntake), duration: 0.4)
     }
     
     fileprivate func updateViews() {
         waterView.setWaterLevelHeight(waterLevel)
-        intakeAmountLabel.countFromCurrent(to: Float(intakeEntryController.totalIntake), duration: 0.4)
+        intakeAmountLabel.countFromCurrent(to: Float(dailyLog.totalIntake), duration: 0.4)
     }
     
     fileprivate func loadIntakeEntries() {
-        intakeEntryController.loadIntakeEntries()
+        dailyLog = dailyLogController.fetchDailyLog()
         updateViews()
     }
     
@@ -329,7 +333,7 @@ class MainViewController: UIViewController {
     fileprivate func addWater(_ intakeAmount: Int, selectedButtonIndex: Int? = nil) {
         guard intakeAmount != 0 else { return }
         
-        intakeEntryController.addIntakeEntry(amount: intakeAmount)
+        dailyLogController.add(intakeAmount: intakeAmount, to: dailyLog)
         
         let buttonIndex = selectedButtonIndex ?? 2
         var buttonCenter = addWaterIntakeButton.center
@@ -340,6 +344,20 @@ class MainViewController: UIViewController {
         addWaterLabelAnimation(withText: amountText, startingCenterPoint: buttonCenter, textColor: color)
         
         intakeAmountLabel.count(from: Float(totalIntake), to: Float(totalIntake + intakeAmount), duration: 0.4)
+        updateViews()
+    }
+    
+    fileprivate func undoAddWater(deletingIntakeEntry intakeEntry: IntakeEntry) {
+        let amount = intakeEntry.amount
+        dailyLogController.delete(intakeEntry, from: dailyLog)
+        
+        var buttonCenter = addWaterIntakeButton.center
+        buttonCenter.x += intakeButtonOffsets[2].x
+        buttonCenter.y += intakeButtonOffsets[2].y
+        
+        addWaterLabelAnimation(withText: "\(-amount)", startingCenterPoint: buttonCenter, textColor: #colorLiteral(red: 0.5971726884, green: 0.2109181469, blue: 0.2735780059, alpha: 0.649614726))
+        
+        intakeAmountLabel.countFromCurrent(to: Float(dailyLog.totalIntake), duration: 0.4)
         updateViews()
     }
     
@@ -469,9 +487,8 @@ class MainViewController: UIViewController {
     
     fileprivate func handleGestureEnded(sender: UILongPressGestureRecognizer) {
         addWaterIntakeButton.adjustsImageWhenHighlighted = true
-        guard totalIntake != 0 else { return }
-        let decreaseWaterAmount = max(-16, -totalIntake)
-        addWater(decreaseWaterAmount)
+        guard let entryToDelete = mostRecentIntakeEntryToday else { return }
+        undoAddWater(deletingIntakeEntry: entryToDelete)
     }
     
     // Page Navigation
