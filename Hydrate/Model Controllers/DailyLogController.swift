@@ -38,6 +38,42 @@ class DailyLogController {
         return dailyLog
     }
     
+    func fetchIntakeEntries(for date: Date = Date()) -> [IntakeEntry]? {
+        let fetchRequest: NSFetchRequest<IntakeEntry> = IntakeEntry.fetchRequest()
+        let datePredicate = NSPredicate(format: "(%K >= %@) AND (%K < %@)",
+                                        #keyPath(IntakeEntry.timestamp), date.startOfDay as NSDate,
+                                        #keyPath(IntakeEntry.timestamp), date.startOfNextDay as NSDate)
+        fetchRequest.predicate = datePredicate
+        
+        let sortDescriptor = NSSortDescriptor(keyPath: \IntakeEntry.timestamp, ascending: false)
+        fetchRequest.sortDescriptors = [sortDescriptor]
+        
+        do {
+            let intakeEntries = try coreDataStack.mainContext.fetch(fetchRequest)
+            return intakeEntries
+        } catch let error as NSError {
+            print("Error fetching intakeEntries: \(error), \(error.userInfo)")
+            return nil
+        }
+    }
+    
+    func fetchIntakeEntries(for dailyLog: DailyLog) -> [IntakeEntry] {
+        let fetchRequest: NSFetchRequest<IntakeEntry> = IntakeEntry.fetchRequest()
+        let datePredicate = NSPredicate(format: "(%K == %@)", #keyPath(IntakeEntry.dailyLog), dailyLog)
+        fetchRequest.predicate = datePredicate
+        
+        let sortDescriptor = NSSortDescriptor(keyPath: \IntakeEntry.timestamp, ascending: false)
+        fetchRequest.sortDescriptors = [sortDescriptor]
+        
+        do {
+            let intakeEntries = try coreDataStack.mainContext.fetch(fetchRequest)
+            return intakeEntries
+        } catch let error as NSError {
+            print("Error fetching intakeEntries: \(error), \(error.userInfo)")
+            return []
+        }
+    }
+    
     func add(intakeAmount: Int, to dailyLog: DailyLog? = nil) {
         let dailyLog = dailyLog ?? fetchDailyLog()
         IntakeEntry(intakeAmount: intakeAmount, dailyLog: dailyLog)
