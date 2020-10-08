@@ -12,7 +12,7 @@ class MainViewController: UIViewController {
     
     // MARK: - Properties
     
-    fileprivate var dailyLog: DailyLog! {
+    fileprivate var dailyLog: DailyLog? {
         didSet {
             updateViews()
         }
@@ -46,16 +46,16 @@ class MainViewController: UIViewController {
     }()
     
     fileprivate var totalIntake: Int {
-        Int(dailyLog.totalIntake)
+        Int(dailyLog?.totalIntake ?? 0)
     }
     
     fileprivate var waterLevel: CGFloat {
-        guard let totalIntake = dailyLog?.totalIntake else { return 0 }
-        return CGFloat(totalIntake) / CGFloat(targetDailyIntake) * ((view.bounds.maxY - measurementMarkersView.frame.minY) / view.bounds.maxY)
+        CGFloat(totalIntake) / CGFloat(targetDailyIntake) *
+            ((view.bounds.maxY - measurementMarkersView.frame.minY) / view.bounds.maxY)
     }
     
-    fileprivate var mostRecentIntakeEntryToday: IntakeEntry? {
-        dailyLogController.fetchIntakeEntries(for: dailyLog).first
+    fileprivate var lastIntakeEntryAddedToday: IntakeEntry? {
+        dailyLogController.fetchIntakeEntries(for: .today)?.first
     }
     
     fileprivate lazy var coreDataStack = CoreDataStack.shared
@@ -144,41 +144,37 @@ class MainViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        NotificationCenter.default.addObserver(self,
-                                               selector: #selector(reloadIntakeEntries),
-                                               name: .todaysDailyLogDidUpdateNotificationName,
-                                               object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(reloadIntakeEntries),
+                                               name: .todaysDailyLogDidUpdateNotificationName, object: nil)
         setupTapGestures()
         setupViews()
         loadIntakeEntries()
     }
     
-    // Shake to undo last intake entry
+    // Shake to undo last intake entry added
     override func motionEnded(_ motion: UIEvent.EventSubtype, with event: UIEvent?) {
         if motion == .motionShake {
             let generator = UINotificationFeedbackGenerator()
             generator.notificationOccurred(.success)
             
-            guard let entryToDelete = mostRecentIntakeEntryToday else { return }
-            undoAddWater(deletingIntakeEntry: entryToDelete)
+            guard let intakeEntry = lastIntakeEntryAddedToday else { return }
+            undoAddWater(deletingIntakeEntry: intakeEntry)
         }
     }
     
-    override var preferredStatusBarStyle: UIStatusBarStyle {
-        return .lightContent
-    }
+    override var preferredStatusBarStyle: UIStatusBarStyle { .lightContent }
     
     //MARK: - Private Methods
     
     @objc fileprivate func reloadIntakeEntries() {
-        let oldTotalIntake = dailyLog?.totalIntake ?? 0
+        let oldTotalIntake = totalIntake
         dailyLog = dailyLogController.fetchDailyLog()
-        intakeAmountLabel.count(from: Float(oldTotalIntake), to: Float(dailyLog.totalIntake), duration: 0.4)
+        intakeAmountLabel.count(from: Float(oldTotalIntake), to: Float(totalIntake), duration: 0.4)
     }
     
     fileprivate func updateViews() {
         waterView.setWaterLevelHeight(waterLevel)
-        intakeAmountLabel.countFromCurrent(to: Float(dailyLog.totalIntake), duration: 0.4)
+        intakeAmountLabel.countFromCurrent(to: Float(totalIntake), duration: 0.4)
     }
     
     fileprivate func loadIntakeEntries() {
@@ -357,7 +353,7 @@ class MainViewController: UIViewController {
         
         addWaterLabelAnimation(withText: "\(-amount)", startingCenterPoint: buttonCenter, textColor: #colorLiteral(red: 0.5971726884, green: 0.2109181469, blue: 0.2735780059, alpha: 0.649614726))
         
-        intakeAmountLabel.countFromCurrent(to: Float(dailyLog.totalIntake), duration: 0.4)
+        intakeAmountLabel.countFromCurrent(to: Float(dailyLog?.totalIntake ?? 0), duration: 0.4)
         updateViews()
     }
     
@@ -487,7 +483,7 @@ class MainViewController: UIViewController {
     
     fileprivate func handleGestureEnded(sender: UILongPressGestureRecognizer) {
         addWaterIntakeButton.adjustsImageWhenHighlighted = true
-        guard let entryToDelete = mostRecentIntakeEntryToday else { return }
+        guard let entryToDelete = lastIntakeEntryAddedToday else { return }
         undoAddWater(deletingIntakeEntry: entryToDelete)
     }
     

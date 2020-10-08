@@ -32,7 +32,7 @@ extension IntakeEntry {
             fetchRequest.predicate = datePredicate
             
             do {
-                let dailyLog = try CoreDataStack.shared.mainContext.fetch(fetchRequest).first
+                let dailyLog = try context.fetch(fetchRequest).first
                 self.dailyLog = dailyLog ?? DailyLog(date: timestamp.startOfDay)
                 CoreDataStack.shared.saveContext()
             } catch let error as NSError {

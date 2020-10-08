@@ -17,7 +17,7 @@ class DailyLogController {
     
     // MARK: - Methods
     
-    func fetchDailyLog(for date: Date = Date()) -> DailyLog {
+    func fetchDailyLog(for date: Date = Date()) -> DailyLog? {
         let day = date.startOfDay
         let fetchRequest: NSFetchRequest<DailyLog> = DailyLog.fetchRequest()
         let datePredicate = NSPredicate(format: "(%K = %@)", #keyPath(DailyLog.date), day as NSDate)
@@ -75,10 +75,16 @@ class DailyLogController {
     }
     
     func add(intakeAmount: Int, to dailyLog: DailyLog? = nil) {
-        let dailyLog = dailyLog ?? fetchDailyLog()
-        IntakeEntry(intakeAmount: intakeAmount, dailyLog: dailyLog)
-        coreDataStack.saveContext()
-        sendNotificationIfNeeded(for: dailyLog)
+        if let dailyLog = dailyLog {
+            IntakeEntry(intakeAmount: intakeAmount, dailyLog: dailyLog)
+            coreDataStack.saveContext()
+            sendNotificationIfNeeded(for: dailyLog)
+        } else {
+            let intakeEntry = IntakeEntry(intakeAmount: intakeAmount)
+            let dailyLog = intakeEntry.dailyLog!
+            coreDataStack.saveContext()
+            sendNotificationIfNeeded(for: dailyLog)
+        }
     }
     
     func delete(_ dailyLog: DailyLog) {
@@ -88,12 +94,17 @@ class DailyLogController {
     }
     
     func delete(_ intakeEntry: IntakeEntry, from dailyLog: DailyLog? = nil) {
-        let dailyLog = dailyLog ?? fetchDailyLog()
+        guard let dailyLog = dailyLog ?? intakeEntry.dailyLog else {
+            coreDataStack.mainContext.delete(intakeEntry)
+            return
+        }
+        
         dailyLog.removeFromIntakeEntries(intakeEntry)
-        coreDataStack.mainContext.delete(intakeEntry)
+        
         if dailyLog.intakeEntries?.count == 0 {
             coreDataStack.mainContext.delete(dailyLog)
         }
+
         coreDataStack.saveContext()
         sendNotificationIfNeeded(for: dailyLog)
     }

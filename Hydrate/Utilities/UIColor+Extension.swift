@@ -30,7 +30,7 @@ extension UIColor {
     static let currColor1 = #colorLiteral(red: 0.2117647059, green: 0.2431372549, blue: 0.337254902, alpha: 1)
     static let currColor2 = #colorLiteral(red: 0.2941176471, green: 0.5411764706, blue: 0.6117647059, alpha: 1)
     static let currColor3 = #colorLiteral(red: 0.8470588235, green: 0.8470588235, blue: 0.8470588235, alpha: 1)
-    static let actionColor = #colorLiteral(red: 0.03921568627, green: 0.5176470588, blue: 1, alpha: 1)
+    static let actionColor = #colorLiteral(red: 0.2941176471, green: 0.5411764706, blue: 0.6117647059, alpha: 1)
     
     // Test Colors
     static let testColor1 = #colorLiteral(red: 0.09147954031, green: 0.2418307391, blue: 0.3917707695, alpha: 1)
