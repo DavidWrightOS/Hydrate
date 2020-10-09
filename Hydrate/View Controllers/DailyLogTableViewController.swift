@@ -154,8 +154,7 @@ class DailyLogTableViewController: UITableViewController {
     }
     
     @objc fileprivate func addDataButtonTapped() {
-        let dailyLog = dailyLogController.fetchDailyLog()
-        dailyLogController.add(intakeAmount: 8, to: dailyLog)
+        dailyLogController.add(intakeAmount: 8)
     }
     
     // MARK: - Table view delegate

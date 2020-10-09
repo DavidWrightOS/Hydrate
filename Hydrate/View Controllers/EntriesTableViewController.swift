@@ -132,7 +132,7 @@ class EntriesTableViewController: UITableViewController {
         if editingStyle == .delete {
             
             let intakeEntry = fetchedResultsController.object(at: indexPath)
-            dailyLogController.delete(intakeEntry, from: dailyLog)
+            dailyLogController.delete(intakeEntry)
         }
     }
     
@@ -152,7 +152,7 @@ class EntriesTableViewController: UITableViewController {
     }
     
     @objc fileprivate func addDataButtonTapped() {
-        dailyLogController.add(intakeAmount: 8, to: dailyLog)
+        dailyLogController.add(intakeAmount: 8)
     }
 }
 

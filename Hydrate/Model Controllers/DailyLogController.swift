@@ -13,9 +13,20 @@ class DailyLogController {
     
     // MARK: - Properties
     
+    var dailyLog: DailyLog?
+    
+    var lastIntakeEntryAddedToday: IntakeEntry? {
+        guard let dailyLog = dailyLog else { return nil }
+        return fetchIntakeEntries(for: dailyLog.date!)?.first
+    }
+    
     private lazy var coreDataStack = CoreDataStack.shared
     
     // MARK: - Methods
+    
+    func loadDailyLog(for date: Date = Date()) {
+        dailyLog = fetchDailyLog(for: date)
+    }
     
     func fetchDailyLog(for date: Date = Date()) -> DailyLog? {
         let day = date.startOfDay
@@ -24,7 +35,7 @@ class DailyLogController {
         fetchRequest.predicate = datePredicate
         
         do {
-            let dailyLog = try CoreDataStack.shared.mainContext.fetch(fetchRequest).first
+            let dailyLog = try coreDataStack.mainContext.fetch(fetchRequest).first
             if let dailyLog = dailyLog {
                 return dailyLog
             }
@@ -74,43 +85,64 @@ class DailyLogController {
         }
     }
     
-    func add(intakeAmount: Int, to dailyLog: DailyLog? = nil) {
-        if let dailyLog = dailyLog {
-            IntakeEntry(intakeAmount: intakeAmount, dailyLog: dailyLog)
-            coreDataStack.saveContext()
-            sendNotificationIfNeeded(for: dailyLog)
-        } else {
-            let intakeEntry = IntakeEntry(intakeAmount: intakeAmount)
-            let dailyLog = intakeEntry.dailyLog!
-            coreDataStack.saveContext()
-            sendNotificationIfNeeded(for: dailyLog)
+    func add(intakeAmount: Int) {
+        if dailyLog == nil {
+            dailyLog = fetchDailyLog() ?? DailyLog()
         }
+        
+        IntakeEntry(intakeAmount: intakeAmount, dailyLog: dailyLog)
+        coreDataStack.saveContext()
+        sendNotificationIfNeeded()
     }
     
     func delete(_ dailyLog: DailyLog) {
+        if self.dailyLog?.date == dailyLog.date {
+            self.dailyLog = nil
+        }
         coreDataStack.mainContext.delete(dailyLog)
         coreDataStack.saveContext()
-        sendNotificationIfNeeded(for: dailyLog)
+        sendNotificationIfNeeded()
     }
     
-    func delete(_ intakeEntry: IntakeEntry, from dailyLog: DailyLog? = nil) {
-        guard let dailyLog = dailyLog ?? intakeEntry.dailyLog else {
-            coreDataStack.mainContext.delete(intakeEntry)
-            return
-        }
-        
-        dailyLog.removeFromIntakeEntries(intakeEntry)
+    func undoLastIntakeEntry() -> Int {
+        guard let dailyLog = dailyLog, let intakeEntry = lastIntakeEntryAddedToday else { return 0 }
+        let intakeAmount = Int(intakeEntry.amount)
+        coreDataStack.mainContext.delete(intakeEntry)
         
         if dailyLog.intakeEntries?.count == 0 {
             coreDataStack.mainContext.delete(dailyLog)
         }
-
+        
         coreDataStack.saveContext()
-        sendNotificationIfNeeded(for: dailyLog)
+        
+        return intakeAmount
     }
     
-    fileprivate func sendNotificationIfNeeded(for dailyLog: DailyLog) {
-        guard let date = dailyLog.date else {
+    func delete(_ intakeEntry: IntakeEntry) {
+        guard let dailyLog = intakeEntry.dailyLog else {
+            coreDataStack.mainContext.delete(intakeEntry)
+            coreDataStack.saveContext()
+            return
+        }
+        
+        dailyLog.removeFromIntakeEntries(intakeEntry)
+        coreDataStack.mainContext.delete(intakeEntry)
+        
+        if dailyLog.intakeEntries?.count == 0 {
+            coreDataStack.mainContext.delete(dailyLog)
+        }
+        
+        coreDataStack.saveContext()
+        
+        if dailyLog.date == self.dailyLog?.date {
+            self.dailyLog = dailyLog
+        }
+        
+        sendNotificationIfNeeded()
+    }
+    
+    fileprivate func sendNotificationIfNeeded() {
+        guard let date = dailyLog?.date else {
             NotificationCenter.default.post(Notification(name: .todaysDailyLogDidUpdateNotificationName))
             return
         }
