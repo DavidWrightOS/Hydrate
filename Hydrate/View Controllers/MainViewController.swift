@@ -225,6 +225,7 @@ class MainViewController: UIViewController {
     
     override func viewDidLayoutSubviews() {
         customWaterButtons.forEach { $0.center = self.addWaterIntakeButton.center }
+        updateViews()
     }
     
     // MARK: - Measurement Markers
