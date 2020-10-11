@@ -165,8 +165,10 @@ class MainViewController: UIViewController {
     }
     
     fileprivate func updateViews() {
-        waterView.setWaterLevelHeight(waterLevel)
-        intakeAmountLabel.countFromCurrent(to: Float(totalIntake), duration: 0.4)
+        DispatchQueue.main.async {
+            self.waterView.setWaterLevelHeight(self.waterLevel)
+            self.intakeAmountLabel.countFromCurrent(to: Float(self.totalIntake), duration: 0.4)
+        }
     }
     
     fileprivate func setupTapGestures() {
