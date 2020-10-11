@@ -136,6 +136,10 @@ class MainViewController: UIViewController {
         
         NotificationCenter.default.addObserver(self, selector: #selector(loadIntakeEntries),
                                                name: .todaysDailyLogDidUpdateNotificationName, object: nil)
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(loadIntakeEntries),
+                                               name: .NSCalendarDayChanged, object: nil)
+        
         setupTapGestures()
         setupViews()
         loadIntakeEntries()
