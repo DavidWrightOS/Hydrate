@@ -36,17 +36,12 @@ class DailyLogController {
         
         do {
             let dailyLog = try coreDataStack.mainContext.fetch(fetchRequest).first
-            if let dailyLog = dailyLog {
-                return dailyLog
-            }
+            return dailyLog
         } catch let error as NSError {
             print("Error fetching: \(error), \(error.userInfo)")
         }
         
-        let dailyLog = DailyLog(date: day)
-        coreDataStack.saveContext()
-        
-        return dailyLog
+        return nil
     }
     
     func fetchIntakeEntries(for date: Date = Date()) -> [IntakeEntry]? {
@@ -86,12 +81,9 @@ class DailyLogController {
     }
     
     func add(intakeAmount: Int) {
-        if dailyLog == nil {
-            dailyLog = fetchDailyLog() ?? DailyLog()
-        }
-        
-        IntakeEntry(intakeAmount: intakeAmount, dailyLog: dailyLog)
+        IntakeEntry(intakeAmount: intakeAmount)
         coreDataStack.saveContext()
+        dailyLog = fetchDailyLog()
         sendNotificationIfNeeded()
     }
     
