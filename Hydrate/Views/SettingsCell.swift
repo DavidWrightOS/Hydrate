@@ -16,13 +16,16 @@ class SettingsCell: UITableViewCell {
         didSet {
             guard let setting = setting else { return }
             textLabel?.text = setting.description
-            switchControl.isHidden = !setting.containsSwitch
-            
-            if setting.containsSwitch {
+            detailTextLabel?.text = setting.description
+            switch setting.settingsCellType {
+            case .onOffSwitch:
                 self.accessoryType = .none
-            } else {
+            default:
                 addDisclosureIndicator()
             }
+            
+            switchControl.isHidden = setting.settingsCellType != .onOffSwitch
+            detailTextLabel?.text = setting.settingsCellType == .dynamicText ? "Dynamic Text" : nil
         }
     }
     
@@ -38,11 +41,12 @@ class SettingsCell: UITableViewCell {
     // MARK: - Init
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
-        super.init(style: style, reuseIdentifier: reuseIdentifier)
+        super.init(style: .value1, reuseIdentifier: reuseIdentifier)
         
         selectionStyle = .none
         backgroundColor = .ravenClawBlue90
         textLabel?.textColor = .undeadWhite
+        detailTextLabel?.textColor = UIColor.undeadWhite.withAlphaComponent(0.5)
         
         addSubview(switchControl)
         switchControl.centerYAnchor.constraint(equalTo: centerYAnchor).isActive = true

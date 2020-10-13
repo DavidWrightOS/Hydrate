@@ -69,7 +69,7 @@ class EntriesTableViewController: UITableViewController {
         cell.backgroundColor = .ravenClawBlue90
         cell.tintColor = .sicklySmurfBlue
         cell.textLabel?.textColor = .undeadWhite
-        cell.detailTextLabel?.textColor = UIColor.undeadWhite.withAlphaComponent(0.4)
+        cell.detailTextLabel?.textColor = UIColor.undeadWhite.withAlphaComponent(0.5)
         cell.selectionStyle = .none
         return cell
     }

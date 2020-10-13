@@ -29,7 +29,7 @@ class SettingsViewController: UIViewController {
     }()
     
     fileprivate let tableView: UITableView = {
-        let tableView = UITableView()
+        let tableView = UITableView(frame: .zero, style: .insetGrouped)
         tableView.register(SettingsCell.self, forCellReuseIdentifier: reuseIdentifier)
         tableView.alwaysBounceVertical = false
         tableView.backgroundColor = .ravenClawBlue

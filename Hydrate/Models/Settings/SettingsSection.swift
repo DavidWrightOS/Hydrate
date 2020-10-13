@@ -7,25 +7,40 @@
 //
 
 protocol SettingOption: CustomStringConvertible {
-    var containsSwitch: Bool { get }
+    var settingsCellType: SettingsCellType { get }
+}
+
+enum SettingsCellType: Int, CaseIterable {
+    case disclosureIndicator
+    case onOffSwitch
+    case dynamicText
 }
 
 // MARK: - Settings TableView Sections
 
 enum SettingsSection: Int, CaseIterable, CustomStringConvertible {
+    case general
     case notifications
     case appSettings
     case about
     
     var description: String {
         switch self {
+        case .general: return "General"
         case .notifications: return "Notifications"
         case .appSettings: return "App Settings"
         case .about: return "About"
         }
     }
     
-    var headerText: String? { description }
+    var headerText: String? {
+        switch self {
+        case .general: return nil
+        case .notifications: return "Notifications"
+        case .appSettings: return "App Settings"
+        case .about: return "About"
+        }
+    }
     
     var footerText: String? {
         switch self {
@@ -36,6 +51,7 @@ enum SettingsSection: Int, CaseIterable, CustomStringConvertible {
     
     var settingOptions: [SettingOption] {
         switch self {
+        case .general: return GeneralSettings.allCases
         case .notifications: return NotificationSettings.allCases
         case .appSettings: return AppSettings.allCases
         case .about: return AboutSettings.allCases
@@ -45,10 +61,29 @@ enum SettingsSection: Int, CaseIterable, CustomStringConvertible {
 
 // MARK: - Settings TableView Rows
 
+enum GeneralSettings: Int, CaseIterable, SettingOption {
+    case targetDailyIntake
+    case unit
+    
+    var settingsCellType: SettingsCellType {
+        switch self {
+        case .targetDailyIntake: return .dynamicText
+        case .unit: return .dynamicText
+        }
+    }
+    
+    var description: String {
+        switch self {
+        case .targetDailyIntake: return "Target Daily Intake"
+        case .unit: return "Unit"
+        }
+    }
+}
+
 enum NotificationSettings: Int, CaseIterable, SettingOption {
     case receiveNotifications
     
-    var containsSwitch: Bool { return true }
+    var settingsCellType: SettingsCellType { return .onOffSwitch }
     
     var description: String {
         switch self {
@@ -62,7 +97,7 @@ enum AppSettings: Int, CaseIterable, SettingOption {
     case hapticFeedback
     case addToHealthApp
     
-    var containsSwitch: Bool { return true }
+    var settingsCellType: SettingsCellType { return .onOffSwitch }
     
     var description: String {
         switch self {
@@ -78,7 +113,7 @@ enum AboutSettings: Int, CaseIterable, SettingOption {
     case rateApp
     case aboutUs
     
-    var containsSwitch: Bool { return false }
+    var settingsCellType: SettingsCellType { return .disclosureIndicator }
     
     var description: String {
         switch self {
