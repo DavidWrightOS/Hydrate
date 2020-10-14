@@ -15,6 +15,7 @@
 		635939C3251888EA00776BB9 /* Hydrate.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 635939C1251888EA00776BB9 /* Hydrate.xcdatamodeld */; };
 		635939C625188A7F00776BB9 /* CoreDataStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 635939C525188A7F00776BB9 /* CoreDataStack.swift */; };
 		635939C925188AE600776BB9 /* IntakeEntry+Convenience.swift in Sources */ = {isa = PBXBuildFile; fileRef = 635939C825188AE600776BB9 /* IntakeEntry+Convenience.swift */; };
+		635DA0042536C3280026D570 /* HydrateSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 635DA0032536C3280026D570 /* HydrateSettings.swift */; };
 		63769DC22522EF6000E26A48 /* EntriesTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63769DC12522EF6000E26A48 /* EntriesTableViewController.swift */; };
 		63769DC82523F2FB00E26A48 /* DailyLog+Convenience.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63769DC72523F2FB00E26A48 /* DailyLog+Convenience.swift */; };
 		63769DD02526F08B00E26A48 /* DailyLogController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63769DCF2526F08B00E26A48 /* DailyLogController.swift */; };
@@ -41,6 +42,7 @@
 		635939C2251888EA00776BB9 /* Hydrate.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Hydrate.xcdatamodel; sourceTree = "<group>"; };
 		635939C525188A7F00776BB9 /* CoreDataStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataStack.swift; sourceTree = "<group>"; };
 		635939C825188AE600776BB9 /* IntakeEntry+Convenience.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "IntakeEntry+Convenience.swift"; sourceTree = "<group>"; };
+		635DA0032536C3280026D570 /* HydrateSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HydrateSettings.swift; sourceTree = "<group>"; };
 		63769DC12522EF6000E26A48 /* EntriesTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EntriesTableViewController.swift; sourceTree = "<group>"; };
 		63769DC72523F2FB00E26A48 /* DailyLog+Convenience.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DailyLog+Convenience.swift"; sourceTree = "<group>"; };
 		63769DCF2526F08B00E26A48 /* DailyLogController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DailyLogController.swift; sourceTree = "<group>"; };
@@ -74,6 +76,7 @@
 		63589F4A2521C000008CFD48 /* Settings */ = {
 			isa = PBXGroup;
 			children = (
+				635DA0032536C3280026D570 /* HydrateSettings.swift */,
 				63589F4B2521C037008CFD48 /* SettingsSection.swift */,
 			);
 			path = Settings;
@@ -244,6 +247,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				635DA0042536C3280026D570 /* HydrateSettings.swift in Sources */,
 				63769DD02526F08B00E26A48 /* DailyLogController.swift in Sources */,
 				638DC58925182EB900C4D1D9 /* DailyLogTableViewController.swift in Sources */,
 				635939C3251888EA00776BB9 /* Hydrate.xcdatamodeld in Sources */,
