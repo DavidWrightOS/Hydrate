@@ -8,12 +8,13 @@
 
 protocol SettingOption: CustomStringConvertible {
     var settingsCellType: SettingsCellType { get }
+//    var settingValue: Any? { get set }
 }
 
-enum SettingsCellType: Int, CaseIterable {
+enum SettingsCellType {
     case disclosureIndicator
-    case onOffSwitch
-    case dynamicText
+    case onOffSwitch(Bool)
+    case detailLabel(String)
 }
 
 // MARK: - Settings TableView Sections
@@ -67,8 +68,8 @@ enum GeneralSettings: Int, CaseIterable, SettingOption {
     
     var settingsCellType: SettingsCellType {
         switch self {
-        case .targetDailyIntake: return .dynamicText
-        case .unit: return .dynamicText
+        case .targetDailyIntake: return .detailLabel(String(MySettings.targetDailyIntake))
+        case .unit: return .detailLabel(MySettings.unit.abbreviation)
         }
     }
     
@@ -83,7 +84,11 @@ enum GeneralSettings: Int, CaseIterable, SettingOption {
 enum NotificationSettings: Int, CaseIterable, SettingOption {
     case receiveNotifications
     
-    var settingsCellType: SettingsCellType { return .onOffSwitch }
+    var settingsCellType: SettingsCellType {
+        switch self {
+        case .receiveNotifications: return .onOffSwitch(MySettings.notificationsEnabled)
+        }
+    }
     
     var description: String {
         switch self {
@@ -97,7 +102,13 @@ enum AppSettings: Int, CaseIterable, SettingOption {
     case hapticFeedback
     case addToHealthApp
     
-    var settingsCellType: SettingsCellType { return .onOffSwitch }
+    var settingsCellType: SettingsCellType {
+        switch self {
+        case .inAppSounds: return .onOffSwitch(MySettings.inAppSoundsEnabled)
+        case .hapticFeedback: return .onOffSwitch(MySettings.hapticFeedbackEnabled)
+        case .addToHealthApp: return .onOffSwitch(MySettings.appleHealthIntegrationEnabled)
+        }
+    }
     
     var description: String {
         switch self {
