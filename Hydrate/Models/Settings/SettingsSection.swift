@@ -68,8 +68,8 @@ enum GeneralSettings: Int, CaseIterable, SettingOption {
     
     var settingsCellType: SettingsCellType {
         switch self {
-        case .targetDailyIntake: return .detailLabel(String(MySettings.targetDailyIntake))
-        case .unit: return .detailLabel(MySettings.unit.abbreviation)
+        case .targetDailyIntake: return .detailLabel(String(HydrateSettings.targetDailyIntake))
+        case .unit: return .detailLabel(HydrateSettings.unit.abbreviation)
         }
     }
     
@@ -86,7 +86,7 @@ enum NotificationSettings: Int, CaseIterable, SettingOption {
     
     var settingsCellType: SettingsCellType {
         switch self {
-        case .receiveNotifications: return .onOffSwitch(MySettings.notificationsEnabled)
+        case .receiveNotifications: return .onOffSwitch(HydrateSettings.notificationsEnabled)
         }
     }
     
@@ -104,9 +104,9 @@ enum AppSettings: Int, CaseIterable, SettingOption {
     
     var settingsCellType: SettingsCellType {
         switch self {
-        case .inAppSounds: return .onOffSwitch(MySettings.inAppSoundsEnabled)
-        case .hapticFeedback: return .onOffSwitch(MySettings.hapticFeedbackEnabled)
-        case .addToHealthApp: return .onOffSwitch(MySettings.appleHealthIntegrationEnabled)
+        case .inAppSounds: return .onOffSwitch(HydrateSettings.inAppSoundsEnabled)
+        case .hapticFeedback: return .onOffSwitch(HydrateSettings.hapticFeedbackEnabled)
+        case .addToHealthApp: return .onOffSwitch(HydrateSettings.appleHealthIntegrationEnabled)
         }
     }
     
