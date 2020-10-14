@@ -15,17 +15,24 @@ class SettingsCell: UITableViewCell {
     var setting: SettingOption? {
         didSet {
             guard let setting = setting else { return }
+            
             textLabel?.text = setting.description
-            detailTextLabel?.text = setting.description
+            
             switch setting.settingsCellType {
-            case .onOffSwitch:
+            case .onOffSwitch(let switchState):
                 self.accessoryType = .none
+                switchControl.isOn = switchState
+                switchControl.isHidden = false
+                detailTextLabel?.text = nil
+            case .detailLabel(let detailString):
+                addDisclosureIndicator()
+                switchControl.isHidden = true
+                detailTextLabel?.text = detailString
             default:
                 addDisclosureIndicator()
+                switchControl.isHidden = true
+                detailTextLabel?.text = nil
             }
-            
-            switchControl.isHidden = setting.settingsCellType != .onOffSwitch
-            detailTextLabel?.text = setting.settingsCellType == .dynamicText ? "Dynamic Text" : nil
         }
     }
     
