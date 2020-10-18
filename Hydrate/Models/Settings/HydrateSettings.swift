@@ -8,6 +8,20 @@
 
 import Foundation
 
+extension Notification.Name {
+    static let settingsChanged = Notification.Name("SettingsChanged")
+}
+
+@objc protocol SettingsTracking {
+    @objc func settingsDataChanged()
+}
+
+extension SettingsTracking {
+    func registerForSettingsChanges() {
+        NotificationCenter.default.addObserver(self, selector: #selector(settingsDataChanged), name: .settingsChanged, object: nil)
+    }
+}
+
 @objc protocol SettingsConfigurable {
     static var targetDailyIntake: Int { get set }
     static var unitRawValue: Int { get set }
@@ -58,10 +72,16 @@ class HydrateSettings: NSObject, SettingsConfigurable {
     
     private static func updateDefaults(for key: String, value: Any) {
         UserDefaults.standard.set(value, forKey: key)
+        sendSettingsChangedNotification()
     }
     
     private static func value<T>(for key: String) -> T? {
         UserDefaults.standard.value(forKey: key) as? T
+    }
+    
+    private static func sendSettingsChangedNotification() {
+        let notification = Notification(name: .settingsChanged)
+        NotificationQueue.default.enqueue(notification, postingStyle: .asap, coalesceMask: .onName, forModes: [.common])
     }
 }
 

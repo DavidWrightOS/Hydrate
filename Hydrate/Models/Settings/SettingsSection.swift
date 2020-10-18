@@ -37,9 +37,7 @@ enum SettingsSection: Int, CaseIterable, CustomStringConvertible {
     var headerText: String? {
         switch self {
         case .general: return nil
-        case .notifications: return "Notifications"
-        case .appSettings: return "App Settings"
-        case .about: return "About"
+        default: return description
         }
     }
     

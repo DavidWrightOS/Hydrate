@@ -8,7 +8,7 @@
 
 import UIKit
 
-class MainViewController: UIViewController {
+class MainViewController: UIViewController, SettingsTracking {
     
     // MARK: - Properties
     
@@ -134,6 +134,8 @@ class MainViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        registerForSettingsChanges()
+        
         NotificationCenter.default.addObserver(self, selector: #selector(loadIntakeEntries),
                                                name: .todaysDailyLogDidUpdateNotificationName, object: nil)
         
@@ -158,6 +160,10 @@ class MainViewController: UIViewController {
     override var preferredStatusBarStyle: UIStatusBarStyle { .lightContent }
     
     //MARK: - Private Methods
+    
+    func settingsDataChanged() {
+        updateViews()
+    }
     
     @objc fileprivate func loadIntakeEntries() {
         dailyLogController.loadDailyLog()
