@@ -68,11 +68,38 @@ class SettingsViewController: UIViewController {
                          trailing: view.trailingAnchor)
     }
     
-    fileprivate func showTargetDailyIntakeSelectionView() {
-        print("DEBUG: Show Target Daily Intake Selection..")
+    fileprivate func presentTargetIntakeSelectionView(for indexPath: IndexPath) {
+        let title = "Target Intake"
+        let message = "Enter your target daily water intake."
+        let alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        
+        let currentValue = HydrateSettings.targetDailyIntake
+        
+        alertController.addTextField { textField in
+            textField.placeholder = title
+            textField.text = String(currentValue)
+        }
+        
+        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel) { [weak self] _ in
+            self?.tableView.deselectRow(at: indexPath, animated: false)
+        }
+        alertController.addAction(cancelAction)
+        
+        let saveAction = UIAlertAction(title: "Save", style: .default) { [weak self, weak alertController] _ in
+            guard let alertController = alertController, let textField = alertController.textFields?.first else { return }
+            
+            if let string = textField.text, let newValue = Int(string), newValue != currentValue {
+                self?.tableView.deselectRow(at: indexPath, animated: false)
+                HydrateSettings.targetDailyIntake = newValue
+                self?.tableView.cellForRow(at: indexPath)?.detailTextLabel?.text = string
+            }
+        }
+        
+        alertController.addAction(saveAction)
+        present(alertController, animated: true)
     }
     
-    fileprivate func showUnitSelectionView() {
+    fileprivate func presentUnitSelectionView() {
         print("DEBUG: Show Unit Selection..")
     }
     
@@ -143,8 +170,8 @@ extension SettingsViewController: UITableViewDelegate {
         case .general:
             let setting = section.settingOptions[indexPath.row] as! GeneralSettings
             switch setting {
-            case .targetDailyIntake: showTargetDailyIntakeSelectionView()
-            case .unit: showUnitSelectionView()
+            case .targetDailyIntake: presentTargetIntakeSelectionView(for: indexPath)
+            case .unit: presentUnitSelectionView()
             }
         case .about:
             let setting = section.settingOptions[indexPath.row] as! AboutSettings

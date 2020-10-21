@@ -18,17 +18,24 @@ class SettingsCell: UITableViewCell {
             
             textLabel?.text = setting.description
             
+            let backgroundView = UIView()
+            backgroundView.backgroundColor = #colorLiteral(red: 0.4117198288, green: 0.4353218675, blue: 0.5058182478, alpha: 1)
+            selectedBackgroundView = backgroundView
+            
             switch setting.settingsCellType {
             case .onOffSwitch(let switchState):
+                selectionStyle = .none
                 self.accessoryType = .none
                 switchControl.isOn = switchState
                 switchControl.isHidden = false
                 detailTextLabel?.text = nil
             case .detailLabel(let detailString):
+                selectionStyle = .default
                 addDisclosureIndicator()
                 switchControl.isHidden = true
                 detailTextLabel?.text = detailString
             default:
+                selectionStyle = .none
                 addDisclosureIndicator()
                 switchControl.isHidden = true
                 detailTextLabel?.text = nil
