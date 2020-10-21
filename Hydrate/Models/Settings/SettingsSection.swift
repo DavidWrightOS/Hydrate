@@ -11,6 +11,10 @@ protocol SettingOption: CustomStringConvertible {
     func updateValue(to value: Any)
 }
 
+extension SettingOption {
+    func updateValue(to value: Any) {}
+}
+
 enum SettingsCellType {
     case disclosureIndicator
     case onOffSwitch(Bool)
@@ -145,9 +149,7 @@ enum AboutSettings: Int, CaseIterable, SettingOption {
     case aboutUs
     
     var settingsCellType: SettingsCellType { return .disclosureIndicator }
-    
-    func updateValue(to value: Any) {}
-        
+            
     var description: String {
         switch self {
         case .reportIssue: return "Report an Issue"

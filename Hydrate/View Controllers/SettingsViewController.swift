@@ -68,6 +68,26 @@ class SettingsViewController: UIViewController {
                          trailing: view.trailingAnchor)
     }
     
+    fileprivate func showTargetDailyIntakeSelectionView() {
+        print("DEBUG: Show Target Daily Intake Selection..")
+    }
+    
+    fileprivate func showUnitSelectionView() {
+        print("DEBUG: Show Unit Selection..")
+    }
+    
+    fileprivate func handleReportIssue() {
+        print("DEBUG: Handle Report Issue..")
+    }
+    
+    fileprivate func handleRateApp() {
+        print("DEBUG: Handle Rate App..")
+    }
+    
+    fileprivate func handleAboutUs() {
+        print("DEBUG: Handle About Us..")
+    }
+    
     // MARK: - Selectors
     
     @objc fileprivate func doneButtonTapped() {
@@ -118,10 +138,24 @@ extension SettingsViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         guard let section = SettingsSection(rawValue: indexPath.section),
               indexPath.row < section.settingOptions.count else { return }
-        
-        let row = section.settingOptions[indexPath.row]
-        
-        print("Debug: \(row.description) tapped..")
+                
+        switch section {
+        case .general:
+            let setting = section.settingOptions[indexPath.row] as! GeneralSettings
+            switch setting {
+            case .targetDailyIntake: showTargetDailyIntakeSelectionView()
+            case .unit: showUnitSelectionView()
+            }
+        case .about:
+            let setting = section.settingOptions[indexPath.row] as! AboutSettings
+            switch setting {
+            case .reportIssue: handleReportIssue()
+            case .rateApp: handleRateApp()
+            case .aboutUs: handleAboutUs()
+            }
+        default:
+            break
+        }
     }
 }
 
@@ -138,12 +172,23 @@ extension SettingsViewController: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: reuseIdentifier, for: indexPath) as! SettingsCell
+        let cell = dequeueReusableSettingsCell(in: tableView, indexPath: indexPath)
         guard let section = SettingsSection(rawValue: indexPath.section),
               indexPath.row < section.settingOptions.count else { return UITableViewCell() }
         
         cell.setting = section.settingOptions[indexPath.row]
         
+        return cell
+    }
+    
+    func dequeueReusableSettingsCell(in tableView: UITableView, indexPath: IndexPath) -> SettingsCell {
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: reuseIdentifier, for: indexPath) as? SettingsCell else {
+            fatalError("Failed to dequeue a SettingsCell.")
+        }
+        cell.textLabel?.text = nil
+        cell.detailTextLabel?.text = nil
+        cell.accessoryType = .none
+        cell.accessoryView = .none
         return cell
     }
 }
