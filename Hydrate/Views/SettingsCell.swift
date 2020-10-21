@@ -67,10 +67,6 @@ class SettingsCell: UITableViewCell {
     // MARK: - Selectors
     
     @objc func handleSwitchAction(sender: UISwitch) {
-        if sender.isOn {
-            print("Debug: \(setting?.description ?? "?") turned ON..")
-        } else {
-            print("Debug: \(setting?.description ?? "?") turned OFF..")
-        }
+        setting?.updateValue(to: sender.isOn)
     }
 }

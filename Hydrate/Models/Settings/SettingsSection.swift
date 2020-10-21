@@ -8,7 +8,7 @@
 
 protocol SettingOption: CustomStringConvertible {
     var settingsCellType: SettingsCellType { get }
-//    var settingValue: Any? { get set }
+    func updateValue(to value: Any)
 }
 
 enum SettingsCellType {
@@ -59,6 +59,7 @@ enum SettingsSection: Int, CaseIterable, CustomStringConvertible {
 }
 
 // MARK: - Settings TableView Rows
+// Each enum defined below is its own section, and the cases are the rows in that section
 
 enum GeneralSettings: Int, CaseIterable, SettingOption {
     case targetDailyIntake
@@ -68,6 +69,13 @@ enum GeneralSettings: Int, CaseIterable, SettingOption {
         switch self {
         case .targetDailyIntake: return .detailLabel(String(HydrateSettings.targetDailyIntake))
         case .unit: return .detailLabel(HydrateSettings.unit.abbreviation)
+        }
+    }
+    
+    func updateValue(to value: Any) {
+        switch self {
+        case .targetDailyIntake: HydrateSettings.targetDailyIntake = value as! Int
+        case .unit: HydrateSettings.unit = value as! Unit
         }
     }
     
@@ -85,6 +93,12 @@ enum NotificationSettings: Int, CaseIterable, SettingOption {
     var settingsCellType: SettingsCellType {
         switch self {
         case .receiveNotifications: return .onOffSwitch(HydrateSettings.notificationsEnabled)
+        }
+    }
+    
+    func updateValue(to value: Any) {
+        switch self {
+        case .receiveNotifications: HydrateSettings.notificationsEnabled = value as! Bool
         }
     }
     
@@ -108,6 +122,14 @@ enum AppSettings: Int, CaseIterable, SettingOption {
         }
     }
     
+    func updateValue(to value: Any) {
+        switch self {
+        case .inAppSounds: HydrateSettings.inAppSoundsEnabled = value as! Bool
+        case .hapticFeedback: HydrateSettings.hapticFeedbackEnabled = value as! Bool
+        case .addToHealthApp: HydrateSettings.appleHealthIntegrationEnabled = value as! Bool
+        }
+    }
+    
     var description: String {
         switch self {
         case .inAppSounds: return "In App Sounds"
@@ -124,6 +146,8 @@ enum AboutSettings: Int, CaseIterable, SettingOption {
     
     var settingsCellType: SettingsCellType { return .disclosureIndicator }
     
+    func updateValue(to value: Any) {}
+        
     var description: String {
         switch self {
         case .reportIssue: return "Report an Issue"
