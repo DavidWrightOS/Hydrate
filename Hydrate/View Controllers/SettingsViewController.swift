@@ -89,9 +89,9 @@ class SettingsViewController: UIViewController {
             guard let alertController = alertController, let textField = alertController.textFields?.first else { return }
             
             if let string = textField.text, let newValue = Int(string), newValue != currentValue {
-                self?.tableView.deselectRow(at: indexPath, animated: false)
                 HydrateSettings.targetDailyIntake = newValue
                 self?.tableView.cellForRow(at: indexPath)?.detailTextLabel?.text = string
+                self?.tableView.deselectRow(at: indexPath, animated: false)
             }
         }
         
@@ -99,8 +99,34 @@ class SettingsViewController: UIViewController {
         present(alertController, animated: true)
     }
     
-    fileprivate func presentUnitSelectionView() {
-        print("DEBUG: Show Unit Selection..")
+    fileprivate func presentUnitSelectionView(for indexPath: IndexPath) {
+        let title = "Select Unit"
+        let alertController = UIAlertController(title: title, message: nil, preferredStyle: .actionSheet)
+        
+        let currentUnit = HydrateSettings.unit
+        
+        for unit in Unit.allCases {
+            let actionTitle = "\(unit.description) (\(unit.abbreviation))"
+            let action = UIAlertAction(title: actionTitle, style: .default) { [weak self] (action) in
+                if unit != currentUnit {
+                    HydrateSettings.unit = unit
+                    self?.tableView.cellForRow(at: indexPath)?.detailTextLabel?.text = unit.abbreviation
+                    self?.tableView.deselectRow(at: indexPath, animated: false)
+                }
+            }
+            
+            let shouldShowCheckmark = unit == currentUnit
+            action.setValue(shouldShowCheckmark, forKey: "checked")
+            alertController.addAction(action)
+        }
+        
+        let cancel = UIAlertAction(title: "Cancel", style: .cancel) { [weak self] _ in
+            self?.tableView.deselectRow(at: indexPath, animated: false)
+        }
+        
+        alertController.addAction(cancel)
+        
+        present(alertController, animated: true)
     }
     
     fileprivate func handleReportIssue() {
@@ -171,7 +197,7 @@ extension SettingsViewController: UITableViewDelegate {
             let setting = section.settingOptions[indexPath.row] as! GeneralSettings
             switch setting {
             case .targetDailyIntake: presentTargetIntakeSelectionView(for: indexPath)
-            case .unit: presentUnitSelectionView()
+            case .unit: presentUnitSelectionView(for: indexPath)
             }
         case .about:
             let setting = section.settingOptions[indexPath.row] as! AboutSettings
