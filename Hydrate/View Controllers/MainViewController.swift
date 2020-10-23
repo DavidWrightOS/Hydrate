@@ -123,9 +123,8 @@ class MainViewController: UIViewController, SettingsTracking {
         return stackView
     }()
     
-    fileprivate let measurementMarkersView: UIView = {
-        let view = UIView()
-        view.backgroundColor = .clear
+    fileprivate let measurementMarkersView: MeasurementMarkerView = {
+        let view = MeasurementMarkerView()
         return view
     }()
     
@@ -133,6 +132,8 @@ class MainViewController: UIViewController, SettingsTracking {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        targetDailyIntake = HydrateSettings.targetDailyIntake
         
         registerForSettingsChanges()
         
@@ -200,7 +201,7 @@ class MainViewController: UIViewController, SettingsTracking {
         view.addSubview(addWaterIntakeButton)
         
         // Setup subviews
-        setupMeasurementMarkers()
+        setupMeasurementMarkerView()
         setupTopControls()
         setupIntakeLabels()
         
@@ -241,84 +242,14 @@ class MainViewController: UIViewController, SettingsTracking {
     
     // MARK: - Measurement Markers
     
-    fileprivate func setupMeasurementMarkers() {
-        let markerIntervalSize = 8 // number of water units (i.e. ounces) between measurement markers
-        
+    fileprivate func setupMeasurementMarkerView() {
         measurementMarkersView.anchor(top: topControlsStackView.bottomAnchor,
                                       leading: view.safeAreaLayoutGuide.leadingAnchor,
                                       bottom: view.bottomAnchor,
                                       trailing: view.safeAreaLayoutGuide.trailingAnchor,
                                       padding: .init(top: 36, left: 16, bottom: 0, right: 16))
         
-        let topPadding: CGFloat = 36
-        let fullMarkerViewHeight = view.bounds.height - topPadding - 104 // topControlsStackView.frame.maxY = 104
-        
-        let topMarkerIntervalOffset = targetDailyIntake % markerIntervalSize
-        var topMarkerInterval = (topMarkerIntervalOffset == 0) ? markerIntervalSize : topMarkerIntervalOffset
-        var topMarkerIntervalHeight = fullMarkerViewHeight * CGFloat(topMarkerInterval) / CGFloat(targetDailyIntake)
-        
-        if topMarkerIntervalHeight < 24 {
-            topMarkerInterval += markerIntervalSize
-            topMarkerIntervalHeight = fullMarkerViewHeight * CGFloat(topMarkerInterval) / CGFloat(targetDailyIntake)
-        }
-        
-        // create top most measurement marker
-        let topMarkerView = newMarkerView(withDisplayNumber: targetDailyIntake)
-        
-        // create all remaining measurement markers and put them in a stackView
-        let stackView = UIStackView()
-        stackView.axis = .vertical
-        stackView.alignment = .fill
-        stackView.distribution = .fillEqually
-        stackView.spacing = 0
-        
-        let nextMarkerNumber = targetDailyIntake - topMarkerInterval
-        
-        for markerNumber in stride(from: nextMarkerNumber, to: 0, by: -markerIntervalSize) {
-            let markerView = newMarkerView(withDisplayNumber: markerNumber)
-            stackView.addArrangedSubview(markerView)
-        }
-        
-        measurementMarkersView.addSubview(topMarkerView)
-        measurementMarkersView.addSubview(stackView)
-        
-        topMarkerView.heightAnchor.constraint(equalToConstant: topMarkerIntervalHeight).isActive = true
-        
-        topMarkerView.anchor(top: measurementMarkersView.topAnchor,
-                             leading: measurementMarkersView.leadingAnchor,
-                             bottom: nil,
-                             trailing: measurementMarkersView.trailingAnchor)
-        
-        stackView.anchor(top: topMarkerView.bottomAnchor,
-                         leading: measurementMarkersView.leadingAnchor,
-                         bottom: measurementMarkersView.bottomAnchor,
-                         trailing: measurementMarkersView.trailingAnchor)
-    }
-    
-    fileprivate func newMarkerView(withDisplayNumber displayNumber: Int) -> UIView {
-        guard displayNumber > 0 else { return UIView() }
-        
-        let markerView = UIView()
-        let label = UILabel()
-        let lineView = UIView()
-        markerView.addSubview(label)
-        markerView.addSubview(lineView)
-        
-        label.textAlignment = .right
-        label.font = UIFont.boldSystemFont(ofSize: 20)
-        label.textColor = .markerLabelColor
-        label.text = "\(displayNumber) oz."
-        
-        lineView.backgroundColor = .markerLineColor
-        
-        markerView.translatesAutoresizingMaskIntoConstraints = false
-        label.anchor(top: nil, leading: markerView.leadingAnchor, bottom: markerView.topAnchor, trailing: nil,
-                     padding: .init(top: 0, left: 0, bottom: -4, right: 0))
-        lineView.anchor(top: nil, leading: label.trailingAnchor, bottom: markerView.topAnchor, trailing: markerView.trailingAnchor,
-                        padding: .init(top: 0, left: 8, bottom: 0, right: 0))
-        lineView.heightAnchor.constraint(equalToConstant: 1).isActive = true
-        
-        return markerView
+//        measurementMarkersView.updateMarkers()
     }
     
     fileprivate func addWater(_ intakeAmount: Int, selectedButtonIndex: Int? = nil) {
