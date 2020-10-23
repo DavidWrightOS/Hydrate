@@ -153,7 +153,6 @@ class MainViewController: UIViewController, SettingsTracking {
         if motion == .motionShake {
             let generator = UINotificationFeedbackGenerator()
             generator.notificationOccurred(.success)
-            
             undoLastIntakeEntry()
         }
     }
@@ -173,6 +172,12 @@ class MainViewController: UIViewController, SettingsTracking {
     
     fileprivate func updateViews() {
         DispatchQueue.main.async {
+            let currentTargetDailyIntake = HydrateSettings.targetDailyIntake
+            if self.targetDailyIntake != currentTargetDailyIntake {
+                self.targetDailyIntake = currentTargetDailyIntake
+                self.measurementMarkersView.updateMarkers()
+            }
+            
             self.waterView.setWaterLevelHeight(self.waterLevel)
             self.intakeAmountLabel.countFromCurrent(to: Float(self.totalIntake), duration: 0.4)
         }
