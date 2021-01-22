@@ -31,6 +31,7 @@
 		63A6A13725106964009417CB /* UIView+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63A6A13625106964009417CB /* UIView+Extension.swift */; };
 		63A6A139251069E8009417CB /* Date+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63A6A138251069E8009417CB /* Date+Extension.swift */; };
 		63A6A13D25107716009417CB /* WaterAnimationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63A6A13C25107716009417CB /* WaterAnimationView.swift */; };
+		63BA790E25BA906F00ACCD95 /* UIViewController+SimpleAlert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63BA790D25BA906F00ACCD95 /* UIViewController+SimpleAlert.swift */; };
 		63BAC6CE2542990D00A53057 /* MeasurementMarkerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63BAC6CD2542990D00A53057 /* MeasurementMarkerView.swift */; };
 /* End PBXBuildFile section */
 
@@ -61,6 +62,7 @@
 		63A6A13625106964009417CB /* UIView+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+Extension.swift"; sourceTree = "<group>"; };
 		63A6A138251069E8009417CB /* Date+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+Extension.swift"; sourceTree = "<group>"; };
 		63A6A13C25107716009417CB /* WaterAnimationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WaterAnimationView.swift; sourceTree = "<group>"; };
+		63BA790D25BA906F00ACCD95 /* UIViewController+SimpleAlert.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+SimpleAlert.swift"; sourceTree = "<group>"; };
 		63BAC6CD2542990D00A53057 /* MeasurementMarkerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeasurementMarkerView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -165,6 +167,7 @@
 				63A6A13625106964009417CB /* UIView+Extension.swift */,
 				63A6A138251069E8009417CB /* Date+Extension.swift */,
 				63769DD7252B025C00E26A48 /* Notification+Extension.swift */,
+				63BA790D25BA906F00ACCD95 /* UIViewController+SimpleAlert.swift */,
 			);
 			path = Utilities;
 			sourceTree = "<group>";
@@ -261,6 +264,7 @@
 				63A6A13D25107716009417CB /* WaterAnimationView.swift in Sources */,
 				634F6F49252DA22C00CDBB61 /* IntakeEntryController.swift in Sources */,
 				635939C625188A7F00776BB9 /* CoreDataStack.swift in Sources */,
+				63BA790E25BA906F00ACCD95 /* UIViewController+SimpleAlert.swift in Sources */,
 				63769DC82523F2FB00E26A48 /* DailyLog+Convenience.swift in Sources */,
 				638DC5852516718200C4D1D9 /* DataViewController.swift in Sources */,
 				63A6A13725106964009417CB /* UIView+Extension.swift in Sources */,
