@@ -153,7 +153,19 @@ class MainViewController: UIViewController, SettingsTracking {
         if motion == .motionShake {
             let generator = UINotificationFeedbackGenerator()
             generator.notificationOccurred(.success)
-            undoLastIntakeEntry()
+            presentUndoAlert()
+        }
+    }
+    
+    private func presentUndoAlert() {
+        guard dailyLogController.lastIntakeEntryAddedToday != nil else { return }
+        
+        presentSimpleAlert(with: "Undo Last Intake",
+                           message: nil,
+                           preferredStyle: .alert,
+                           dismissText: "Undo") { [weak self] _ in
+            guard let self = self else { return }
+            self.undoLastIntakeEntry()
         }
     }
     
@@ -413,7 +425,7 @@ class MainViewController: UIViewController, SettingsTracking {
     
     fileprivate func handleGestureEnded(sender: UILongPressGestureRecognizer) {
         addWaterIntakeButton.adjustsImageWhenHighlighted = true
-        undoLastIntakeEntry()
+        presentUndoAlert()
     }
     
     // Page Navigation
