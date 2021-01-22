@@ -255,6 +255,7 @@ class MainViewController: UIViewController, SettingsTracking {
     
     override func viewDidLayoutSubviews() {
         customWaterButtons.forEach { $0.center = self.addWaterIntakeButton.center }
+        measurementMarkersView.updateMarkers()
     }
     
     // MARK: - Measurement Markers
@@ -265,8 +266,6 @@ class MainViewController: UIViewController, SettingsTracking {
                                       bottom: view.bottomAnchor,
                                       trailing: view.safeAreaLayoutGuide.trailingAnchor,
                                       padding: .init(top: 36, left: 16, bottom: 0, right: 16))
-        
-//        measurementMarkersView.updateMarkers()
     }
     
     fileprivate func addWater(_ intakeAmount: Int, selectedButtonIndex: Int? = nil) {
