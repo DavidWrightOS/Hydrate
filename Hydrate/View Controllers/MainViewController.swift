@@ -160,10 +160,10 @@ class MainViewController: UIViewController, SettingsTracking {
     private func presentUndoAlert() {
         guard dailyLogController.lastIntakeEntryAddedToday != nil else { return }
         
-        presentSimpleAlert(with: "Undo Last Intake",
-                           message: nil,
-                           preferredStyle: .alert,
-                           dismissText: "Undo") { [weak self] _ in
+        presentAlert(title: "Undo Last Intake",
+                     message: nil,
+                     actionButtonText: "Undo",
+                     options: [.isCancellable]) { [weak self] _ in
             guard let self = self else { return }
             self.undoLastIntakeEntry()
         }
