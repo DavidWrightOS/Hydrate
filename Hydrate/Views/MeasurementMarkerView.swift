@@ -19,7 +19,6 @@ class MeasurementMarkerView: UIView {
     var markerLabelFont = UIFont.boldSystemFont(ofSize: 20)
     
     func updateMarkers() {
-        print("DEBUG: Update Markers..")
         subviews.forEach { $0.removeFromSuperview() }
         setupMeasurementMarkers()
     }
