@@ -98,7 +98,7 @@ extension ConfettiView {
     
     func animateConfetti() {
         
-        UIImpactFeedbackGenerator(style: .rigid).impactOccurred()
+        UINotificationFeedbackGenerator().notificationOccurred(.success)
         
         for layer in [foregroundConfettiLayer, backgroundConfettiLayer] {
             addBehaviors(to: layer!)
