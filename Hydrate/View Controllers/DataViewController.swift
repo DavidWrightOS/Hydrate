@@ -7,8 +7,11 @@
 //
 
 import UIKit
+import SwiftUI
 
 class DataViewController: UIViewController {
+    
+    var dailyLogController: DailyLogController?
     
     // MARK: - UI Components
     
@@ -70,6 +73,22 @@ class DataViewController: UIViewController {
     
     fileprivate func setupChartView() {
         view.addSubview(chartView)
+        
+        var chartsView = ChartView()
+        let startOfLastSevenDays = Calendar.current.date(byAdding: .day, value: -6, to: Date().startOfDay)!
+        let dailyLogs = dailyLogController?.fetchDailyLogs() ?? []
+        chartsView.dailyLogs = dailyLogs.filter { $0.date != nil && $0.date! >= startOfLastSevenDays }
+        chartsView.updateDailyLogs()
+        
+        let childView = UIHostingController(rootView: chartsView)
+        addChild(childView)
+        childView.didMove(toParent: self)
+        chartView.addSubview(childView.view)
+        childView.view.anchor(top: chartView.topAnchor,
+                              leading: chartView.leadingAnchor,
+                              bottom: chartView.bottomAnchor,
+                              trailing: chartView.trailingAnchor)
+        
         chartView.anchor(top: navigationBar.bottomAnchor, leading: view.leadingAnchor,
                          bottom: nil, trailing: view.trailingAnchor,
                          size: CGSize(width: view.bounds.width, height: 220))

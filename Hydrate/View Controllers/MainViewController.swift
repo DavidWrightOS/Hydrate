@@ -449,6 +449,7 @@ class MainViewController: UIViewController, SettingsTracking {
     
     @objc fileprivate func handleShowDataTapped() {
         let dvc = DataViewController()
+        dvc.dailyLogController = dailyLogController
         present(dvc, animated: true, completion: nil)
     }
     
