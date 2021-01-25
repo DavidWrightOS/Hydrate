@@ -44,6 +44,20 @@ class DailyLogController {
         return nil
     }
     
+    func fetchDailyLogs() -> [DailyLog] {
+        let fetchRequest: NSFetchRequest<DailyLog> = DailyLog.fetchRequest()
+        let timeSortDescriptor = NSSortDescriptor(key: #keyPath(DailyLog.date), ascending: false)
+        fetchRequest.sortDescriptors = [timeSortDescriptor]
+        
+        do {
+            let dailyLogs = try coreDataStack.mainContext.fetch(fetchRequest)
+            return dailyLogs
+        } catch let error as NSError {
+            print("Error fetching: \(error), \(error.userInfo)")
+            return []
+        }
+    }
+    
     func fetchIntakeEntries(for date: Date = Date()) -> [IntakeEntry]? {
         let fetchRequest: NSFetchRequest<IntakeEntry> = IntakeEntry.fetchRequest()
         let datePredicate = NSPredicate(format: "(%K >= %@) AND (%K < %@)",
