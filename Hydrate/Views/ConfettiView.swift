@@ -15,11 +15,9 @@ protocol ConfettiViewDelegate: class {
 class ConfettiView: UIView {
     
     private var confettiTypes: [ConfettiType] = {
-        let confettiColors = [#colorLiteral(red: 0.1109799057, green: 0.5251363395, blue: 0.8133467553, alpha: 1), #colorLiteral(red: 0.3529411765, green: 0.7843137255, blue: 0.9607843137, alpha: 1), #colorLiteral(red: 0, green: 0.3450980484, blue: 0.8156862855, alpha: 1), #colorLiteral(red: 0.2191328406, green: 0.8196589351, blue: 0.9959532619, alpha: 1), #colorLiteral(red: 0.8744339347, green: 0.8706369996, blue: 0.8587210774, alpha: 1), #colorLiteral(red: 0.1764705926, green: 0.4980392158, blue: 0.7568627596, alpha: 1), #colorLiteral(red: 0.95158571, green: 0.9517521262, blue: 0.9515877366, alpha: 1), #colorLiteral(red: 0.4620226622, green: 0.8382837176, blue: 1, alpha: 1), #colorLiteral(red: 0.03921568627, green: 0.5176470588, blue: 1, alpha: 1)]
-        
         return [ConfettiPosition.foreground, ConfettiPosition.background].flatMap { position in
             return [ConfettiShape.rectangle, ConfettiShape.circle].flatMap { shape in
-                return confettiColors.map { color in
+                return UIColor.confettiColors.map { color in
                     return ConfettiType(color: color, shape: shape, position: position)
                 }
             }

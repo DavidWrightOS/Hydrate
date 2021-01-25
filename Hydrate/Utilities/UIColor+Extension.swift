@@ -44,6 +44,17 @@ extension UIColor {
     static let testColor9 = #colorLiteral(red: 0.7499628663, green: 0.7656405568, blue: 0.7302817702, alpha: 1)
     static let testColor0 = #colorLiteral(red: 0.7533128858, green: 0.8374676108, blue: 0.8750609756, alpha: 1)
     
+    // ConfettiColors
+    static let confettiColors = [UIColor(hex: 0x0058d0),
+                                 UIColor(hex: 0x2D7FC1),
+                                 UIColor(hex: 0x1C86CF),
+                                 UIColor(hex: 0x0A84FF),
+                                 UIColor(hex: 0x38D1FE),
+                                 UIColor(hex: 0x5AC8F5),
+                                 UIColor(hex: 0x76D6FF),
+                                 UIColor(hex: 0xDFDEDB),
+                                 UIColor(hex: 0xF3F3F3)]
+    
     // Create a UIColor from RGB
     convenience init(red: Int, green: Int, blue: Int, a: CGFloat = 1.0) {
         self.init(
