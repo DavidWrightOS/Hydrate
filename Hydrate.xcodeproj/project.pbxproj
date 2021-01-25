@@ -34,6 +34,7 @@
 		63BA790E25BA906F00ACCD95 /* UIViewController+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63BA790D25BA906F00ACCD95 /* UIViewController+Extension.swift */; };
 		63BAC6CE2542990D00A53057 /* MeasurementMarkerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63BAC6CD2542990D00A53057 /* MeasurementMarkerView.swift */; };
 		63EF334B25BEB3DB00880FA4 /* ConfettiView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63EF334A25BEB3DB00880FA4 /* ConfettiView.swift */; };
+		63EF335525BEBE6900880FA4 /* ChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63EF335425BEBE6900880FA4 /* ChartView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -66,6 +67,7 @@
 		63BA790D25BA906F00ACCD95 /* UIViewController+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+Extension.swift"; sourceTree = "<group>"; };
 		63BAC6CD2542990D00A53057 /* MeasurementMarkerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeasurementMarkerView.swift; sourceTree = "<group>"; };
 		63EF334A25BEB3DB00880FA4 /* ConfettiView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfettiView.swift; sourceTree = "<group>"; };
+		63EF335425BEBE6900880FA4 /* ChartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChartView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -182,6 +184,7 @@
 				63589F4F2521C3C1008CFD48 /* SettingsCell.swift */,
 				63BAC6CD2542990D00A53057 /* MeasurementMarkerView.swift */,
 				63EF334A25BEB3DB00880FA4 /* ConfettiView.swift */,
+				63EF335425BEBE6900880FA4 /* ChartView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -257,6 +260,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				635DA0042536C3280026D570 /* HydrateSettings.swift in Sources */,
+				63EF335525BEBE6900880FA4 /* ChartView.swift in Sources */,
 				63769DD02526F08B00E26A48 /* DailyLogController.swift in Sources */,
 				638DC58925182EB900C4D1D9 /* DailyLogTableViewController.swift in Sources */,
 				635939C3251888EA00776BB9 /* Hydrate.xcdatamodeld in Sources */,
