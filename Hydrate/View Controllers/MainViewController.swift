@@ -128,6 +128,8 @@ class MainViewController: UIViewController, SettingsTracking {
         return view
     }()
     
+    fileprivate var confettiView: ConfettiView?
+    
     // MARK: - Lifecycle
     
     override func viewDidLoad() {
@@ -271,6 +273,10 @@ class MainViewController: UIViewController, SettingsTracking {
     fileprivate func addWater(_ intakeAmount: Int, selectedButtonIndex: Int? = nil) {
         guard intakeAmount != 0 else { return }
         
+        if totalIntake < targetDailyIntake, totalIntake + intakeAmount >= targetDailyIntake {
+            showConfettiAnimation()
+        }
+        
         dailyLogController.add(intakeAmount: intakeAmount)
         
         let buttonIndex = selectedButtonIndex ?? 2
@@ -380,6 +386,18 @@ class MainViewController: UIViewController, SettingsTracking {
         }
     }
     
+    fileprivate func showConfettiAnimation() {
+        confettiView?.removeFromSuperview()
+        confettiView = nil
+        
+        let confettiView = ConfettiView(frame: view.frame)
+        self.confettiView = confettiView
+        view.addSubview(confettiView)
+        
+        confettiView.delegate = self
+        confettiView.animateConfetti()
+    }
+    
     // MARK: - UIButton Selectors
     
     // Add Water Button (Short Tap)
@@ -437,5 +455,14 @@ class MainViewController: UIViewController, SettingsTracking {
     @objc fileprivate func handleShowSettingsTapped() {
         let svc = SettingsViewController()
         present(svc, animated: true, completion: nil)
+    }
+}
+
+// MARK: - ConfettiView Delegate
+
+extension MainViewController: ConfettiViewDelegate {
+    func animationDidEnd() {
+        confettiView?.removeFromSuperview()
+        confettiView = nil
     }
 }
