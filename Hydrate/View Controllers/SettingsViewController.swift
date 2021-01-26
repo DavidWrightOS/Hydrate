@@ -37,6 +37,13 @@ class SettingsViewController: UIViewController {
         return tableView
     }()
     
+    fileprivate lazy var darkTintView: UIView = {
+        let view = UIView(frame: self.view.frame)
+        view.backgroundColor = UIColor.black.withAlphaComponent(0.75)
+        view.isUserInteractionEnabled = false
+        return view
+    }()
+    
     // MARK: - Lifecycle
 
     override func viewDidLoad() {
@@ -72,16 +79,27 @@ class SettingsViewController: UIViewController {
         let title = "Target Intake"
         let message = "Enter your target daily water intake."
         let alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        alertController.view.tintColor = .actionColorMediumContrast
         
         let currentValue = HydrateSettings.targetDailyIntake
         
         alertController.addTextField { textField in
             textField.placeholder = title
             textField.text = String(currentValue)
+            textField.font = .systemFont(ofSize: 16)
+            textField.textColor = .actionColorMediumContrast
+            
+            let unitLabel = UILabel()
+            unitLabel.font = .systemFont(ofSize: 16)
+            unitLabel.textColor = .placeholderText
+            unitLabel.text = HydrateSettings.unit.abbreviation
+            textField.addSubview(unitLabel)
+            textField.rightView = unitLabel
         }
         
         let cancelAction = UIAlertAction(title: "Cancel", style: .cancel) { [weak self] _ in
             self?.tableView.deselectRow(at: indexPath, animated: false)
+            self?.darkTintView.removeFromSuperview()
         }
         alertController.addAction(cancelAction)
         
@@ -93,6 +111,8 @@ class SettingsViewController: UIViewController {
                 self?.tableView.cellForRow(at: indexPath)?.detailTextLabel?.text = string
                 self?.tableView.deselectRow(at: indexPath, animated: false)
             }
+            
+            self?.darkTintView.removeFromSuperview()
         }
         
         alertController.addAction(saveAction)
@@ -102,11 +122,14 @@ class SettingsViewController: UIViewController {
     fileprivate func presentUnitSelectionView(for indexPath: IndexPath) {
         let title = "Select Unit"
         let alertController = UIAlertController(title: title, message: nil, preferredStyle: .actionSheet)
+        alertController.view.tintColor = .actionColorMediumContrast
         
         let currentUnit = HydrateSettings.unit
         
         for unit in Unit.allCases {
-            let actionTitle = "\(unit.description) (\(unit.abbreviation))"
+            let actionTitle = unit.abbreviation != unit.description ?
+                "\(unit.abbreviation) (\(unit.description))" : "\(unit.abbreviation)"
+            
             let action = UIAlertAction(title: actionTitle, style: .default) { [weak self] (action) in
                 if unit != currentUnit {
                     HydrateSettings.unit = unit
