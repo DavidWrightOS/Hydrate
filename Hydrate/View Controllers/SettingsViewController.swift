@@ -37,13 +37,6 @@ class SettingsViewController: UIViewController {
         return tableView
     }()
     
-    fileprivate lazy var darkTintView: UIView = {
-        let view = UIView(frame: self.view.frame)
-        view.backgroundColor = UIColor.black.withAlphaComponent(0.75)
-        view.isUserInteractionEnabled = false
-        return view
-    }()
-    
     // MARK: - Lifecycle
 
     override func viewDidLoad() {
@@ -79,7 +72,7 @@ class SettingsViewController: UIViewController {
         let title = "Target Intake"
         let message = "Enter your target daily water intake."
         let alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
-        alertController.view.tintColor = .actionColorMediumContrast
+        alertController.view.tintColor = .actionColorHighContrast
         
         let currentValue = HydrateSettings.targetDailyIntake
         
@@ -87,7 +80,7 @@ class SettingsViewController: UIViewController {
             textField.placeholder = title
             textField.text = String(currentValue)
             textField.font = .systemFont(ofSize: 16)
-            textField.textColor = .actionColorMediumContrast
+            textField.textColor = .actionColorHighContrast
             
             let unitLabel = UILabel()
             unitLabel.font = .systemFont(ofSize: 16)
@@ -95,11 +88,12 @@ class SettingsViewController: UIViewController {
             unitLabel.text = HydrateSettings.unit.abbreviation
             textField.addSubview(unitLabel)
             textField.rightView = unitLabel
+            textField.rightViewMode = .always
+            textField.keyboardType = .numberPad
         }
         
         let cancelAction = UIAlertAction(title: "Cancel", style: .cancel) { [weak self] _ in
             self?.tableView.deselectRow(at: indexPath, animated: false)
-            self?.darkTintView.removeFromSuperview()
         }
         alertController.addAction(cancelAction)
         
@@ -112,7 +106,6 @@ class SettingsViewController: UIViewController {
                 self?.tableView.deselectRow(at: indexPath, animated: false)
             }
             
-            self?.darkTintView.removeFromSuperview()
         }
         
         alertController.addAction(saveAction)
@@ -122,7 +115,7 @@ class SettingsViewController: UIViewController {
     fileprivate func presentUnitSelectionView(for indexPath: IndexPath) {
         let title = "Select Unit"
         let alertController = UIAlertController(title: title, message: nil, preferredStyle: .actionSheet)
-        alertController.view.tintColor = .actionColorMediumContrast
+        alertController.view.tintColor = .actionColorHighContrast
         
         let currentUnit = HydrateSettings.unit
         
