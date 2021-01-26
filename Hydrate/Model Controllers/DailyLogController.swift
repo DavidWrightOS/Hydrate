@@ -44,10 +44,33 @@ class DailyLogController {
         return nil
     }
     
-    func fetchDailyLogs() -> [DailyLog] {
+    func fetchDailyLogs(startingOn startDate: Date? = nil, through endDate: Date? = nil) -> [DailyLog] {
         let fetchRequest: NSFetchRequest<DailyLog> = DailyLog.fetchRequest()
         let timeSortDescriptor = NSSortDescriptor(key: #keyPath(DailyLog.date), ascending: false)
         fetchRequest.sortDescriptors = [timeSortDescriptor]
+        
+        if let startDate = startDate?.startOfDay as NSDate?, let endDate = endDate?.startOfDay as NSDate? {
+            fetchRequest.predicate = NSPredicate(format: "(date >= %@) AND (date <= %@)", startDate, endDate)
+        } else if let startDate = startDate?.startOfDay as NSDate? {
+            fetchRequest.predicate = NSPredicate(format: "(%K >= %@)", startDate)
+        } else if let endDate = endDate?.startOfDay as NSDate? {
+            fetchRequest.predicate = NSPredicate(format: "(%K <= %@)", endDate)
+        }
+        
+        do {
+            let dailyLogs = try coreDataStack.mainContext.fetch(fetchRequest)
+            return dailyLogs
+        } catch let error as NSError {
+            print("Error fetching: \(error), \(error.userInfo)")
+            return []
+        }
+    }
+    
+    func fetchMostRecentDailyLogs(limit: Int) -> [DailyLog] {
+        let fetchRequest: NSFetchRequest<DailyLog> = DailyLog.fetchRequest()
+        let timeSortDescriptor = NSSortDescriptor(key: #keyPath(DailyLog.date), ascending: false)
+        fetchRequest.sortDescriptors = [timeSortDescriptor]
+        fetchRequest.fetchLimit = limit
         
         do {
             let dailyLogs = try coreDataStack.mainContext.fetch(fetchRequest)
