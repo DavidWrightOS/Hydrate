@@ -148,7 +148,7 @@ class EntriesTableViewController: UITableViewController {
         } else {
             cell.detailTextLabel?.text = "--"
         }
-        cell.textLabel?.text = "\(intakeEntry.amount) oz."
+        cell.textLabel?.text = "\(intakeEntry.amount) \(HydrateSettings.unit.abbreviation)"
     }
     
     @objc fileprivate func addDataButtonTapped() {

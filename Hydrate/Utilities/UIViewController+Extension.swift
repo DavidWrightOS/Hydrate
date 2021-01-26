@@ -22,7 +22,7 @@ extension UIViewController {
                       actionButtonCompletionHandler: ((UIAlertAction) -> Void)? = nil) {
         
         let alert = UIAlertController(title: title, message: message, preferredStyle: preferredStyle)
-        alert.view.tintColor = .actionColor
+        alert.view.tintColor = .actionColorHighContrast
         
         if options.contains(.isCancellable) {
             let cancelAction = UIAlertAction(title: "Cancel", style: .cancel)

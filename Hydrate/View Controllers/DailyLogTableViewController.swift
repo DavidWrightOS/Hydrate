@@ -149,7 +149,7 @@ class DailyLogTableViewController: UITableViewController {
     
     fileprivate func configure(cell: UITableViewCell, for indexPath: IndexPath) {
         let dailyLog = fetchedResultsController.object(at: indexPath)
-        cell.textLabel?.text = "\(dailyLog.totalIntake) oz."
+        cell.textLabel?.text = "\(dailyLog.totalIntake) \(HydrateSettings.unit.abbreviation)"
         cell.detailTextLabel?.text = dateFormatter.string(from: dailyLog.date!)
     }
     
