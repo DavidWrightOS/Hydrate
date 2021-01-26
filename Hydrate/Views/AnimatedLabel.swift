@@ -20,6 +20,8 @@ class AnimatedLabel: UILabel {
         return startingValue + (update(t: Float(progress / totalTime)) * (destinationValue - startingValue))
     }
     
+    var unitsString: String?
+    
     private var rate: Float = 0
     private var startingValue: Float = 0
     private var destinationValue: Float = 0
@@ -103,7 +105,11 @@ class AnimatedLabel: UILabel {
     }
     
     private func setTextValue(value: Float) {
-        text = "\(Int(value)) oz."
+        if let unitsString = unitsString {
+            text = "\(Int(value)) \(unitsString)"
+        } else {
+            text = "\(Int(value))"
+        }
     }
 }
 

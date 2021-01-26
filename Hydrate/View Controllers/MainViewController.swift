@@ -16,6 +16,8 @@ class MainViewController: UIViewController, SettingsTracking {
     
     fileprivate var targetDailyIntake: Int = 96
     
+    fileprivate var units = HydrateSettings.unit
+    
     fileprivate var intakeButtonAmounts = [8, 12, 16, 20, 32]
     
     fileprivate lazy var intakeButtonOffsets: [CGPoint] = {
@@ -75,8 +77,12 @@ class MainViewController: UIViewController, SettingsTracking {
             button.backgroundColor = .intakeButtonColor
             button.alpha = 0.0
             button.setTitleColor(.intakeButtonTextColor, for: .normal)
-            button.setTitle("\(intakeButtonAmounts[index]) oz.", for: .normal)
+            button.setTitle("\(intakeButtonAmounts[index]) \(units.abbreviation)", for: .normal)
             button.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .bold)
+            button.titleLabel?.lineBreakMode = .byWordWrapping
+            button.titleLabel?.numberOfLines = 0
+            button.titleLabel?.textAlignment = .center
+            button.contentEdgeInsets = UIEdgeInsets(top: 2, left: 2, bottom: 2, right: 2)
             button.addTarget(self, action: #selector(customWaterButtonTapped), for: .touchUpInside)
             buttons.append(button)
         }
@@ -107,7 +113,7 @@ class MainViewController: UIViewController, SettingsTracking {
     
     fileprivate let intakeAmountLabel: AnimatedLabel = {
         let label = AnimatedLabel()
-        label.text = "0 oz."
+        label.unitsString = HydrateSettings.unit.abbreviation
         label.textAlignment = .center
         label.textColor = .undeadWhite
         label.font = UIFont.boldSystemFont(ofSize: 52)
@@ -125,6 +131,7 @@ class MainViewController: UIViewController, SettingsTracking {
     
     fileprivate let measurementMarkersView: MeasurementMarkerView = {
         let view = MeasurementMarkerView()
+        view.unitsString = HydrateSettings.unit.abbreviation
         return view
     }()
     
@@ -186,10 +193,20 @@ class MainViewController: UIViewController, SettingsTracking {
     
     fileprivate func updateViews() {
         DispatchQueue.main.async {
-            let currentTargetDailyIntake = HydrateSettings.targetDailyIntake
-            if self.targetDailyIntake != currentTargetDailyIntake {
-                self.targetDailyIntake = currentTargetDailyIntake
+            
+            if self.targetDailyIntake != HydrateSettings.targetDailyIntake {
+                self.targetDailyIntake = HydrateSettings.targetDailyIntake
                 self.measurementMarkersView.updateMarkers()
+            }
+            
+            if self.units != HydrateSettings.unit {
+                self.units = HydrateSettings.unit
+                self.intakeAmountLabel.unitsString = self.units.abbreviation
+                self.measurementMarkersView.unitsString = self.units.abbreviation
+                
+                self.customWaterButtons.forEach {
+                    $0.setTitle("\(self.intakeButtonAmounts[$0.tag]) \(self.units.abbreviation)", for: .normal)
+                }
             }
             
             self.waterView.setWaterLevelHeight(self.waterLevel)

@@ -13,7 +13,7 @@ class MeasurementMarkerView: UIView {
     // MARK: - Public
     
     var markerIntervalSize = 8 // number of water units (i.e. ounces) between measurement markers
-    var markerUnitsString = "oz."
+    var unitsString: String?
     var markerTextColor = UIColor.markerLabelColor
     var markerLineColor = UIColor.markerLineColor
     var markerLabelFont = UIFont.boldSystemFont(ofSize: 20)
@@ -103,7 +103,12 @@ class MeasurementMarkerView: UIView {
         label.textAlignment = .right
         label.font = markerLabelFont
         label.textColor = markerTextColor
-        label.text = "\(displayNumber) \(markerUnitsString)"
+        
+        if let unitsString = unitsString {
+            label.text = "\(displayNumber) \(unitsString)"
+        } else {
+            label.text = "\(displayNumber)"
+        }
         
         lineView.backgroundColor = markerLineColor
         
