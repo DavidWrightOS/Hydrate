@@ -75,9 +75,9 @@ class DataViewController: UIViewController {
         view.addSubview(chartView)
         
         var chartsView = ChartView()
-        let startOfLastSevenDays = Calendar.current.date(byAdding: .day, value: -6, to: Date().startOfDay)!
-        let dailyLogs = dailyLogController?.fetchDailyLogs() ?? []
-        chartsView.dailyLogs = dailyLogs.filter { $0.date != nil && $0.date! >= startOfLastSevenDays }
+        let today = Date().startOfDay
+        let sevenDaysAgo = Calendar.current.date(byAdding: .day, value: -6, to: today)!
+        chartsView.dailyLogs = dailyLogController?.fetchDailyLogs(startingOn: sevenDaysAgo, through: today) ?? []
         chartsView.updateDailyLogs()
         
         let childView = UIHostingController(rootView: chartsView)
