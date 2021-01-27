@@ -91,23 +91,33 @@ class MainViewController: UIViewController, SettingsTracking {
     
     fileprivate let showDataButton: UIButton = {
         let button = UIButton()
-        button.setImage(UIImage(named: "calendar-button"), for: .normal)
+        let config = UIImage.SymbolConfiguration(pointSize: 38, weight: .light)
+        let image = UIImage(systemName: "chart.bar.xaxis")?.withConfiguration(config)
+        button.setImage(image?.withTintColor(.undeadWhite, renderingMode: .alwaysOriginal), for: .normal)
         button.tintColor = UIColor.actionColor
         button.contentHorizontalAlignment = .center
         button.imageView?.contentMode = .scaleAspectFit
-        button.imageEdgeInsets = UIEdgeInsets(top: 10.0, left: 10.0, bottom: 10.0, right: 10.0);
+        button.imageEdgeInsets = UIEdgeInsets(top: 10.0, left: 10.0, bottom: 10.0, right: 10.0)
         button.addTarget(self, action: #selector(handleShowDataTapped), for: .touchUpInside)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.heightAnchor.constraint(equalToConstant: 58).isActive = true
+        button.widthAnchor.constraint(equalToConstant: 58).isActive = true
         return button
     }()
     
     fileprivate let showSettingsButton: UIButton = {
         let button = UIButton()
-        button.setImage(UIImage(named: "settings-button"), for: .normal)
+        let config = UIImage.SymbolConfiguration(pointSize: 38, weight: .light)
+        let image = UIImage(systemName: "gearshape")?.withConfiguration(config)
+        button.setImage(image?.withTintColor(.undeadWhite, renderingMode: .alwaysOriginal), for: .normal)
         button.tintColor = UIColor.actionColor
         button.contentHorizontalAlignment = .center
         button.imageView?.contentMode = .scaleAspectFit
         button.imageEdgeInsets = UIEdgeInsets(top: 10.0, left: 10.0, bottom: 10.0, right: 10.0);
         button.addTarget(self, action: #selector(handleShowSettingsTapped), for: .touchUpInside)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.heightAnchor.constraint(equalToConstant: 58).isActive = true
+        button.widthAnchor.constraint(equalToConstant: 58).isActive = true
         return button
     }()
     
