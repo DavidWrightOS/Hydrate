@@ -98,7 +98,9 @@ extension ConfettiView {
     
     func animateConfetti() {
         
-        UINotificationFeedbackGenerator().notificationOccurred(.success)
+        if HydrateSettings.hapticFeedbackEnabled {
+            UIImpactFeedbackGenerator(style: .rigid).impactOccurred()
+        }
         
         for layer in [foregroundConfettiLayer, backgroundConfettiLayer] {
             addBehaviors(to: layer!)

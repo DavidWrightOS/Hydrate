@@ -160,8 +160,9 @@ class MainViewController: UIViewController, SettingsTracking {
     // Shake to undo last intake entry added
     override func motionEnded(_ motion: UIEvent.EventSubtype, with event: UIEvent?) {
         if motion == .motionShake {
-            let generator = UINotificationFeedbackGenerator()
-            generator.notificationOccurred(.success)
+            if HydrateSettings.hapticFeedbackEnabled {
+                UINotificationFeedbackGenerator().notificationOccurred(.warning)
+            }
             presentUndoAlert()
         }
     }
@@ -453,8 +454,10 @@ class MainViewController: UIViewController, SettingsTracking {
         UIView.animate(withDuration: 0.5, delay: 0, options: .curveEaseInOut) {
             self.addWaterIntakeButton.transform = .identity
         }
-        let generator = UIImpactFeedbackGenerator(style: .heavy)
-        generator.impactOccurred()
+        
+        if HydrateSettings.hapticFeedbackEnabled {
+            UINotificationFeedbackGenerator().notificationOccurred(.warning)
+        }
     }
     
     fileprivate func handleGestureEnded(sender: UILongPressGestureRecognizer) {
