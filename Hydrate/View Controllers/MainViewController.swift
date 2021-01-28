@@ -349,9 +349,9 @@ class MainViewController: UIViewController, SettingsTracking {
     
     // MARK: - Animations
     
-    fileprivate func showIntakeButtons() {
+    fileprivate func showIntakeButtons(staggerAnimationsBy staggerInterval: Double = 0.0) {
         customWaterButtons.forEach { $0.alpha = 0.0 }
-        let delayStep = 0.0 //0.05
+        let delayStep = staggerInterval
         for i in customWaterButtons.indices {
             let delay: TimeInterval = delayStep * Double(i)
             UIView.animate(withDuration: 0.2, delay: delay, usingSpringWithDamping: 0.8, initialSpringVelocity: 1, options: .curveEaseOut, animations: {
@@ -368,9 +368,9 @@ class MainViewController: UIViewController, SettingsTracking {
         addWaterIntakeButton.isSelected = true
     }
     
-    fileprivate func hideIntakeButtons(selectedButtonIndex: Int? = nil) {
+    fileprivate func hideIntakeButtons(selectedButtonIndex: Int? = nil, staggerAnimationsBy staggerInterval: Double = 0.0) {
         addWaterIntakeButton.isSelected = false
-        let delayStep = 0.0 //0.05
+        let delayStep = staggerInterval
         for i in customWaterButtons.indices {
             let delay: TimeInterval = delayStep * Double(customWaterButtons.count - i - 1)
             UIView.animate(withDuration: 0.35, delay: delay, usingSpringWithDamping: 0.65, initialSpringVelocity: 1, options: .curveEaseIn, animations: {
@@ -483,7 +483,7 @@ class MainViewController: UIViewController, SettingsTracking {
             if HydrateSettings.hapticFeedbackEnabled {
                 UIImpactFeedbackGenerator(style: .medium).impactOccurred()
             }
-            hideIntakeButtons()
+            hideIntakeButtons(staggerAnimationsBy: 0.05)
         } else {
             presentUndoAlert()
         }
