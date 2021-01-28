@@ -60,6 +60,10 @@ class MainViewController: UIViewController, SettingsTracking {
         let button = UIButton()
         button.setImage(UIImage(named: "water-button"), for: .normal)
         button.translatesAutoresizingMaskIntoConstraints = false
+        let config = UIImage.SymbolConfiguration(pointSize: 60, weight: .light)
+        let image = UIImage(systemName: "multiply.circle.fill")?.withConfiguration(config)
+        button.setImage(image?.withTintColor(.undeadWhite, renderingMode: .alwaysOriginal), for: .selected)
+        button.setImage(image?.withTintColor(UIColor.init(hex: 0xB3A298), renderingMode: .alwaysOriginal), for: [.selected, .highlighted])
         return button
     }()
     
@@ -180,15 +184,16 @@ class MainViewController: UIViewController, SettingsTracking {
     /// Shake to undo last intake entry added
     override func motionEnded(_ motion: UIEvent.EventSubtype, with event: UIEvent?) {
         if motion == .motionShake {
-            if HydrateSettings.hapticFeedbackEnabled {
-                UINotificationFeedbackGenerator().notificationOccurred(.warning)
-            }
             presentUndoAlert()
         }
     }
     
     private func presentUndoAlert() {
         guard dailyLogController.lastIntakeEntryAddedToday != nil else { return }
+        
+        if HydrateSettings.hapticFeedbackEnabled {
+            UINotificationFeedbackGenerator().notificationOccurred(.warning)
+        }
         
         presentAlert(title: "Undo Last Intake",
                      message: nil,
@@ -349,28 +354,29 @@ class MainViewController: UIViewController, SettingsTracking {
         let delayStep = 0.0 //0.05
         for i in customWaterButtons.indices {
             let delay: TimeInterval = delayStep * Double(i)
-            UIView.animate(withDuration: 0.2, delay: delay, usingSpringWithDamping: 0.8,
-                           initialSpringVelocity: 1, options: .curveEaseOut, animations: {
-                            self.customWaterButtons[i].transform = CGAffineTransform(translationX: self.intakeButtonOffsets[i].x,
-                                                                                     y: self.intakeButtonOffsets[i].y)
-                            self.customWaterButtons[i].alpha = 1.0
-                           })
+            UIView.animate(withDuration: 0.2, delay: delay, usingSpringWithDamping: 0.8, initialSpringVelocity: 1, options: .curveEaseOut, animations: {
+                self.customWaterButtons[i].transform = CGAffineTransform(translationX: self.intakeButtonOffsets[i].x, y: self.intakeButtonOffsets[i].y)
+                self.customWaterButtons[i].alpha = 1.0
+            })
         }
+        
         UIView.animate(withDuration: 0.1, delay: 0, options: [], animations: {
-                        self.addWaterIntakeButton.alpha = 0.4
-                       })
+            self.addWaterIntakeButton.alpha = 0.4
+        })
+        
         isShowingIntakeButtons = true
+        addWaterIntakeButton.isSelected = true
     }
     
     fileprivate func hideIntakeButtons(selectedButtonIndex: Int? = nil) {
+        addWaterIntakeButton.isSelected = false
         let delayStep = 0.0 //0.05
         for i in customWaterButtons.indices {
             let delay: TimeInterval = delayStep * Double(customWaterButtons.count - i - 1)
-            UIView.animate(withDuration: 0.35, delay: delay, usingSpringWithDamping: 0.65,
-                           initialSpringVelocity: 1, options: .curveEaseIn, animations: {
-                            self.customWaterButtons[i].transform = .identity
-                            self.customWaterButtons[i].alpha = 0.0
-                           })
+            UIView.animate(withDuration: 0.35, delay: delay, usingSpringWithDamping: 0.65, initialSpringVelocity: 1, options: .curveEaseIn, animations: {
+                self.customWaterButtons[i].transform = .identity
+                self.customWaterButtons[i].alpha = 0.0
+            })
         }
         
         UIView.animate(withDuration: 0.1, delay: 0, options: .curveEaseIn) {
@@ -460,7 +466,7 @@ class MainViewController: UIViewController, SettingsTracking {
     
     // Add Water Button (Long Tap)
     
-    @objc fileprivate func handleLongPress(sender : UILongPressGestureRecognizer){
+    @objc fileprivate func handleLongPress(sender : UILongPressGestureRecognizer) {
         switch sender.state {
         case .began: handleGestureBegan(sender: sender)
         case .ended: handleGestureEnded(sender: sender)
@@ -469,20 +475,22 @@ class MainViewController: UIViewController, SettingsTracking {
     }
     
     fileprivate func handleGestureBegan(sender: UILongPressGestureRecognizer) {
-        addWaterIntakeButton.isHighlighted = false
-        addWaterIntakeButton.adjustsImageWhenHighlighted = false
         UIView.animate(withDuration: 0.5, delay: 0, options: .curveEaseInOut) {
             self.addWaterIntakeButton.transform = .identity
         }
         
-        if HydrateSettings.hapticFeedbackEnabled {
-            UINotificationFeedbackGenerator().notificationOccurred(.warning)
+        if isShowingIntakeButtons {
+            if HydrateSettings.hapticFeedbackEnabled {
+                UIImpactFeedbackGenerator(style: .medium).impactOccurred()
+            }
+            hideIntakeButtons()
+        } else {
+            presentUndoAlert()
         }
     }
     
     fileprivate func handleGestureEnded(sender: UILongPressGestureRecognizer) {
-        addWaterIntakeButton.adjustsImageWhenHighlighted = true
-        presentUndoAlert()
+        
     }
     
     // Page Navigation
