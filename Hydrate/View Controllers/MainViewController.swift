@@ -162,12 +162,22 @@ class MainViewController: UIViewController, SettingsTracking {
         NotificationCenter.default.addObserver(self, selector: #selector(loadIntakeEntries),
                                                name: .NSCalendarDayChanged, object: nil)
         
+        NotificationCenter.default.addObserver(self, selector: #selector(applicationWillEnterForeground),
+                                               name: UIApplication.willEnterForegroundNotification, object: nil)
+        
         setupTapGestures()
         setupViews()
         loadIntakeEntries()
     }
     
-    // Shake to undo last intake entry added
+    /// Restart the water animation at the correct height when the app is brought to the foreground
+    @objc fileprivate func applicationWillEnterForeground() {
+        DispatchQueue.main.async {
+            self.waterView.setWaterLevelHeight(self.waterLevel, animated: false)
+        }
+    }
+    
+    /// Shake to undo last intake entry added
     override func motionEnded(_ motion: UIEvent.EventSubtype, with event: UIEvent?) {
         if motion == .motionShake {
             if HydrateSettings.hapticFeedbackEnabled {
