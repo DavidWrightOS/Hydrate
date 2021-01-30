@@ -483,13 +483,14 @@ class MainViewController: UIViewController, SettingsTracking {
             self.addWaterIntakeButton.transform = .identity
         }
         
+        if HydrateSettings.hapticFeedbackEnabled {
+            UIImpactFeedbackGenerator(style: .medium).impactOccurred()
+        }
+        
         if isShowingIntakeButtons {
-            if HydrateSettings.hapticFeedbackEnabled {
-                UIImpactFeedbackGenerator(style: .medium).impactOccurred()
-            }
             hideIntakeButtons(staggerAnimationsBy: 0.05)
         } else {
-            presentUndoAlert()
+            showIntakeButtons(staggerAnimationsBy: 0.05)
         }
     }
     
