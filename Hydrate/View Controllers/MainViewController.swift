@@ -247,6 +247,10 @@ class MainViewController: UIViewController, SettingsTracking {
         
         addWaterIntakeButton.addGestureRecognizer(tapGesture)
         addWaterIntakeButton.addGestureRecognizer(longGesture)
+        
+        let swipeDown = UISwipeGestureRecognizer(target: self, action: #selector(handleSwipeDownGesture))
+        swipeDown.direction = .down
+        view.addGestureRecognizer(swipeDown)
     }
     
     fileprivate func setupViews() {
@@ -491,6 +495,10 @@ class MainViewController: UIViewController, SettingsTracking {
     
     fileprivate func handleGestureEnded(sender: UILongPressGestureRecognizer) {
         
+    }
+    
+    @objc fileprivate func handleSwipeDownGesture() {
+        presentUndoAlert()
     }
     
     // Page Navigation
