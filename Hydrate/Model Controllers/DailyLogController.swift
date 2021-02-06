@@ -124,6 +124,15 @@ class DailyLogController {
         sendNotificationIfNeeded()
     }
     
+    func add(intakeAmount: Int, for date: Date = Date()) {
+        let intakeEntry = IntakeEntry(intakeAmount: intakeAmount, timestamp: date)
+        coreDataStack.saveContext()
+        if intakeEntry.dailyLog == dailyLog {
+            dailyLog = fetchDailyLog()
+        }
+        sendNotificationIfNeeded()
+    }
+    
     func delete(_ dailyLog: DailyLog) {
         if self.dailyLog?.date == dailyLog.date {
             self.dailyLog = nil
