@@ -50,8 +50,6 @@ class MainViewController: UIViewController, SettingsTracking {
             ((view.bounds.maxY - measurementMarkersView.frame.minY) / view.bounds.maxY)
     }
     
-    fileprivate lazy var coreDataStack = CoreDataStack.shared
-    
     //MARK: - UI Components
     
     fileprivate var waterView: WaterAnimationView!
