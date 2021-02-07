@@ -125,6 +125,75 @@ class DataViewController: UIViewController {
     @objc fileprivate func doneButtonTapped() {
         dismiss(animated: true, completion: nil)
     }
+    
+    private func presentAddDataAlert(for date: Date = Date()) {
+        let title = "New Intake"
+        let message = "Enter the new intake details."
+        let alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        alertController.view.tintColor = .actionColorHighContrast
+        
+        // Intake Amount Textfield
+        alertController.addTextField { textField in
+            textField.placeholder = "Enter intake amount"
+            textField.text = nil
+            textField.font = .systemFont(ofSize: 16)
+            textField.textColor = .actionColorHighContrast
+            
+            let unitLabel = UILabel()
+            unitLabel.font = .systemFont(ofSize: 16)
+            unitLabel.textColor = .placeholderText
+            unitLabel.text = HydrateSettings.unit.abbreviation
+            textField.addSubview(unitLabel)
+            textField.rightView = unitLabel
+            textField.rightViewMode = .always
+            textField.keyboardType = .numberPad
+        }
+        
+        let datePicker = UIDatePicker()
+        datePicker.datePickerMode = .dateAndTime
+        
+        let currentDate = Date()
+        let currentTime = currentDate.startOfDay.distance(to: currentDate)
+        datePicker.date = date.startOfDay.addingTimeInterval(currentTime)
+        
+        if #available(iOS 14, *) {
+            datePicker.preferredDatePickerStyle = .compact
+        } else {
+            datePicker.preferredDatePickerStyle = .wheels
+        }
+        
+        // Date and Time Textfield
+        alertController.addTextField { textField in
+            textField.addSubview(datePicker)
+            datePicker.anchor(top: textField.topAnchor, leading: textField.leadingAnchor, bottom: textField.bottomAnchor, trailing: textField.trailingAnchor)
+        }
+        
+        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel)
+        alertController.addAction(cancelAction)
+        
+        let saveAction = UIAlertAction(title: "Save", style: .default) { [weak self, weak alertController, weak datePicker] _ in
+            guard let self = self,
+                  let alertController = alertController,
+                  let datePickerDate = datePicker?.date,
+                  let amountText = alertController.textFields?.first?.text,
+                  let amount = Int(amountText) else { return }
+            
+            self.dailyLogController.add(intakeAmount: amount, for: datePickerDate)
+            
+            guard let navController = self.children.last as? UINavigationController else { return }
+            
+            if let dailyLogTableVC = navController.topViewController as? DailyLogTableViewController {
+                dailyLogTableVC.setEditing(false, animated: true)
+            } else if let entriesTableVC = navController.topViewController as? EntriesTableViewController {
+                entriesTableVC.setEditing(false, animated: true)
+            }
+        }
+        
+        alertController.addAction(saveAction)
+        present(alertController, animated: true)
+    }
+}
+
 extension DataViewController: DailyLogTableViewControllerDelegate {
     func addDataButtonTapped() {
         let date = dailyLogController.dailyLog?.date ?? Date()
