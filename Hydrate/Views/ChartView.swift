@@ -22,7 +22,7 @@ struct ChartView: View {
     
     var body: some View {
         ZStack {
-            Color(#colorLiteral(red: 0.2122643888, green: 0.2450331748, blue: 0.3367856145, alpha: 1))
+            Color(.ravenClawBlue)
             VStack (alignment: .leading) {
                 VStack (alignment: .leading, spacing: 0){
                     Text("Water Intake")
