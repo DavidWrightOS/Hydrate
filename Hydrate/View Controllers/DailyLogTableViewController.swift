@@ -41,6 +41,9 @@ class DailyLogTableViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        NotificationCenter.default.addObserver(self, selector: #selector(loadIntakeEntries),
+                                               name: .intakeEntriesDidChangeNotificationName, object: nil)
+        
         self.navigationItem.rightBarButtonItem = self.editButtonItem
         fetchDailyLogs()
         configureTableView()
@@ -113,6 +116,10 @@ class DailyLogTableViewController: UITableViewController {
         }
         
         return DailyLog(date: date.startOfDay)
+    }
+    
+    @objc fileprivate func loadIntakeEntries() {
+        tableView.reloadData()
     }
 
     // MARK: - Table view data source

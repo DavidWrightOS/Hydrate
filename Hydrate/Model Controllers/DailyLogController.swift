@@ -180,6 +180,8 @@ class DailyLogController {
     }
     
     fileprivate func sendNotificationIfNeeded() {
+        NotificationCenter.default.post(Notification(name: .intakeEntriesDidChangeNotificationName))
+        
         guard let date = dailyLog?.date else {
             NotificationCenter.default.post(Notification(name: .todaysDailyLogDidUpdateNotificationName))
             return

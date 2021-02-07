@@ -59,6 +59,10 @@ class DataViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(loadIntakeEntries),
+                                               name: .intakeEntriesDidChangeNotificationName, object: nil)
+        
         setupViews()
     }
     
@@ -109,6 +113,16 @@ class DataViewController: UIViewController {
                                                   leading: containerView.leadingAnchor,
                                                   bottom: containerView.bottomAnchor,
                                                   trailing: containerView.trailingAnchor)
+    }
+    
+    @objc fileprivate func loadIntakeEntries() {
+        guard let hostingController = children.first as? UIHostingController<ChartView> else { return }
+        
+        let today = Date().startOfDay
+        let startOfLastSevenDays = Calendar.current.date(byAdding: .day, value: -6, to: today)!
+        let dailyLogsForLastSevenDays = dailyLogController.fetchDailyLogs(startingOn: startOfLastSevenDays, through: today)
+        hostingController.rootView.dailyLogs = dailyLogsForLastSevenDays
+        hostingController.rootView.updateDailyLogs()
     }
     
     @objc fileprivate func doneButtonTapped() {
