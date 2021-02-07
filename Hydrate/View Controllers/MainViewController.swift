@@ -503,7 +503,7 @@ class MainViewController: UIViewController, SettingsTracking {
     // Page Navigation
     
     @objc fileprivate func handleShowDataTapped() {
-        let dvc = DataViewController()
+        let dvc = DataViewController(dailyLogController: dailyLogController)
         dvc.dailyLogController = dailyLogController
         present(dvc, animated: true, completion: nil)
     }

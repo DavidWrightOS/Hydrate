@@ -11,7 +11,7 @@ import SwiftUI
 
 class DataViewController: UIViewController {
     
-    var dailyLogController: DailyLogController?
+    var dailyLogController: DailyLogController
     
     // MARK: - UI Components
     
@@ -50,6 +50,15 @@ class DataViewController: UIViewController {
     }()
     
     // MARK: - Lifecycle
+    
+    init(dailyLogController: DailyLogController) {
+        self.dailyLogController = dailyLogController
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
