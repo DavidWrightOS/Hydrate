@@ -27,11 +27,13 @@ class DataViewController: UIViewController {
         return navigationBar
     }()
     
-    fileprivate let chartView: UIView = {
+    fileprivate let chartViewContainer: UIView = {
         let chartView = UIView()
         chartView.backgroundColor = .ravenClawBlue
         return chartView
     }()
+    
+    fileprivate lazy var chartView = ChartView(dailyLogController: dailyLogController)
     
     fileprivate let containerView: UIView = {
         let containerView = UIView()
@@ -81,31 +83,30 @@ class DataViewController: UIViewController {
     }
     
     fileprivate func setupChartView() {
-        view.addSubview(chartView)
+        view.addSubview(chartViewContainer)
         
-        var chartsView = ChartView()
         let today = Date().startOfDay
         let sevenDaysAgo = Calendar.current.date(byAdding: .day, value: -6, to: today)!
-        chartsView.dailyLogs = dailyLogController?.fetchDailyLogs(startingOn: sevenDaysAgo, through: today) ?? []
-        chartsView.updateDailyLogs()
+        chartView.dailyLogs = dailyLogController.fetchDailyLogs(startingOn: sevenDaysAgo, through: today)
+        chartView.updateDailyLogs()
         
-        let childView = UIHostingController(rootView: chartsView)
+        let childView = UIHostingController(rootView: chartView)
         addChild(childView)
         childView.didMove(toParent: self)
-        chartView.addSubview(childView.view)
-        childView.view.anchor(top: chartView.topAnchor,
-                              leading: chartView.leadingAnchor,
-                              bottom: chartView.bottomAnchor,
-                              trailing: chartView.trailingAnchor)
+        chartViewContainer.addSubview(childView.view)
+        childView.view.anchor(top: chartViewContainer.topAnchor,
+                              leading: chartViewContainer.leadingAnchor,
+                              bottom: chartViewContainer.bottomAnchor,
+                              trailing: chartViewContainer.trailingAnchor)
         
-        chartView.anchor(top: navigationBar.bottomAnchor, leading: view.leadingAnchor,
+        chartViewContainer.anchor(top: navigationBar.bottomAnchor, leading: view.leadingAnchor,
                          bottom: nil, trailing: view.trailingAnchor,
                          size: CGSize(width: view.bounds.width, height: 220))
     }
     
     fileprivate func setupContainerView() {
         view.addSubview(containerView)
-        containerView.anchor(top: chartView.bottomAnchor, leading: view.leadingAnchor,
+        containerView.anchor(top: chartViewContainer.bottomAnchor, leading: view.leadingAnchor,
                              bottom: view.bottomAnchor, trailing: view.trailingAnchor)
         setupTableViewNavigationController()
     }

@@ -10,11 +10,13 @@ import SwiftUI
 
 struct ChartView: View {
     
+    let dailyLogController: DailyLogController
     var dailyLogs: [DailyLog] = []
     var dayOfWeekLabels = [String]()
     var totalsToChart = [Int]()
 
-    init() {
+    init(dailyLogController: DailyLogController) {
+        self.dailyLogController = dailyLogController
         updateDailyLogs()
     }
     
@@ -69,7 +71,7 @@ struct BarView: View {
 
 struct ChartView_Previews: PreviewProvider {
     static var previews: some View {
-        ChartView()
+        ChartView(dailyLogController: DailyLogController())
     }
 }
 
