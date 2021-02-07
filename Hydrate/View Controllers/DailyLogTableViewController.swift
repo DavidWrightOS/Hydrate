@@ -9,9 +9,16 @@
 import UIKit
 import CoreData
 
+protocol DailyLogTableViewControllerDelegate: class {
+    func addDataButtonTapped()
+    func addDataButtonTapped(for date: Date)
+}
+
 class DailyLogTableViewController: UITableViewController {
 
     // MARK: - Properties
+    
+    weak var delegate: DailyLogTableViewControllerDelegate?
     
     fileprivate let dailyLogController = DailyLogController()
     
@@ -59,7 +66,7 @@ class DailyLogTableViewController: UITableViewController {
     }
     
     fileprivate lazy var addDataButton: UIBarButtonItem = {
-        UIBarButtonItem(title: "Add Data", style: .plain, target: self, action: #selector(addDataButtonTapped))
+        UIBarButtonItem(title: "Add Data", style: .plain, target: self, action: #selector(didTapAddDataButton))
     }()
     
     fileprivate var dateFormatter: DateFormatter = {
@@ -153,8 +160,8 @@ class DailyLogTableViewController: UITableViewController {
         cell.detailTextLabel?.text = dateFormatter.string(from: dailyLog.date!)
     }
     
-    @objc fileprivate func addDataButtonTapped() {
-        dailyLogController.add(intakeAmount: 8)
+    @objc fileprivate func didTapAddDataButton() {
+        delegate?.addDataButtonTapped()
     }
     
     // MARK: - Table view delegate

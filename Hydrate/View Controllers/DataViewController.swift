@@ -43,6 +43,7 @@ class DataViewController: UIViewController {
     
     fileprivate lazy var tableViewNavigationController: UINavigationController = {
         let dailyLogTableVC = DailyLogTableViewController()
+        dailyLogTableVC.delegate = self
         let navController = UINavigationController(rootViewController: dailyLogTableVC)
         navController.navigationBar.barTintColor = .ravenClawBlue
         navController.navigationBar.tintColor = .actionColor
@@ -123,5 +124,15 @@ class DataViewController: UIViewController {
     
     @objc fileprivate func doneButtonTapped() {
         dismiss(animated: true, completion: nil)
+    }
+extension DataViewController: DailyLogTableViewControllerDelegate {
+    func addDataButtonTapped() {
+        let date = dailyLogController.dailyLog?.date ?? Date()
+        presentAddDataAlert(for: date)
+    }
+    
+    func addDataButtonTapped(for date: Date) {
+        presentAddDataAlert(for: date)
+    }
     }
 }
