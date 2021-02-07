@@ -169,6 +169,7 @@ class DailyLogTableViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let dailyLog = fetchedResultsController.object(at: indexPath)
         let entryTableVC = EntriesTableViewController(for: dailyLog)
+        entryTableVC.delegate = self
         navigationController?.pushViewController(entryTableVC, animated: true)
     }
 }
@@ -229,5 +230,13 @@ extension DailyLogTableViewController: NSFetchedResultsControllerDelegate {
     
     func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
         tableView.endUpdates()
+    }
+}
+
+// MARK: - EntriesTableViewControllerDelegate
+
+extension DailyLogTableViewController: EntriesTableViewControllerDelegate {
+    func addDataButtonTapped(for date: Date) {
+        delegate?.addDataButtonTapped(for: date)
     }
 }
