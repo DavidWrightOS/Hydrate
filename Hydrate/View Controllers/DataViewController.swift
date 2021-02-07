@@ -27,12 +27,6 @@ class DataViewController: UIViewController {
         return navigationBar
     }()
     
-    fileprivate let chartViewContainer: UIView = {
-        let chartView = UIView()
-        chartView.backgroundColor = .ravenClawBlue
-        return chartView
-    }()
-    
     fileprivate lazy var chartView = ChartView(dailyLogController: dailyLogController)
     
     fileprivate let containerView: UIView = {
@@ -74,7 +68,7 @@ class DataViewController: UIViewController {
         view.backgroundColor = .ravenClawBlue
         setupNavigationBar()
         setupChartView()
-        setupContainerView()
+        setupTableViewNavigationController()
     }
     
     fileprivate func setupNavigationBar() {
@@ -84,8 +78,6 @@ class DataViewController: UIViewController {
     }
     
     fileprivate func setupChartView() {
-        view.addSubview(chartViewContainer)
-        
         let today = Date().startOfDay
         let sevenDaysAgo = Calendar.current.date(byAdding: .day, value: -6, to: today)!
         chartView.dailyLogs = dailyLogController.fetchDailyLogs(startingOn: sevenDaysAgo, through: today)
@@ -94,22 +86,19 @@ class DataViewController: UIViewController {
         let childView = UIHostingController(rootView: chartView)
         addChild(childView)
         childView.didMove(toParent: self)
-        chartViewContainer.addSubview(childView.view)
-        childView.view.anchor(top: chartViewContainer.topAnchor,
-                              leading: chartViewContainer.leadingAnchor,
-                              bottom: chartViewContainer.bottomAnchor,
-                              trailing: chartViewContainer.trailingAnchor)
         
-        chartViewContainer.anchor(top: navigationBar.bottomAnchor, leading: view.leadingAnchor,
-                         bottom: nil, trailing: view.trailingAnchor,
-                         size: CGSize(width: view.bounds.width, height: 220))
-    }
-    
-    fileprivate func setupContainerView() {
+        view.addSubview(childView.view)
+        childView.view.anchor(top: navigationBar.bottomAnchor,
+                              leading: view.leadingAnchor,
+                              bottom: nil,
+                              trailing: view.trailingAnchor,
+                              size: CGSize(width: view.bounds.width, height: 220))
+        
         view.addSubview(containerView)
-        containerView.anchor(top: chartViewContainer.bottomAnchor, leading: view.leadingAnchor,
-                             bottom: view.bottomAnchor, trailing: view.trailingAnchor)
-        setupTableViewNavigationController()
+        containerView.anchor(top: childView.view.bottomAnchor,
+                             leading: view.leadingAnchor,
+                             bottom: view.bottomAnchor,
+                             trailing: view.trailingAnchor)
     }
     
     fileprivate func setupTableViewNavigationController() {
@@ -202,6 +191,5 @@ extension DataViewController: DailyLogTableViewControllerDelegate {
     
     func addDataButtonTapped(for date: Date) {
         presentAddDataAlert(for: date)
-    }
     }
 }
