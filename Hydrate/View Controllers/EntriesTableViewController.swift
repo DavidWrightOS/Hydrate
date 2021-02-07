@@ -9,9 +9,15 @@
 import UIKit
 import CoreData
 
+protocol EntriesTableViewControllerDelegate: class {
+    func addDataButtonTapped(for date: Date)
+}
+
 class EntriesTableViewController: UITableViewController {
     
     // MARK: - Properties
+    
+    weak var delegate: EntriesTableViewControllerDelegate?
     
     fileprivate let dailyLogController = DailyLogController()
     
@@ -152,7 +158,8 @@ class EntriesTableViewController: UITableViewController {
     }
     
     @objc fileprivate func addDataButtonTapped() {
-        dailyLogController.add(intakeAmount: 8)
+        guard let date = dailyLog.date else { return }
+        delegate?.addDataButtonTapped(for: date)
     }
 }
 
