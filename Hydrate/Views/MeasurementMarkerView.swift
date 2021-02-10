@@ -37,15 +37,15 @@ class MeasurementMarkerView: UIView {
     
     // MARK: - Private
     
-    fileprivate var topMarkerView = UIView()
-    fileprivate var bottomMarkersStackView = UIStackView()
+    private var topMarkerView = UIView()
+    private var bottomMarkersStackView = UIStackView()
     
-    fileprivate func configure() {
+    private func configure() {
         backgroundColor = .clear
         setupMeasurementMarkers()
     }
     
-    fileprivate func setupMeasurementMarkers() {
+    private func setupMeasurementMarkers() {
         let targetDailyIntake = HydrateSettings.targetDailyIntake
         let topMarkerIntervalOffset = targetDailyIntake % markerIntervalSize
         var topMarkerInterval = (topMarkerIntervalOffset == 0) ? markerIntervalSize : topMarkerIntervalOffset
@@ -91,7 +91,7 @@ class MeasurementMarkerView: UIView {
                                       trailing: trailingAnchor)
     }
     
-    fileprivate func newMarkerView(withDisplayNumber displayNumber: Int) -> UIView {
+    private func newMarkerView(withDisplayNumber displayNumber: Int) -> UIView {
         guard displayNumber > 0 else { return UIView() }
         
         let markerView = UIView()

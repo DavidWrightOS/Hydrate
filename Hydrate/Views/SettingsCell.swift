@@ -10,6 +10,8 @@ import UIKit
 
 class SettingsCell: UITableViewCell {
     
+    static let reuseIdentifier = "SettingsCell"
+    
     // MARK: - Properties
     
     var setting: SettingOption? {

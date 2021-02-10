@@ -19,13 +19,13 @@ class EntriesTableViewController: UITableViewController {
     
     weak var delegate: EntriesTableViewControllerDelegate?
     
-    fileprivate let dailyLogController = DailyLogController()
+    private let dailyLogController = DailyLogController()
     
-    fileprivate lazy var coreDataStack = CoreDataStack.shared
+    private lazy var coreDataStack = CoreDataStack.shared
     
-    fileprivate var dailyLog: DailyLog!
+    private var dailyLog: DailyLog!
     
-    fileprivate lazy var fetchedResultsController: NSFetchedResultsController<IntakeEntry> = {
+    private lazy var fetchedResultsController: NSFetchedResultsController<IntakeEntry> = {
         let fetchRequest: NSFetchRequest<IntakeEntry> = IntakeEntry.fetchRequest()
         fetchRequest.sortDescriptors = [NSSortDescriptor(key: #keyPath(IntakeEntry.timestamp), ascending: false)]
         fetchRequest.predicate = NSPredicate(format: "(%K = %@)", #keyPath(IntakeEntry.dailyLog), dailyLog)
@@ -70,7 +70,7 @@ class EntriesTableViewController: UITableViewController {
     
     // MARK: - Private Properties
     
-    fileprivate static var intakeEntryCell: UITableViewCell {
+    private static var intakeEntryCell: UITableViewCell {
         let cell = UITableViewCell(style: .value1, reuseIdentifier: "intakeEntryCell")
         cell.backgroundColor = .ravenClawBlue90
         cell.tintColor = .sicklySmurfBlue
@@ -80,18 +80,18 @@ class EntriesTableViewController: UITableViewController {
         return cell
     }
     
-    fileprivate lazy var addDataButton: UIBarButtonItem = {
+    private lazy var addDataButton: UIBarButtonItem = {
         UIBarButtonItem(title: "Add Data", style: .plain, target: self, action: #selector(addDataButtonTapped))
     }()
     
-    fileprivate var dateFormatter: DateFormatter = {
+    private var dateFormatter: DateFormatter = {
         let dateFormatter = DateFormatter()
         dateFormatter.dateStyle = .medium
         dateFormatter.timeStyle = .none
         return dateFormatter
     }()
     
-    fileprivate var timeFormatter: DateFormatter = {
+    private var timeFormatter: DateFormatter = {
         let dateFormatter = DateFormatter()
         dateFormatter.dateStyle = .none
         dateFormatter.timeStyle = .short
@@ -100,14 +100,14 @@ class EntriesTableViewController: UITableViewController {
     
     // MARK: - Private Methods
     
-    fileprivate func configureTableView() {
+    private func configureTableView() {
         title = dateFormatter.string(from: dailyLog.date!)
         tableView = UITableView(frame: self.tableView.frame, style: .insetGrouped)
         tableView.backgroundColor = .ravenClawBlue
         tableView.separatorColor = .ravenClawBlue
     }
     
-    fileprivate func updateViews() {
+    private func updateViews() {
         guard isViewLoaded else { return }
         setEditing(false, animated: true)
         tableView.reloadData()
@@ -157,7 +157,7 @@ class EntriesTableViewController: UITableViewController {
         cell.textLabel?.text = "\(intakeEntry.amount) \(HydrateSettings.unit.abbreviation)"
     }
     
-    @objc fileprivate func addDataButtonTapped() {
+    @objc private func addDataButtonTapped() {
         guard let date = dailyLog.date else { return }
         delegate?.addDataButtonTapped(for: date)
     }

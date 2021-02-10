@@ -15,7 +15,7 @@ class DataViewController: UIViewController {
     
     // MARK: - UI Components
     
-    fileprivate let navigationBar: UINavigationBar = {
+    private let navigationBar: UINavigationBar = {
         let navigationItem = UINavigationItem(title: "Water Intake History")
         let navigationBar = UINavigationBar()
         navigationBar.setItems([navigationItem], animated: false)
@@ -27,15 +27,15 @@ class DataViewController: UIViewController {
         return navigationBar
     }()
     
-    fileprivate lazy var chartView = ChartView(dailyLogController: dailyLogController)
+    private lazy var chartView = ChartView(dailyLogController: dailyLogController)
     
-    fileprivate let containerView: UIView = {
+    private let containerView: UIView = {
         let containerView = UIView()
         containerView.backgroundColor = .lightGray
         return containerView
     }()
     
-    fileprivate lazy var tableViewNavigationController: UINavigationController = {
+    private lazy var tableViewNavigationController: UINavigationController = {
         let dailyLogTableVC = DailyLogTableViewController()
         dailyLogTableVC.delegate = self
         let navController = UINavigationController(rootViewController: dailyLogTableVC)
@@ -68,20 +68,20 @@ class DataViewController: UIViewController {
     
     // MARK: - Private Methods
     
-    fileprivate func setupViews() {
+    private func setupViews() {
         view.backgroundColor = .ravenClawBlue
         setupNavigationBar()
         setupChartView()
         setupTableViewNavigationController()
     }
     
-    fileprivate func setupNavigationBar() {
+    private func setupNavigationBar() {
         view.addSubview(navigationBar)
         navigationBar.anchor(top: view.topAnchor, leading: view.leadingAnchor,
                              bottom: nil, trailing: view.trailingAnchor)
     }
     
-    fileprivate func setupChartView() {
+    private func setupChartView() {
         let today = Date().startOfDay
         let sevenDaysAgo = Calendar.current.date(byAdding: .day, value: -6, to: today)!
         chartView.dailyLogs = dailyLogController.fetchDailyLogs(startingOn: sevenDaysAgo, through: today)
@@ -105,7 +105,7 @@ class DataViewController: UIViewController {
                              trailing: view.trailingAnchor)
     }
     
-    fileprivate func setupTableViewNavigationController() {
+    private func setupTableViewNavigationController() {
         addChild(tableViewNavigationController)
         containerView.addSubview(tableViewNavigationController.view)
         tableViewNavigationController.didMove(toParent: self)
@@ -115,7 +115,7 @@ class DataViewController: UIViewController {
                                                   trailing: containerView.trailingAnchor)
     }
     
-    @objc fileprivate func loadIntakeEntries() {
+    @objc private func loadIntakeEntries() {
         guard let hostingController = children.first as? UIHostingController<ChartView> else { return }
         
         let today = Date().startOfDay
@@ -125,7 +125,7 @@ class DataViewController: UIViewController {
         hostingController.rootView.updateDailyLogs()
     }
     
-    @objc fileprivate func doneButtonTapped() {
+    @objc private func doneButtonTapped() {
         dismiss(animated: true, completion: nil)
     }
     

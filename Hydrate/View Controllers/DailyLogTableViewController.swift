@@ -20,11 +20,11 @@ class DailyLogTableViewController: UITableViewController {
     
     weak var delegate: DailyLogTableViewControllerDelegate?
     
-    fileprivate let dailyLogController = DailyLogController()
+    private let dailyLogController = DailyLogController()
     
-    fileprivate lazy var coreDataStack = CoreDataStack.shared
+    private lazy var coreDataStack = CoreDataStack.shared
     
-    fileprivate lazy var fetchedResultsController: NSFetchedResultsController<DailyLog> = {
+    private lazy var fetchedResultsController: NSFetchedResultsController<DailyLog> = {
         let fetchRequest: NSFetchRequest<DailyLog> = DailyLog.fetchRequest()
         fetchRequest.sortDescriptors = [NSSortDescriptor(key: #keyPath(DailyLog.date), ascending: false)]
         fetchRequest.fetchBatchSize = 50
@@ -57,7 +57,7 @@ class DailyLogTableViewController: UITableViewController {
     
     // MARK: - Private Properties
     
-    fileprivate static var dailyLogCell: UITableViewCell {
+    private static var dailyLogCell: UITableViewCell {
         let cell = UITableViewCell(style: .value1, reuseIdentifier: "dailyLogCell")
         cell.backgroundColor = .ravenClawBlue90
         cell.tintColor = .sicklySmurfBlue
@@ -68,11 +68,11 @@ class DailyLogTableViewController: UITableViewController {
         return cell
     }
     
-    fileprivate lazy var addDataButton: UIBarButtonItem = {
+    private lazy var addDataButton: UIBarButtonItem = {
         UIBarButtonItem(title: "Add Data", style: .plain, target: self, action: #selector(didTapAddDataButton))
     }()
     
-    fileprivate var dateFormatter: DateFormatter = {
+    private var dateFormatter: DateFormatter = {
         let dateFormatter = DateFormatter()
         dateFormatter.dateStyle = .medium
         dateFormatter.timeStyle = .none
@@ -81,20 +81,20 @@ class DailyLogTableViewController: UITableViewController {
     
     // MARK: - Private Methods
     
-    fileprivate func configureTableView() {
+    private func configureTableView() {
         title = "Daily Logs"
         tableView = UITableView(frame: self.tableView.frame, style: .insetGrouped)
         tableView.backgroundColor = .ravenClawBlue
         tableView.separatorColor = .ravenClawBlue
     }
     
-    fileprivate func updateViews() {
+    private func updateViews() {
         guard isViewLoaded else { return }
         setEditing(false, animated: true)
         tableView.reloadData()
     }
     
-    fileprivate func fetchDailyLogs() {
+    private func fetchDailyLogs() {
         do {
             try fetchedResultsController.performFetch()
         } catch let error as NSError {
@@ -102,7 +102,7 @@ class DailyLogTableViewController: UITableViewController {
         }
     }
     
-    fileprivate func fetchDailyLog(for date: Date = Date()) -> DailyLog {
+    private func fetchDailyLog(for date: Date = Date()) -> DailyLog {
         let fetchRequest: NSFetchRequest<DailyLog> = DailyLog.fetchRequest()
         let datePredicate = NSPredicate(format: "(%K = %@)", #keyPath(DailyLog.date), date.startOfDay as NSDate)
         fetchRequest.predicate = datePredicate
@@ -118,7 +118,7 @@ class DailyLogTableViewController: UITableViewController {
         return DailyLog(date: date.startOfDay)
     }
     
-    @objc fileprivate func loadIntakeEntries() {
+    @objc private func loadIntakeEntries() {
         tableView.reloadData()
     }
 
@@ -161,13 +161,13 @@ class DailyLogTableViewController: UITableViewController {
         }
     }
     
-    fileprivate func configure(cell: UITableViewCell, for indexPath: IndexPath) {
+    private func configure(cell: UITableViewCell, for indexPath: IndexPath) {
         let dailyLog = fetchedResultsController.object(at: indexPath)
         cell.textLabel?.text = "\(dailyLog.totalIntake) \(HydrateSettings.unit.abbreviation)"
         cell.detailTextLabel?.text = dateFormatter.string(from: dailyLog.date!)
     }
     
-    @objc fileprivate func didTapAddDataButton() {
+    @objc private func didTapAddDataButton() {
         delegate?.addDataButtonTapped()
     }
     

@@ -12,15 +12,15 @@ class MainViewController: UIViewController, SettingsTracking {
     
     // MARK: - Properties
     
-    fileprivate let dailyLogController = DailyLogController()
+    private let dailyLogController = DailyLogController()
     
-    fileprivate var targetDailyIntake: Int = 96
+    private var targetDailyIntake: Int = 96
     
-    fileprivate var units = HydrateSettings.unit
+    private var units = HydrateSettings.unit
     
-    fileprivate var intakeButtonAmounts = [8, 12, 16, 20, 32]
+    private var intakeButtonAmounts = [8, 12, 16, 20, 32]
     
-    fileprivate lazy var intakeButtonOffsets: [CGPoint] = {
+    private lazy var intakeButtonOffsets: [CGPoint] = {
         var offsets: [CGPoint] = []
         let buttonCount = intakeButtonAmounts.count
         let radius: CGFloat = 150
@@ -41,20 +41,20 @@ class MainViewController: UIViewController, SettingsTracking {
         return offsets
     }()
     
-    fileprivate var totalIntake: Int {
+    private var totalIntake: Int {
         Int(dailyLogController.dailyLog?.totalIntake ?? 0)
     }
     
-    fileprivate var waterLevel: CGFloat {
+    private var waterLevel: CGFloat {
         CGFloat(totalIntake) / CGFloat(targetDailyIntake) *
             ((view.bounds.maxY - measurementMarkersView.frame.minY) / view.bounds.maxY)
     }
     
     //MARK: - UI Components
     
-    fileprivate var waterView: WaterAnimationView!
+    private var waterView: WaterAnimationView!
     
-    fileprivate let addWaterIntakeButton: UIButton = {
+    private let addWaterIntakeButton: UIButton = {
         let button = UIButton()
         button.setImage(UIImage(named: "water-button"), for: .normal)
         button.translatesAutoresizingMaskIntoConstraints = false
@@ -65,7 +65,7 @@ class MainViewController: UIViewController, SettingsTracking {
         return button
     }()
     
-    fileprivate lazy var customWaterButtons: [UIButton] = {
+    private lazy var customWaterButtons: [UIButton] = {
         var buttons = [UIButton]()
         let buttonDiameter: CGFloat = 60
         for index in 0..<5 {
@@ -91,7 +91,7 @@ class MainViewController: UIViewController, SettingsTracking {
         return buttons
     }()
     
-    fileprivate let showDataButton: UIButton = {
+    private let showDataButton: UIButton = {
         let button = UIButton()
         let config = UIImage.SymbolConfiguration(pointSize: 38, weight: .light)
         let image = UIImage(systemName: "chart.bar.xaxis")?.withConfiguration(config)
@@ -107,7 +107,7 @@ class MainViewController: UIViewController, SettingsTracking {
         return button
     }()
     
-    fileprivate let showSettingsButton: UIButton = {
+    private let showSettingsButton: UIButton = {
         let button = UIButton()
         let config = UIImage.SymbolConfiguration(pointSize: 38, weight: .light)
         let image = UIImage(systemName: "gearshape")?.withConfiguration(config)
@@ -123,7 +123,7 @@ class MainViewController: UIViewController, SettingsTracking {
         return button
     }()
     
-    fileprivate let intakeAmountLabel: AnimatedLabel = {
+    private let intakeAmountLabel: AnimatedLabel = {
         let label = AnimatedLabel()
         label.unitsString = HydrateSettings.unit.abbreviation
         label.textAlignment = .center
@@ -133,7 +133,7 @@ class MainViewController: UIViewController, SettingsTracking {
         return label
     }()
     
-    fileprivate let topControlsStackView: UIStackView = {
+    private let topControlsStackView: UIStackView = {
         let stackView = UIStackView()
         stackView.distribution = .fill
         stackView.alignment = .top
@@ -141,13 +141,13 @@ class MainViewController: UIViewController, SettingsTracking {
         return stackView
     }()
     
-    fileprivate let measurementMarkersView: MeasurementMarkerView = {
+    private let measurementMarkersView: MeasurementMarkerView = {
         let view = MeasurementMarkerView()
         view.unitsString = HydrateSettings.unit.abbreviation
         return view
     }()
     
-    fileprivate var confettiView: ConfettiView?
+    private var confettiView: ConfettiView?
     
     // MARK: - Lifecycle
     
@@ -173,7 +173,7 @@ class MainViewController: UIViewController, SettingsTracking {
     }
     
     /// Restart the water animation at the correct height when the app is brought to the foreground
-    @objc fileprivate func applicationWillEnterForeground() {
+    @objc private func applicationWillEnterForeground() {
         DispatchQueue.main.async {
             self.waterView.setWaterLevelHeight(self.waterLevel, animated: false)
         }
@@ -210,12 +210,12 @@ class MainViewController: UIViewController, SettingsTracking {
         updateViews()
     }
     
-    @objc fileprivate func loadIntakeEntries() {
+    @objc private func loadIntakeEntries() {
         dailyLogController.loadDailyLog()
         updateViews()
     }
     
-    fileprivate func updateViews() {
+    private func updateViews() {
         DispatchQueue.main.async {
             
             if self.targetDailyIntake != HydrateSettings.targetDailyIntake {
@@ -238,7 +238,7 @@ class MainViewController: UIViewController, SettingsTracking {
         }
     }
     
-    fileprivate func setupTapGestures() {
+    private func setupTapGestures() {
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleNormalPress))
         let longGesture = UILongPressGestureRecognizer(target: self, action: #selector(handleLongPress))
         longGesture.cancelsTouchesInView = false
@@ -251,7 +251,7 @@ class MainViewController: UIViewController, SettingsTracking {
         view.addGestureRecognizer(swipeDown)
     }
     
-    fileprivate func setupViews() {
+    private func setupViews() {
         view.backgroundColor = UIColor.backgroundColor
         waterView = WaterAnimationView(frame: view.frame)
         waterView.setWaterLevelHeight(0, animated: false)
@@ -280,7 +280,7 @@ class MainViewController: UIViewController, SettingsTracking {
         view.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(mainViewTapped)))
     }
     
-    fileprivate func setupTopControls() {
+    private func setupTopControls() {
         topControlsStackView.addArrangedSubview(showDataButton)
         topControlsStackView.addArrangedSubview(UIView()) // spacer view
         topControlsStackView.addArrangedSubview(showSettingsButton)
@@ -293,7 +293,7 @@ class MainViewController: UIViewController, SettingsTracking {
         ])
     }
     
-    fileprivate func setupIntakeLabels() {
+    private func setupIntakeLabels() {
         NSLayoutConstraint.activate([
             intakeAmountLabel.centerYAnchor.constraint(equalTo: topControlsStackView.centerYAnchor, constant: -4),
             intakeAmountLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
@@ -307,7 +307,7 @@ class MainViewController: UIViewController, SettingsTracking {
     
     // MARK: - Measurement Markers
     
-    fileprivate func setupMeasurementMarkerView() {
+    private func setupMeasurementMarkerView() {
         measurementMarkersView.anchor(top: topControlsStackView.bottomAnchor,
                                       leading: view.safeAreaLayoutGuide.leadingAnchor,
                                       bottom: view.bottomAnchor,
@@ -315,7 +315,7 @@ class MainViewController: UIViewController, SettingsTracking {
                                       padding: .init(top: 36, left: 16, bottom: 0, right: 16))
     }
     
-    fileprivate func addWater(_ intakeAmount: Int, selectedButtonIndex: Int? = nil) {
+    private func addWater(_ intakeAmount: Int, selectedButtonIndex: Int? = nil) {
         guard intakeAmount != 0 else { return }
         
         if totalIntake < targetDailyIntake, totalIntake + intakeAmount >= targetDailyIntake {
@@ -336,7 +336,7 @@ class MainViewController: UIViewController, SettingsTracking {
         updateViews()
     }
     
-    fileprivate func undoLastIntakeEntry() {
+    private func undoLastIntakeEntry() {
         let amount = dailyLogController.undoLastIntakeEntry()
         guard amount != 0 else { return }
         
@@ -351,7 +351,7 @@ class MainViewController: UIViewController, SettingsTracking {
     
     // MARK: - Animations
     
-    fileprivate func showIntakeButtons(staggerAnimationsBy staggerInterval: Double = 0.0) {
+    private func showIntakeButtons(staggerAnimationsBy staggerInterval: Double = 0.0) {
         customWaterButtons.forEach { $0.alpha = 0.0 }
         let delayStep = staggerInterval
         for i in customWaterButtons.indices {
@@ -370,7 +370,7 @@ class MainViewController: UIViewController, SettingsTracking {
         addWaterIntakeButton.isSelected = true
     }
     
-    fileprivate func hideIntakeButtons(selectedButtonIndex: Int? = nil, staggerAnimationsBy staggerInterval: Double = 0.0) {
+    private func hideIntakeButtons(selectedButtonIndex: Int? = nil, staggerAnimationsBy staggerInterval: Double = 0.0) {
         addWaterIntakeButton.isSelected = false
         let delayStep = staggerInterval
         for i in customWaterButtons.indices {
@@ -388,13 +388,13 @@ class MainViewController: UIViewController, SettingsTracking {
         isShowingIntakeButtons = false
     }
     
-    @objc fileprivate func mainViewTapped() {
+    @objc private func mainViewTapped() {
         if isShowingIntakeButtons {
             hideIntakeButtons()
         }
     }
     
-    fileprivate func addWaterLabelAnimation(withText text: String, startingCenterPoint: CGPoint, textColor: UIColor? = nil) {
+    private func addWaterLabelAnimation(withText text: String, startingCenterPoint: CGPoint, textColor: UIColor? = nil) {
         let label = UILabel()
         label.backgroundColor = .clear
         label.alpha = 0
@@ -432,7 +432,7 @@ class MainViewController: UIViewController, SettingsTracking {
         }
     }
     
-    fileprivate func showConfettiAnimation() {
+    private func showConfettiAnimation() {
         confettiView?.removeFromSuperview()
         confettiView = nil
         
@@ -448,9 +448,9 @@ class MainViewController: UIViewController, SettingsTracking {
     
     // Add Water Button (Short Tap)
     
-    fileprivate var isShowingIntakeButtons = false
+    private var isShowingIntakeButtons = false
     
-    @objc fileprivate func handleNormalPress() {
+    @objc private func handleNormalPress() {
         if isShowingIntakeButtons {
             hideIntakeButtons()
         } else {
@@ -458,7 +458,7 @@ class MainViewController: UIViewController, SettingsTracking {
         }
     }
     
-    @objc fileprivate func customWaterButtonTapped(_ sender: UIButton) {
+    @objc private func customWaterButtonTapped(_ sender: UIButton) {
         guard sender.tag >= 0, sender.tag < intakeButtonAmounts.count else { return }
         
         let intakeAmount = intakeButtonAmounts[sender.tag]
@@ -468,7 +468,7 @@ class MainViewController: UIViewController, SettingsTracking {
     
     // Add Water Button (Long Tap)
     
-    @objc fileprivate func handleLongPress(sender : UILongPressGestureRecognizer) {
+    @objc private func handleLongPress(sender : UILongPressGestureRecognizer) {
         switch sender.state {
         case .began: handleGestureBegan(sender: sender)
         case .ended: handleGestureEnded(sender: sender)
@@ -476,7 +476,7 @@ class MainViewController: UIViewController, SettingsTracking {
         }
     }
     
-    fileprivate func handleGestureBegan(sender: UILongPressGestureRecognizer) {
+    private func handleGestureBegan(sender: UILongPressGestureRecognizer) {
         UIView.animate(withDuration: 0.5, delay: 0, options: .curveEaseInOut) {
             self.addWaterIntakeButton.transform = .identity
         }
@@ -492,23 +492,23 @@ class MainViewController: UIViewController, SettingsTracking {
         }
     }
     
-    fileprivate func handleGestureEnded(sender: UILongPressGestureRecognizer) {
+    private func handleGestureEnded(sender: UILongPressGestureRecognizer) {
         
     }
     
-    @objc fileprivate func handleSwipeDownGesture() {
+    @objc private func handleSwipeDownGesture() {
         presentUndoAlert()
     }
     
     // Page Navigation
     
-    @objc fileprivate func handleShowDataTapped() {
+    @objc private func handleShowDataTapped() {
         let dvc = DataViewController(dailyLogController: dailyLogController)
         dvc.dailyLogController = dailyLogController
         present(dvc, animated: true, completion: nil)
     }
     
-    @objc fileprivate func handleShowSettingsTapped() {
+    @objc private func handleShowSettingsTapped() {
         let svc = SettingsViewController()
         present(svc, animated: true, completion: nil)
     }

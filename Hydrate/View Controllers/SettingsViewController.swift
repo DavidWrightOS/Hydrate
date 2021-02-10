@@ -8,13 +8,11 @@
 
 import UIKit
 
-fileprivate let reuseIdentifier = "SettingsCell"
-
 class SettingsViewController: UIViewController {
     
     // MARK: - UI Components
     
-    fileprivate let navigationBar: UINavigationBar = {
+    private let navigationBar: UINavigationBar = {
         let navigationItem = UINavigationItem(title: "Settings")
         let navigationBar = UINavigationBar()
         navigationBar.prefersLargeTitles = true
@@ -28,9 +26,9 @@ class SettingsViewController: UIViewController {
         return navigationBar
     }()
     
-    fileprivate let tableView: UITableView = {
+    private let tableView: UITableView = {
         let tableView = UITableView(frame: .zero, style: .insetGrouped)
-        tableView.register(SettingsCell.self, forCellReuseIdentifier: reuseIdentifier)
+        tableView.register(SettingsCell.self, forCellReuseIdentifier: SettingsCell.reuseIdentifier)
         tableView.alwaysBounceVertical = false
         tableView.backgroundColor = .ravenClawBlue
         tableView.tableFooterView = UIView()
@@ -49,7 +47,7 @@ class SettingsViewController: UIViewController {
 
     // MARK: - Helpers
     
-    fileprivate func configureNavigationBar() {
+    private func configureNavigationBar() {
         view.addSubview(navigationBar)
         navigationBar.anchor(top: view.topAnchor,
                              leading: view.leadingAnchor,
@@ -57,7 +55,7 @@ class SettingsViewController: UIViewController {
                              trailing: view.trailingAnchor)
     }
     
-    fileprivate func configureTableView() {
+    private func configureTableView() {
         tableView.delegate = self
         tableView.dataSource = self
                 
@@ -68,7 +66,7 @@ class SettingsViewController: UIViewController {
                          trailing: view.trailingAnchor)
     }
     
-    fileprivate func presentTargetIntakeSelectionView(for indexPath: IndexPath) {
+    private func presentTargetIntakeSelectionView(for indexPath: IndexPath) {
         let title = "Target Intake"
         let message = "Enter your target daily water intake."
         let alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
@@ -112,7 +110,7 @@ class SettingsViewController: UIViewController {
         present(alertController, animated: true)
     }
     
-    fileprivate func presentUnitSelectionView(for indexPath: IndexPath) {
+    private func presentUnitSelectionView(for indexPath: IndexPath) {
         let title = "Select Unit"
         let alertController = UIAlertController(title: title, message: nil, preferredStyle: .actionSheet)
         alertController.view.tintColor = .actionColorHighContrast
@@ -145,21 +143,21 @@ class SettingsViewController: UIViewController {
         present(alertController, animated: true)
     }
     
-    fileprivate func handleReportIssue() {
+    private func handleReportIssue() {
         print("DEBUG: Handle Report Issue..")
     }
     
-    fileprivate func handleRateApp() {
+    private func handleRateApp() {
         print("DEBUG: Handle Rate App..")
     }
     
-    fileprivate func handleAboutUs() {
+    private func handleAboutUs() {
         print("DEBUG: Handle About Us..")
     }
     
     // MARK: - Selectors
     
-    @objc fileprivate func doneButtonTapped() {
+    @objc private func doneButtonTapped() {
         dismiss(animated: true, completion: nil)
     }
 }
@@ -251,7 +249,7 @@ extension SettingsViewController: UITableViewDataSource {
     }
     
     func dequeueReusableSettingsCell(in tableView: UITableView, indexPath: IndexPath) -> SettingsCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: reuseIdentifier, for: indexPath) as? SettingsCell else {
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: SettingsCell.reuseIdentifier, for: indexPath) as? SettingsCell else {
             fatalError("Failed to dequeue a SettingsCell.")
         }
         cell.textLabel?.text = nil
