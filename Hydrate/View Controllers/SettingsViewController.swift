@@ -144,7 +144,14 @@ class SettingsViewController: UIViewController {
     }
     
     private func handleReportIssue() {
-        print("DEBUG: Handle Report Issue..")
+        if let url = URL(string: "https://github.com/DavidWrightOS/Hydrate/issues") {
+            UIApplication.shared.open(url) { success in
+                guard !success else { return }
+                self.presentSimpleAlert(title: "Sorry 😕", message: "The link is currently broken. Please try back later.")
+            }
+        } else {
+            presentSimpleAlert(title: "Sorry 😕", message: "The link is currently broken. Please try back later.")
+        }
     }
     
     private func handleRateApp() {
