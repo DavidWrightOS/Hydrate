@@ -35,4 +35,19 @@ extension UIViewController {
         
         present(alert, animated: true, completion: nil)
     }
+    
+    func presentSimpleAlert(title: String?,
+                            message: String?,
+                            actionButtonText: String = "Dismiss",
+                            preferredStyle: UIAlertController.Style = .alert,
+                            actionButtonCompletionHandler: ((UIAlertAction) -> Void)? = nil) {
+        
+        let alert = UIAlertController(title: title, message: message, preferredStyle: preferredStyle)
+        alert.view.tintColor = .actionColorHighContrast
+        
+        let dismissAction = UIAlertAction(title: actionButtonText, style: .cancel, handler: actionButtonCompletionHandler)
+        alert.addAction(dismissAction)
+        
+        present(alert, animated: true, completion: nil)
+    }
 }
