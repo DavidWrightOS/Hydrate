@@ -18,6 +18,7 @@ extension SettingOption {
 enum SettingsCellType {
     case disclosureIndicator
     case onOffSwitch(Bool)
+    case stepperControl(Double)
     case detailLabel(String)
 }
 

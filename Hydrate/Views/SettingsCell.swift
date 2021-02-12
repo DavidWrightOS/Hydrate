@@ -16,32 +16,7 @@ class SettingsCell: UITableViewCell {
     
     var setting: SettingOption? {
         didSet {
-            guard let setting = setting else { return }
-            
-            textLabel?.text = setting.description
-            
-            let backgroundView = UIView()
-            backgroundView.backgroundColor = .ravenClawBlue90
-            selectedBackgroundView = backgroundView
-            
-            switch setting.settingsCellType {
-            case .onOffSwitch(let switchState):
-                selectionStyle = .none
-                self.accessoryType = .none
-                switchControl.isOn = switchState
-                switchControl.isHidden = false
-                detailTextLabel?.text = nil
-            case .detailLabel(let detailString):
-                selectionStyle = .default
-                addDisclosureIndicator()
-                switchControl.isHidden = true
-                detailTextLabel?.text = detailString
-            default:
-                selectionStyle = .none
-                addDisclosureIndicator()
-                switchControl.isHidden = true
-                detailTextLabel?.text = nil
-            }
+            configure()
         }
     }
     
@@ -52,6 +27,28 @@ class SettingsCell: UITableViewCell {
         switchControl.translatesAutoresizingMaskIntoConstraints = false
         switchControl.addTarget(self, action: #selector(handleSwitchAction), for: .valueChanged)
         return switchControl
+    }()
+    
+    lazy var stepperControl: UIStepper = {
+        let stepper = UIStepper()
+        stepper.minimumValue = 1
+        stepper.maximumValue = 10
+        
+        let decrementImageTinted = stepper.decrementImage(for: .normal)?
+            .withTintColor(.undeadWhite, renderingMode: .alwaysOriginal)
+        stepper.setDecrementImage(decrementImageTinted, for: .normal)
+
+        let incrementImageTinted = stepper.incrementImage(for: .normal)?
+            .withTintColor(.undeadWhite, renderingMode: .alwaysOriginal)
+        stepper.setIncrementImage(incrementImageTinted, for: .normal)
+        
+        stepper.layer.backgroundColor = UIColor.ravenClawBlue80.cgColor
+        stepper.layer.cornerRadius = 8
+        stepper.layer.cornerCurve = .continuous
+        
+        stepper.translatesAutoresizingMaskIntoConstraints = false
+        stepper.addTarget(self, action: #selector(handleStepperAction), for: .valueChanged)
+        return stepper
     }()
     
     // MARK: - Init
@@ -67,6 +64,10 @@ class SettingsCell: UITableViewCell {
         addSubview(switchControl)
         switchControl.centerYAnchor.constraint(equalTo: centerYAnchor).isActive = true
         switchControl.rightAnchor.constraint(equalTo: rightAnchor, constant: -12).isActive = true
+        
+        addSubview(stepperControl)
+        stepperControl.centerYAnchor.constraint(equalTo: centerYAnchor).isActive = true
+        stepperControl.rightAnchor.constraint(equalTo: rightAnchor, constant: -12).isActive = true
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -78,4 +79,53 @@ class SettingsCell: UITableViewCell {
     @objc func handleSwitchAction(sender: UISwitch) {
         setting?.updateValue(to: sender.isOn)
     }
+    
+    @objc func handleStepperAction(sender: UIStepper) {
+        let stepperValue = Int(sender.value)
+        setting?.updateValue(to: stepperValue)
+        
+        if let text = setting?.description {
+            textLabel?.text = text + ": \(stepperValue)"
+        } else {
+            textLabel?.text = "\(stepperValue)"
+        }
+    }
+    
 }
+
+// MARK: - Configure Cell
+
+extension SettingsCell {
+    
+    private func configure() {
+        guard let setting = setting else { return }
+        
+        let backgroundView = UIView()
+        backgroundView.backgroundColor = .ravenClawBlue90
+        selectedBackgroundView = backgroundView
+        
+        textLabel?.text = setting.description
+        selectionStyle = .none
+        detailTextLabel?.text = nil
+        accessoryType = .none
+        
+        switchControl.isHidden = true
+        stepperControl.isHidden = true
+        
+        switch setting.settingsCellType {
+        case .onOffSwitch(let switchState):
+            switchControl.isHidden = false
+            switchControl.isOn = switchState
+        case .stepperControl(let stepperValue):
+            stepperControl.isHidden = false
+            stepperControl.value = stepperValue
+        case .detailLabel(let detailString):
+            selectionStyle = .default
+            addDisclosureIndicator()
+            detailTextLabel?.text = detailString
+        default:
+            addDisclosureIndicator()
+        }
+    }
+}
+
