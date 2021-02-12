@@ -51,6 +51,26 @@ class SettingsCell: UITableViewCell {
         return stepper
     }()
     
+    lazy var timePicker: UIDatePicker = {
+        let timePicker = UIDatePicker()
+        timePicker.datePickerMode = .time
+        
+        if #available(iOS 13.4, *) {
+            timePicker.preferredDatePickerStyle = .compact
+        } else {
+            timePicker.preferredDatePickerStyle = .wheels
+        }
+        
+        timePicker.tintColor = .undeadWhite
+        timePicker.layer.backgroundColor = UIColor.ravenClawBlue80.cgColor
+        timePicker.layer.cornerRadius = 8
+        timePicker.layer.cornerCurve = .continuous
+        
+        timePicker.translatesAutoresizingMaskIntoConstraints = false
+        timePicker.addTarget(self, action: #selector(handleTimePickerChanged), for: .valueChanged)
+        return timePicker
+    }()
+    
     // MARK: - Init
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
@@ -68,6 +88,10 @@ class SettingsCell: UITableViewCell {
         addSubview(stepperControl)
         stepperControl.centerYAnchor.constraint(equalTo: centerYAnchor).isActive = true
         stepperControl.rightAnchor.constraint(equalTo: rightAnchor, constant: -12).isActive = true
+        
+        addSubview(timePicker)
+        timePicker.centerYAnchor.constraint(equalTo: centerYAnchor).isActive = true
+        timePicker.rightAnchor.constraint(equalTo: rightAnchor, constant: -12).isActive = true
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -91,6 +115,13 @@ class SettingsCell: UITableViewCell {
         }
     }
     
+    @objc func handleTimePickerChanged(sender: UIDatePicker) {
+        let dateComponents = Calendar.current.dateComponents([.hour, .minute], from: sender.date)
+        let hours = dateComponents.hour ?? 0
+        let minutes = dateComponents.minute ?? 0
+        let totalMinutes = hours * 60 + minutes
+        setting?.updateValue(to: totalMinutes)
+    }
 }
 
 // MARK: - Configure Cell
@@ -111,6 +142,7 @@ extension SettingsCell {
         
         switchControl.isHidden = true
         stepperControl.isHidden = true
+        timePicker.isHidden = true
         
         switch setting.settingsCellType {
         case .onOffSwitch(let switchState):
@@ -119,6 +151,9 @@ extension SettingsCell {
         case .stepperControl(let stepperValue):
             stepperControl.isHidden = false
             stepperControl.value = stepperValue
+        case .timePicker(let date):
+            timePicker.isHidden = false
+            timePicker.date = date
         case .detailLabel(let detailString):
             selectionStyle = .default
             addDisclosureIndicator()

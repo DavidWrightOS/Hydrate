@@ -6,6 +6,8 @@
 //  Copyright © 2020 David Wright. All rights reserved.
 //
 
+import Foundation
+
 protocol SettingOption: CustomStringConvertible {
     var settingsCellType: SettingsCellType { get }
     func updateValue(to value: Any)
@@ -19,6 +21,7 @@ enum SettingsCellType {
     case disclosureIndicator
     case onOffSwitch(Bool)
     case stepperControl(Double)
+    case timePicker(Date)
     case detailLabel(String)
 }
 
