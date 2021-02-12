@@ -26,6 +26,9 @@ extension SettingsTracking {
     static var targetDailyIntake: Int { get set }
     static var unitRawValue: Int { get set }
     static var notificationsEnabled: Bool { get set }
+    static var wakeUpTime: Int { get set } // minutes from 12:00 AM
+    static var bedTime: Int { get set } // minutes from 12:00 AM
+    static var notificationsPerDay: Int { get set }
     static var inAppSoundsEnabled: Bool { get set }
     static var hapticFeedbackEnabled: Bool { get set }
     static var appleHealthIntegrationEnabled: Bool { get set }
@@ -51,6 +54,21 @@ class HydrateSettings: NSObject, SettingsConfigurable {
     static var notificationsEnabled: Bool {
         get { HydrateSettings.value(for: #keyPath(notificationsEnabled)) ?? false }
         set { HydrateSettings.updateDefaults(for: #keyPath(notificationsEnabled), value: newValue) }
+    }
+    
+    static var wakeUpTime: Int {
+        get { HydrateSettings.value(for: #keyPath(wakeUpTime)) ?? 540 } // default is 540 minutes (9:00 AM)
+        set { HydrateSettings.updateDefaults(for: #keyPath(wakeUpTime), value: newValue) }
+    }
+    
+    static var bedTime: Int {
+        get { HydrateSettings.value(for: #keyPath(bedTime)) ?? 1320 } // default is 1320 minutes (10:00 PM)
+        set { HydrateSettings.updateDefaults(for: #keyPath(bedTime), value: newValue) }
+    }
+    
+    static var notificationsPerDay: Int {
+        get { HydrateSettings.value(for: #keyPath(notificationsPerDay)) ?? 8 }
+        set { HydrateSettings.updateDefaults(for: #keyPath(notificationsPerDay), value: newValue) }
     }
     
     static var inAppSoundsEnabled: Bool {
