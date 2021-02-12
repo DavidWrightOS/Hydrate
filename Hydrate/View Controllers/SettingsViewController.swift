@@ -10,6 +10,25 @@ import UIKit
 
 class SettingsViewController: UIViewController {
     
+    // MARK: - Properties
+    
+    private var isNotificationSectionExpanded: Bool {
+        tableView.numberOfRows(inSection: SettingsSection.notifications.rawValue) > NotificationSettings.allCases.count
+    }
+    
+    private lazy var expandedNotificationsSectionIndexPaths: [IndexPath] = {
+        var indexPaths = [IndexPath]()
+        let sectionIndex = SettingsSection.notifications.rawValue
+        var numberOfRowsBeforeExpanding = NotificationSettings.allCases.count
+        
+        for row in NotificationSettingsExpanded.allCases.dropFirst(numberOfRowsBeforeExpanding) {
+            let rowIndex = row.rawValue
+            let indexPath = IndexPath(row: row.rawValue, section: sectionIndex)
+            indexPaths.append(indexPath)
+        }
+        return indexPaths
+    }()
+    
     // MARK: - UI Components
     
     private let navigationBar: UINavigationBar = {
@@ -39,6 +58,10 @@ class SettingsViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(notificationsEnabledSettingChanged),
+                                               name: .notificationsEnabledSettingChanged,
+                                               object: nil)
         
         view.backgroundColor = .ravenClawBlue
         configureNavigationBar()
@@ -167,6 +190,34 @@ class SettingsViewController: UIViewController {
     @objc private func doneButtonTapped() {
         dismiss(animated: true, completion: nil)
     }
+    
+    @objc func notificationsEnabledSettingChanged() {
+        let notificationsEnabled = HydrateSettings.notificationsEnabled
+        
+        guard notificationsEnabled != isNotificationSectionExpanded else { return }
+        
+        if notificationsEnabled {
+            showNotificationsSectionDetails()
+        } else {
+            hideNotificationsSectionDetails()
+        }
+    }
+    
+    private func showNotificationsSectionDetails() {
+        guard !isNotificationSectionExpanded else { return }
+
+        tableView.beginUpdates()
+        tableView.insertRows(at: expandedNotificationsSectionIndexPaths, with: .automatic)
+        tableView.endUpdates()
+    }
+    
+    private func hideNotificationsSectionDetails() {
+        guard isNotificationSectionExpanded else { return }
+        
+        tableView.beginUpdates()
+        tableView.deleteRows(at: expandedNotificationsSectionIndexPaths, with: .automatic)
+        tableView.endUpdates()
+    }
 }
 
 // MARK: - UITableViewDelegate
@@ -215,17 +266,19 @@ extension SettingsViewController: UITableViewDelegate {
                 
         switch section {
         case .general:
-            let setting = section.settingOptions[indexPath.row] as! GeneralSettings
-            switch setting {
-            case .targetDailyIntake: presentTargetIntakeSelectionView(for: indexPath)
-            case .unit: presentUnitSelectionView(for: indexPath)
+            if let setting = section.settingOptions[indexPath.row] as? GeneralSettings {
+                switch setting {
+                case .targetDailyIntake: presentTargetIntakeSelectionView(for: indexPath)
+                case .unit: presentUnitSelectionView(for: indexPath)
+                }
             }
         case .about:
-            let setting = section.settingOptions[indexPath.row] as! AboutSettings
-            switch setting {
-            case .reportIssue: handleReportIssue()
-            case .rateApp: handleRateApp()
-            case .aboutUs: handleAboutUs()
+            if let setting = section.settingOptions[indexPath.row] as? AboutSettings {
+                switch setting {
+                case .reportIssue: handleReportIssue()
+                case .rateApp: handleRateApp()
+                case .aboutUs: handleAboutUs()
+                }
             }
         default:
             break

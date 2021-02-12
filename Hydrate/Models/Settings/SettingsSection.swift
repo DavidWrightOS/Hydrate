@@ -59,7 +59,7 @@ enum SettingsSection: Int, CaseIterable, CustomStringConvertible {
     var settingOptions: [SettingOption] {
         switch self {
         case .general: return GeneralSettings.allCases
-        case .notifications: return NotificationSettings.allCases
+        case .notifications: return HydrateSettings.notificationsEnabled ? NotificationSettingsExpanded.allCases : NotificationSettings.allCases
         case .appSettings: return AppSettings.allCases
         case .about: return AboutSettings.allCases
         }
