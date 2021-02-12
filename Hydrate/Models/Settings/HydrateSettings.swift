@@ -10,6 +10,8 @@ import Foundation
 
 extension Notification.Name {
     static let settingsChanged = Notification.Name("SettingsChanged")
+    static let notificationsEnabledSettingChanged = Notification.Name("notificationsEnabledSettingChanged")
+    static let notificationSettingsChanged = Notification.Name("NotificationSettingsChanged")
 }
 
 @objc protocol SettingsTracking {
@@ -90,7 +92,18 @@ class HydrateSettings: NSObject, SettingsConfigurable {
     
     private static func updateDefaults(for key: String, value: Any) {
         UserDefaults.standard.set(value, forKey: key)
-        sendSettingsChangedNotification()
+        
+        switch key {
+        case #keyPath(notificationsEnabled):
+            sendNotificationsEnabledSettingChangedNotification()
+            sendNotificationSettingsChangedNotification()
+        case #keyPath(notificationsEnabled),
+             #keyPath(notificationsEnabled),
+             #keyPath(notificationsEnabled):
+            sendNotificationSettingsChangedNotification()
+        default:
+            sendSettingsChangedNotification()
+        }
     }
     
     private static func value<T>(for key: String) -> T? {
@@ -99,6 +112,16 @@ class HydrateSettings: NSObject, SettingsConfigurable {
     
     private static func sendSettingsChangedNotification() {
         let notification = Notification(name: .settingsChanged)
+        NotificationQueue.default.enqueue(notification, postingStyle: .asap, coalesceMask: .onName, forModes: [.common])
+    }
+    
+    private static func sendNotificationsEnabledSettingChangedNotification() {
+        let notification = Notification(name: .notificationsEnabledSettingChanged)
+        NotificationQueue.default.enqueue(notification, postingStyle: .asap, coalesceMask: .onName, forModes: [.common])
+    }
+    
+    private static func sendNotificationSettingsChangedNotification() {
+        let notification = Notification(name: .notificationSettingsChanged)
         NotificationQueue.default.enqueue(notification, postingStyle: .asap, coalesceMask: .onName, forModes: [.common])
     }
 }
