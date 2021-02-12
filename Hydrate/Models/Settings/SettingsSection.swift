@@ -162,3 +162,43 @@ enum AboutSettings: Int, CaseIterable, SettingOption {
         }
     }
 }
+
+enum NotificationSettingsExpanded: Int, CaseIterable, SettingOption {
+    case receiveNotifications
+    case notificationsPerDay
+    case wakeUpTime
+    case bedTime
+    
+    var settingsCellType: SettingsCellType {
+        switch self {
+        case .receiveNotifications: return .onOffSwitch(HydrateSettings.notificationsEnabled)
+        case .notificationsPerDay: return .stepperControl(Double(HydrateSettings.notificationsPerDay))
+        case .wakeUpTime: return .timePicker(date(totalMinutes: HydrateSettings.wakeUpTime))
+        case .bedTime: return .timePicker(date(totalMinutes: HydrateSettings.bedTime))
+        }
+    }
+    
+    private func date(totalMinutes: Int) -> Date {
+        let hours = totalMinutes / 60
+        let minutes = totalMinutes - hours * 60
+        return Calendar.current.date(from: DateComponents(hour: hours, minute: minutes))!
+    }
+    
+    func updateValue(to value: Any) {
+        switch self {
+        case .receiveNotifications: HydrateSettings.notificationsEnabled = value as! Bool
+        case .notificationsPerDay: HydrateSettings.notificationsPerDay = value as! Int
+        case .wakeUpTime: HydrateSettings.wakeUpTime = value as! Int
+        case .bedTime: HydrateSettings.bedTime = value as! Int
+        }
+    }
+    
+    var description: String {
+        switch self {
+        case .receiveNotifications: return "Receive Notifications"
+        case .notificationsPerDay: return "Daily Notifications"
+        case .wakeUpTime: return "Wake Up Time"
+        case .bedTime: return "Bed Time"
+        }
+    }
+}
