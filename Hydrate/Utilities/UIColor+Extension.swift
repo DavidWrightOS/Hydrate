@@ -17,6 +17,7 @@ extension UIColor {
     static let sicklySmurfBlueHighContrast = UIColor(hex: 0x248A9E)
     static let ravenClawBlue = UIColor(hex: 0x363e56)
     static let ravenClawBlue90 = UIColor(hex: 0x4a5167)
+    static let ravenClawBlue80 = #colorLiteral(red: 0.368627451, green: 0.3960784314, blue: 0.4705882353, alpha: 1) //UIColor(hex: 0x5E6578)
     static let ravenClawBlue70 = UIColor(hex: 0x727788)
     static let ravenClawBlue60 = #colorLiteral(red: 0.5305853486, green: 0.5456264615, blue: 0.6051801443, alpha: 1) //UIColor(hex: 0x888B99)
     static let ravenClawBlue50 = #colorLiteral(red: 0.6041786075, green: 0.6242232323, blue: 0.6666357517, alpha: 1) //UIColor(hex: 0x9B9FA9)
