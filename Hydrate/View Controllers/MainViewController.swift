@@ -329,7 +329,7 @@ class MainViewController: UIViewController, SettingsTracking {
         buttonCenter.x += intakeButtonOffsets[buttonIndex].x
         buttonCenter.y += intakeButtonOffsets[buttonIndex].y
         
-        let color: UIColor? = intakeAmount < 0 ? #colorLiteral(red: 0.5971726884, green: 0.2109181469, blue: 0.2735780059, alpha: 0.649614726) : nil
+        let color: UIColor? = intakeAmount < 0 ? .negativeNumberRed : nil
         let amountText = intakeAmount < 0 ? "\(intakeAmount)" : "+\(intakeAmount)"
         addWaterLabelAnimation(withText: amountText, startingCenterPoint: buttonCenter, textColor: color)
         
@@ -344,7 +344,7 @@ class MainViewController: UIViewController, SettingsTracking {
         buttonCenter.x += intakeButtonOffsets[2].x
         buttonCenter.y += intakeButtonOffsets[2].y
         
-        addWaterLabelAnimation(withText: "\(-amount)", startingCenterPoint: buttonCenter, textColor: #colorLiteral(red: 0.5971726884, green: 0.2109181469, blue: 0.2735780059, alpha: 0.649614726))
+        addWaterLabelAnimation(withText: "\(-amount)", startingCenterPoint: buttonCenter, textColor: .negativeNumberRed)
         
         updateViews()
     }
