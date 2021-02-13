@@ -197,7 +197,14 @@ class SettingsViewController: UIViewController {
         guard notificationsEnabled != isNotificationSectionExpanded else { return }
         
         if notificationsEnabled {
-            showNotificationsSectionDetails()
+            let notificationManager = LocalNotificationManager()
+            notificationManager.requestAuthorization() { [weak self] granted in
+                if granted {
+                    self?.showNotificationsSectionDetails()
+                } else {
+                    self?.presentNotificationPermissionsAlert()
+                }
+            }
         } else {
             hideNotificationsSectionDetails()
         }
@@ -317,5 +324,53 @@ extension SettingsViewController: UITableViewDataSource {
         cell.accessoryType = .none
         cell.accessoryView = .none
         return cell
+    }
+}
+
+// MARK: - Local Notifications Permission
+
+extension SettingsViewController {
+    
+    func presentNotificationPermissionsAlert() {
+        
+        let title = "Notifications are disabled"
+        let message = "Please turn on notifications in the Settings app to enable reminder notifications."
+        
+        let alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        
+        let settingsAction = UIAlertAction(title: "Settings", style: .default, handler: { [weak self] _ in
+            UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!) { _ in
+                let sectionIndex = SettingsSection.notifications.rawValue
+                let rowIndex = NotificationSettings.receiveNotifications.rawValue
+                let indexPath = IndexPath(row: rowIndex, section: sectionIndex)
+                
+                if let cell = self?.tableView.cellForRow(at: indexPath) as? SettingsCell {
+                    cell.switchControl.isOn = false
+                }
+            }
+        })
+        
+        let cancelAction = UIAlertAction(title: "Cancel", style: .default) { [weak self] _ in
+            let sectionIndex = SettingsSection.notifications.rawValue
+            let rowIndex = NotificationSettings.receiveNotifications.rawValue
+            let indexPath = IndexPath(row: rowIndex, section: sectionIndex)
+            
+            if let cell = self?.tableView.cellForRow(at: indexPath) as? SettingsCell {
+                cell.switchControl.isOn = false
+            }
+        }
+        
+        alertController.addAction(cancelAction)
+        alertController.addAction(settingsAction)
+        
+        alertController.preferredAction = settingsAction
+        alertController.view.tintColor = .actionColorHighContrast
+        alertController.overrideUserInterfaceStyle = .dark
+        
+        let subview = (alertController.view.subviews.first?.subviews.first?.subviews.first!)! as UIView
+        subview.layer.cornerRadius = 1
+        subview.backgroundColor = .ravenClawBlue
+        
+        present(alertController, animated: true, completion: nil)
     }
 }
