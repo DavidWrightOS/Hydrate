@@ -183,7 +183,7 @@ enum Unit: Int, CaseIterable, CustomStringConvertible {
     var abbreviation: String {
         switch self {
         case .milliliters: return "mL"
-        case .fluidOunces: return "oz."
+        case .fluidOunces: return "oz"
         case .cups: return "cups"
         }
     }

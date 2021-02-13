@@ -196,7 +196,7 @@ enum NotificationSettingsExpanded: Int, CaseIterable, SettingOption {
     var description: String {
         switch self {
         case .receiveNotifications: return "Receive Notifications"
-        case .notificationsPerDay: return "Daily Notifications"
+        case .notificationsPerDay: return "Notifications per day"
         case .wakeUpTime: return "Wake Up Time"
         case .bedTime: return "Bed Time"
         }
