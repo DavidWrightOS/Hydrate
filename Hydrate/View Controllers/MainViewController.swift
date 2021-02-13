@@ -565,7 +565,7 @@ extension MainViewController {
             if granted {
                 self?.scheduleLocalNotifications()
             } else {
-                
+                HydrateSettings.notificationsEnabled = false
             }
         }
     }
