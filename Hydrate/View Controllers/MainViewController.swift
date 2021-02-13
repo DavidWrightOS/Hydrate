@@ -14,6 +14,8 @@ class MainViewController: UIViewController {
     
     private let dailyLogController = DailyLogController()
     
+    private let notificationManager = LocalNotificationManager()
+    
     private var targetDailyIntake: Int = 96
     
     private var units = HydrateSettings.unit
@@ -541,5 +543,58 @@ extension MainViewController: SettingsTracking {
     }
     
     func notificationSettingsDataChanged() {
+        rescheduleLocalNotifications()
+    }
+}
+
+// MARK: - Local Notifications
+
+extension MainViewController {
+    
+    private func rescheduleLocalNotifications() {
+        notificationManager.removeAllPendingNotifications()
+        
+        guard HydrateSettings.notificationsEnabled else { return }
+        
+        notificationManager.requestAuthorization() { [weak self] granted in
+            if granted {
+                self?.scheduleLocalNotifications()
+            } else {
+                
+            }
+        }
+    }
+    
+    private func scheduleLocalNotifications() {
+        
+        let notificationsStartTime = dateComponentsFrom(minutes: HydrateSettings.wakeUpTime)
+        let notificationsEndTime = dateComponentsFrom(minutes: HydrateSettings.bedTime)
+        let numberOfNotifications = HydrateSettings.notificationsPerDay
+        
+        let notificationInterval = notificationsStartTime.date!.distance(to: notificationsEndTime.date!) / Double(numberOfNotifications)
+        
+        let notificationBody = "Time to drink some more water 💧"
+        let content = LocalNotificationContentModel(body: notificationBody)
+        
+        for intervalCount in 0..<numberOfNotifications {
+            let timeFromStart = notificationInterval * Double(intervalCount)
+            let date = notificationsStartTime.date!.addingTimeInterval(timeFromStart)
+            let dateComponents = Calendar.current.dateComponents([.hour, .minute], from: date)
+            
+            print("Scheduling notification #\(intervalCount + 1) at time: \(dateComponents.hour ?? 0):\(dateComponents.minute ?? 0)")
+            
+            let trigger = UNCalendarNotificationTrigger(dateMatching: dateComponents, repeats: true)
+            
+            notificationManager.scheduleNotification(trigger: trigger, content: content) { text in
+                NSLog("Notification not scheduled for: \"\(text)\"")
+            }
+        }
+    }
+    
+    private func dateComponentsFrom(minutes: Int) -> DateComponents {
+        let minutes = minutes % (60 * 24)
+        let hoursComponent = minutes / 60
+        let minutesComponent = minutes - hoursComponent * 60
+        return DateComponents(calendar: Calendar.current, hour: hoursComponent, minute: minutesComponent)
     }
 }
