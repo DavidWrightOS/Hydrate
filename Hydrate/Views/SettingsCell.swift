@@ -67,7 +67,7 @@ class SettingsCell: UITableViewCell {
         timePicker.layer.cornerCurve = .continuous
         
         timePicker.translatesAutoresizingMaskIntoConstraints = false
-        timePicker.addTarget(self, action: #selector(handleTimePickerChanged), for: .valueChanged)
+        timePicker.addTarget(self, action: #selector(handleTimePickerChanged), for: .editingDidEnd)
         return timePicker
     }()
     
