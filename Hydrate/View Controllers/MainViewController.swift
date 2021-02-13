@@ -8,7 +8,7 @@
 
 import UIKit
 
-class MainViewController: UIViewController, SettingsTracking {
+class MainViewController: UIViewController {
     
     // MARK: - Properties
     
@@ -157,19 +157,27 @@ class MainViewController: UIViewController, SettingsTracking {
         targetDailyIntake = HydrateSettings.targetDailyIntake
         
         registerForSettingsChanges()
+        registerForNotificationSettingsChanges()
         
-        NotificationCenter.default.addObserver(self, selector: #selector(loadIntakeEntries),
-                                               name: .todaysDailyLogDidUpdateNotificationName, object: nil)
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(dailyLogDidUpdate),
+                                               name: .todaysDailyLogDidUpdateNotificationName,
+                                               object: nil)
         
-        NotificationCenter.default.addObserver(self, selector: #selector(loadIntakeEntries),
-                                               name: .NSCalendarDayChanged, object: nil)
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(dailyLogDidUpdate),
+                                               name: .NSCalendarDayChanged,
+                                               object: nil)
         
-        NotificationCenter.default.addObserver(self, selector: #selector(applicationWillEnterForeground),
-                                               name: UIApplication.willEnterForegroundNotification, object: nil)
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(applicationWillEnterForeground),
+                                               name: UIApplication.willEnterForegroundNotification,
+                                               object: nil)
         
         setupTapGestures()
         setupViews()
-        loadIntakeEntries()
+        reloadIntakeEntries()
+        rescheduleLocalNotifications()
     }
     
     /// Restart the water animation at the correct height when the app is brought to the foreground
@@ -206,11 +214,12 @@ class MainViewController: UIViewController, SettingsTracking {
     
     //MARK: - Private Methods
     
-    func settingsDataChanged() {
-        updateViews()
+    @objc private func dailyLogDidUpdate() {
+        reloadIntakeEntries()
+        rescheduleLocalNotifications()
     }
     
-    @objc private func loadIntakeEntries() {
+    private func reloadIntakeEntries() {
         dailyLogController.loadDailyLog()
         updateViews()
     }
@@ -520,5 +529,17 @@ extension MainViewController: ConfettiViewDelegate {
     func animationDidEnd() {
         confettiView?.removeFromSuperview()
         confettiView = nil
+    }
+}
+
+// MARK: - SettingsTracking
+
+extension MainViewController: SettingsTracking {
+
+    func settingsDataChanged() {
+        updateViews()
+    }
+    
+    func notificationSettingsDataChanged() {
     }
 }
