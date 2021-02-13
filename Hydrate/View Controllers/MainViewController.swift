@@ -160,6 +160,7 @@ class MainViewController: UIViewController {
         
         registerForSettingsChanges()
         registerForNotificationSettingsChanges()
+        registerForNotificationsEnabledSettingChanges()
         
         NotificationCenter.default.addObserver(self,
                                                selector: #selector(dailyLogDidUpdate),
@@ -543,6 +544,10 @@ extension MainViewController: SettingsTracking {
     }
     
     func notificationSettingsDataChanged() {
+        rescheduleLocalNotifications()
+    }
+    
+    func notificationsEnabledSettingDataChanged() {
         rescheduleLocalNotifications()
     }
 }

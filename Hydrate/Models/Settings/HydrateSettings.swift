@@ -17,6 +17,7 @@ extension Notification.Name {
 @objc protocol SettingsTracking {
     @objc func settingsDataChanged()
     @objc func notificationSettingsDataChanged()
+    @objc func notificationsEnabledSettingDataChanged()
 }
 
 extension SettingsTracking {
@@ -31,6 +32,13 @@ extension SettingsTracking {
         NotificationCenter.default.addObserver(self,
                                                selector: #selector(notificationSettingsDataChanged),
                                                name: .notificationSettingsChanged,
+                                               object: nil)
+    }
+    
+    func registerForNotificationsEnabledSettingChanges() {
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(notificationsEnabledSettingDataChanged),
+                                               name: .notificationsEnabledSettingChanged,
                                                object: nil)
     }
 }
@@ -137,7 +145,6 @@ class HydrateSettings: NSObject, SettingsConfigurable {
         switch key {
         case #keyPath(notificationsEnabled):
             sendNotificationsEnabledSettingChangedNotification()
-            sendNotificationSettingsChangedNotification()
         case #keyPath(notificationsPerDay),
              #keyPath(wakeUpTime),
              #keyPath(bedTime):
