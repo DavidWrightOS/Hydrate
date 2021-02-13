@@ -50,53 +50,83 @@ extension SettingsTracking {
 class HydrateSettings: NSObject, SettingsConfigurable {
     
     static var targetDailyIntake: Int {
-        get { HydrateSettings.value(for: #keyPath(targetDailyIntake)) ?? 96 } // 96 is the default value if never set before
-        set { HydrateSettings.updateDefaults(for: #keyPath(targetDailyIntake), value: newValue) }
+        get { HydrateSettings.value(for: #keyPath(targetDailyIntake)) ?? 96 } // 96 is the default value
+        set {
+            guard newValue != targetDailyIntake else { return }
+            HydrateSettings.updateDefaults(for: #keyPath(targetDailyIntake), value: newValue)
+        }
     }
     
     static var unitRawValue: Int {
         get { HydrateSettings.value(for: #keyPath(unitRawValue)) ?? 1 }
-        set { HydrateSettings.updateDefaults(for: #keyPath(unitRawValue), value: newValue) }
+        set {
+            guard newValue != unitRawValue else { return }
+            HydrateSettings.updateDefaults(for: #keyPath(unitRawValue), value: newValue)
+        }
     }
     
     static var unit: Unit {
         get { Unit(rawValue: HydrateSettings.unitRawValue)! }
-        set { unitRawValue = newValue.rawValue }
+        set {
+            guard newValue != unit else { return }
+            unitRawValue = newValue.rawValue
+        }
     }
     
     static var notificationsEnabled: Bool {
         get { HydrateSettings.value(for: #keyPath(notificationsEnabled)) ?? false }
-        set { HydrateSettings.updateDefaults(for: #keyPath(notificationsEnabled), value: newValue) }
+        set {
+            guard newValue != notificationsEnabled else { return }
+            HydrateSettings.updateDefaults(for: #keyPath(notificationsEnabled), value: newValue)
+        }
     }
     
     static var wakeUpTime: Int {
         get { HydrateSettings.value(for: #keyPath(wakeUpTime)) ?? 540 } // default is 540 minutes (9:00 AM)
-        set { HydrateSettings.updateDefaults(for: #keyPath(wakeUpTime), value: newValue) }
+        set {
+            guard newValue != wakeUpTime else { return }
+            HydrateSettings.updateDefaults(for: #keyPath(wakeUpTime), value: newValue)
+        }
     }
     
     static var bedTime: Int {
         get { HydrateSettings.value(for: #keyPath(bedTime)) ?? 1320 } // default is 1320 minutes (10:00 PM)
-        set { HydrateSettings.updateDefaults(for: #keyPath(bedTime), value: newValue) }
+        set {
+            guard newValue != bedTime else { return }
+            HydrateSettings.updateDefaults(for: #keyPath(bedTime), value: newValue)
+        }
     }
     
     static var notificationsPerDay: Int {
         get { HydrateSettings.value(for: #keyPath(notificationsPerDay)) ?? 8 }
-        set { HydrateSettings.updateDefaults(for: #keyPath(notificationsPerDay), value: newValue) }
+        set {
+            guard newValue != notificationsPerDay else { return }
+            HydrateSettings.updateDefaults(for: #keyPath(notificationsPerDay), value: newValue)
+        }
     }
     
     static var inAppSoundsEnabled: Bool {
         get { HydrateSettings.value(for: #keyPath(inAppSoundsEnabled)) ?? false }
-        set { HydrateSettings.updateDefaults(for: #keyPath(inAppSoundsEnabled), value: newValue) }
+        set {
+            guard newValue != inAppSoundsEnabled else { return }
+            HydrateSettings.updateDefaults(for: #keyPath(inAppSoundsEnabled), value: newValue)
+        }
     }
     
     static var appleHealthIntegrationEnabled: Bool {
         get { HydrateSettings.value(for: #keyPath(appleHealthIntegrationEnabled)) ?? false }
-        set { HydrateSettings.updateDefaults(for: #keyPath(appleHealthIntegrationEnabled), value: newValue) }
+        set {
+            guard newValue != appleHealthIntegrationEnabled else { return }
+            HydrateSettings.updateDefaults(for: #keyPath(appleHealthIntegrationEnabled), value: newValue)
+        }
     }
     
     static var hapticFeedbackEnabled: Bool {
         get { HydrateSettings.value(for: #keyPath(hapticFeedbackEnabled)) ?? false }
-        set { HydrateSettings.updateDefaults(for: #keyPath(hapticFeedbackEnabled), value: newValue) }
+        set {
+            guard newValue != hapticFeedbackEnabled else { return }
+            HydrateSettings.updateDefaults(for: #keyPath(hapticFeedbackEnabled), value: newValue)
+        }
     }
     
     // MARK: - Private Methods
