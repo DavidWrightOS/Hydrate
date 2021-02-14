@@ -40,7 +40,11 @@ extension UIColor {
     static let currColor2 = #colorLiteral(red: 0.2941176471, green: 0.5411764706, blue: 0.6117647059, alpha: 1) //.sicklySmurfBlue
     static let currColor3 = #colorLiteral(red: 0.8470588235, green: 0.8470588235, blue: 0.8470588235, alpha: 1) //.undeadWhite
     static let actionColor = #colorLiteral(red: 0.2941176471, green: 0.5411764706, blue: 0.6117647059, alpha: 1) //.sicklySmurfBlue
-    static let actionColorHighContrast = #colorLiteral(red: 0.1411764706, green: 0.5411764706, blue: 0.6196078431, alpha: 1) //.sicklySmurfBlueHighContrast
+    static let actionColorHighContrast =  #colorLiteral(red: 0.1411764706, green: 0.5411764706, blue: 0.6196078431, alpha: 1) //.sicklySmurfBlueHighContrast
+    static let actionColorHighContrast2 = #colorLiteral(red: 0.1529411765, green: 0.5882352941, blue: 0.6745098039, alpha: 1) //UIColor(hex: 0x2796AC)
+    static let actionColorHighContrast3 = #colorLiteral(red: 0.1647058824, green: 0.6235294118, blue: 0.7176470588, alpha: 1) //UIColor(hex: 0x2A9FB7)
+    static let actionColorHighContrast4 = #colorLiteral(red: 0.1764705882, green: 0.6705882353, blue: 0.7725490196, alpha: 1) //UIColor(hex: 0x2DABC5)
+    static let actionColorHighContrast5 = #colorLiteral(red: 0.1882352941, green: 0.7098039216, blue: 0.8196078431, alpha: 1) //UIColor(hex: 0x30B5D1)
     
     // Test Colors
     static let testColor1 = #colorLiteral(red: 0.09147954031, green: 0.2418307391, blue: 0.3917707695, alpha: 1)
