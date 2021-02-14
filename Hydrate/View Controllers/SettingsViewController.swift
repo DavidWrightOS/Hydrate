@@ -279,6 +279,13 @@ extension SettingsViewController: UITableViewDelegate {
                 case .unit: presentUnitSelectionView(for: indexPath)
                 }
             }
+        case .notifications:
+            if let setting = section.settingOptions[indexPath.row] as? NotificationSettingsExpanded {
+                switch setting {
+                case .notificationsPerDay: tableView.cellForRow(at: indexPath)?.becomeFirstResponder()
+                default: break
+                }
+            }
         case .about:
             if let setting = section.settingOptions[indexPath.row] as? AboutSettings {
                 switch setting {

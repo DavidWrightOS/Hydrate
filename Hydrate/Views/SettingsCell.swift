@@ -51,6 +51,33 @@ class SettingsCell: UITableViewCell {
         return stepper
     }()
     
+    lazy var notificationsPerDayPickerView: UIPickerView = {
+        let screenWidth = UIScreen.main.bounds.width
+        let picker = UIPickerView(frame: CGRect(x: 0, y: 0, width: screenWidth, height: 200))
+        picker.dataSource = self
+        picker.delegate = self
+        picker.overrideUserInterfaceStyle = .dark
+        let notificationsPerDay = HydrateSettings.notificationsPerDay
+        picker.selectRow(notificationsPerDay - 1, inComponent: 0, animated: false)
+        return picker
+    }()
+    
+    lazy var notificationsPerDayPickerViewToolBar: UIToolbar = {
+        let screenWidth = UIScreen.main.bounds.width
+        let toolBar = UIToolbar()
+        let flexible = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
+        let cancelButton = UIBarButtonItem(title: "Cancel", style: .plain, target: self, action: #selector(pickerCancelTapped))
+        let doneButton = UIBarButtonItem(title: "Done", style: .done, target: self, action: #selector(pickerDoneTapped))
+        
+        toolBar.setItems([cancelButton, flexible, doneButton], animated: false)
+        
+        toolBar.tintColor = .actionColorHighContrast
+        toolBar.overrideUserInterfaceStyle = .dark
+        toolBar.sizeToFit()
+        
+        return toolBar
+    }()
+    
     lazy var timePicker: UIDatePicker = {
         let timePicker = UIDatePicker()
         timePicker.datePickerMode = .time
@@ -151,6 +178,10 @@ extension SettingsCell {
         case .stepperControl(let stepperValue):
             stepperControl.isHidden = false
             stepperControl.value = stepperValue
+        case .notificationsPerDayPicker(let notificationsPerDay):
+            selectionStyle = .default
+            addDisclosureIndicator()
+            detailTextLabel?.text = String(notificationsPerDay)
         case .timePicker(let date):
             timePicker.isHidden = false
             timePicker.date = date
@@ -161,6 +192,68 @@ extension SettingsCell {
         default:
             addDisclosureIndicator()
         }
+    }
+}
+
+// MARK: - Configure: Notifications Per Day
+
+extension SettingsCell {
+    
+    override var inputView: UIView? {
+        guard let setting = setting, case SettingsCellType.notificationsPerDayPicker = setting.settingsCellType else {
+            return super.inputView
+        }
+        return notificationsPerDayPickerView
+    }
+    
+    override var inputAccessoryView: UIView? {
+        guard let setting = setting, case SettingsCellType.notificationsPerDayPicker = setting.settingsCellType else {
+            return super.inputAccessoryView
+        }
+        return notificationsPerDayPickerViewToolBar
+    }
+    
+    override var canBecomeFirstResponder: Bool {
+        guard let setting = setting, case SettingsCellType.notificationsPerDayPicker = setting.settingsCellType else {
+            return super.canBecomeFirstResponder
+        }
+        return true
+    }
+    
+    override var canResignFirstResponder: Bool {
+        guard let setting = setting, case SettingsCellType.notificationsPerDayPicker = setting.settingsCellType else {
+            return super.canResignFirstResponder
+        }
+        return true
+    }
+    
+    @objc private func pickerDoneTapped() {
+        let notificationsPerDay = notificationsPerDayPickerView.selectedRow(inComponent: 0) + 1
+        detailTextLabel?.text = "\(notificationsPerDay)"
+        setting?.updateValue(to: notificationsPerDay)
+        resignFirstResponder()
+    }
+    
+    @objc private func pickerCancelTapped() {
+        resignFirstResponder()
+    }
+}
+
+extension SettingsCell: UIPickerViewDataSource {
+    func numberOfComponents(in pickerView: UIPickerView) -> Int {
+        1
+    }
+    
+    func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
+        12
+    }
+}
+
+extension SettingsCell: UIPickerViewDelegate {
+    func pickerView(_ pickerView: UIPickerView, attributedTitleForRow row: Int, forComponent component: Int) -> NSAttributedString? {
+        let attributes = [ NSAttributedString.Key.foregroundColor : UIColor.actionColorHighContrast3,
+                           NSAttributedString.Key.font : UIFont.systemFont(ofSize: 17) ]
+        return NSAttributedString(string: String(row + 1), attributes: attributes)
     }
 }
 

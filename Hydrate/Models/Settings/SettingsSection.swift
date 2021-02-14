@@ -21,6 +21,7 @@ enum SettingsCellType {
     case disclosureIndicator
     case onOffSwitch(Bool)
     case stepperControl(Double)
+    case notificationsPerDayPicker(Int)
     case timePicker(Date)
     case detailLabel(String)
 }
@@ -172,7 +173,8 @@ enum NotificationSettingsExpanded: Int, CaseIterable, SettingOption {
     var settingsCellType: SettingsCellType {
         switch self {
         case .receiveNotifications: return .onOffSwitch(HydrateSettings.notificationsEnabled)
-        case .notificationsPerDay: return .stepperControl(Double(HydrateSettings.notificationsPerDay))
+//        case .notificationsPerDay: return .stepperControl(Double(HydrateSettings.notificationsPerDay))
+        case .notificationsPerDay: return .notificationsPerDayPicker(HydrateSettings.notificationsPerDay)
         case .wakeUpTime: return .timePicker(date(totalMinutes: HydrateSettings.wakeUpTime))
         case .bedTime: return .timePicker(date(totalMinutes: HydrateSettings.bedTime))
         }
