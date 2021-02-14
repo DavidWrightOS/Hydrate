@@ -66,10 +66,18 @@ class SettingsCell: UITableViewCell {
         let screenWidth = UIScreen.main.bounds.width
         let toolBar = UIToolbar()
         let flexible = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
+        let title = UIBarButtonItem(title: "Notifications Per Day", style: .plain, target: nil, action: nil)
+        
+        title.isEnabled = false
+        title.setTitleTextAttributes([
+            .foregroundColor : UIColor.undeadWhite.withAlphaComponent(0.8),
+            .font : UIFont.systemFont(ofSize: 17, weight: .semibold)
+        ], for: .disabled)
+        
         let cancelButton = UIBarButtonItem(title: "Cancel", style: .plain, target: self, action: #selector(pickerCancelTapped))
         let doneButton = UIBarButtonItem(title: "Done", style: .done, target: self, action: #selector(pickerDoneTapped))
         
-        toolBar.setItems([cancelButton, flexible, doneButton], animated: false)
+        toolBar.setItems([cancelButton, flexible, title, flexible, doneButton], animated: false)
         
         toolBar.tintColor = .actionColorHighContrast
         toolBar.overrideUserInterfaceStyle = .dark
