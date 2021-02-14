@@ -96,11 +96,7 @@ class SettingsCell: UITableViewCell {
             timePicker.preferredDatePickerStyle = .wheels
         }
         
-        timePicker.tintColor = .undeadWhite
-        timePicker.layer.backgroundColor = UIColor.ravenClawBlue80.cgColor
-        timePicker.layer.cornerRadius = 8
-        timePicker.layer.cornerCurve = .continuous
-        
+        timePicker.tintColor = UIColor.undeadWhite.withAlphaComponent(0.65)
         timePicker.translatesAutoresizingMaskIntoConstraints = false
         timePicker.addTarget(self, action: #selector(handleTimePickerChanged), for: .editingDidEnd)
         return timePicker
@@ -114,7 +110,8 @@ class SettingsCell: UITableViewCell {
         selectionStyle = .none
         backgroundColor = .ravenClawBlue90
         textLabel?.textColor = .undeadWhite
-        detailTextLabel?.textColor = UIColor.undeadWhite.withAlphaComponent(0.5)
+        detailTextLabel?.textColor = UIColor.undeadWhite.withAlphaComponent(0.65)
+        overrideUserInterfaceStyle = .dark
         
         addSubview(switchControl)
         switchControl.centerYAnchor.constraint(equalTo: centerYAnchor).isActive = true
@@ -188,17 +185,17 @@ extension SettingsCell {
             stepperControl.value = stepperValue
         case .notificationsPerDayPicker(let notificationsPerDay):
             selectionStyle = .default
-            addDisclosureIndicator()
+            addDisclosureIndicator(color: .actionColor)
             detailTextLabel?.text = String(notificationsPerDay)
         case .timePicker(let date):
             timePicker.isHidden = false
             timePicker.date = date
         case .detailLabel(let detailString):
             selectionStyle = .default
-            addDisclosureIndicator()
+            addDisclosureIndicator(color: .actionColor)
             detailTextLabel?.text = detailString
         default:
-            addDisclosureIndicator()
+            addDisclosureIndicator(color: .actionColor)
         }
     }
 }

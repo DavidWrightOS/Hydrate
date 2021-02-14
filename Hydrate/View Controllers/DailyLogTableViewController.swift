@@ -62,8 +62,8 @@ class DailyLogTableViewController: UITableViewController {
         cell.backgroundColor = .ravenClawBlue90
         cell.tintColor = .sicklySmurfBlue
         cell.textLabel?.textColor = .undeadWhite
-        cell.detailTextLabel?.textColor = UIColor.undeadWhite.withAlphaComponent(0.5)
-        cell.addDisclosureIndicator()
+        cell.detailTextLabel?.textColor = UIColor.undeadWhite.withAlphaComponent(0.65)
+        cell.addDisclosureIndicator(color: .actionColor)
         cell.selectionStyle = .none
         return cell
     }
@@ -182,13 +182,23 @@ class DailyLogTableViewController: UITableViewController {
 }
 
 extension UITableViewCell {
-    func addDisclosureIndicator(){
-        let button = UIButton(frame: CGRect(x: 0, y: 0, width: 15, height: 15))
-        let symbolConfiguration = UIImage.SymbolConfiguration(pointSize: 13, weight: UIImage.SymbolWeight.semibold)
-        let image = UIImage(systemName: "chevron.right", withConfiguration: symbolConfiguration)
-        button.setImage(image, for: .normal)
-        button.tintColor = .actionColor
-        self.accessoryView = button
+    func addDisclosureIndicator(color: UIColor) {
+        let chevronConfig = UIImage.SymbolConfiguration(pointSize: 14, weight: .semibold)
+        let chevronImg = UIImage(systemName: "chevron.right", withConfiguration: chevronConfig)?
+            .withTintColor(color, renderingMode: .alwaysTemplate)
+        let chevron = UIImageView(image: chevronImg)
+        chevron.tintColor = color
+        
+        let accessoryViewHeight = self.frame.height
+        let customDisclosureIndicator = UIView(frame: CGRect(x: 0, y: 0, width: 11, height: accessoryViewHeight))
+        customDisclosureIndicator.addSubview(chevron)
+        
+        chevron.translatesAutoresizingMaskIntoConstraints = false
+        chevron.trailingAnchor.constraint(equalTo: customDisclosureIndicator.trailingAnchor).isActive = true
+        chevron.centerYAnchor.constraint(equalTo: customDisclosureIndicator.centerYAnchor).isActive = true
+        
+        customDisclosureIndicator.backgroundColor = .clear
+        self.accessoryView = customDisclosureIndicator
     }
 }
 
