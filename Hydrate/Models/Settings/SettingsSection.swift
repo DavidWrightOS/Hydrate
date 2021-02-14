@@ -97,23 +97,23 @@ enum GeneralSettings: Int, CaseIterable, SettingOption {
 }
 
 enum NotificationSettings: Int, CaseIterable, SettingOption {
-    case receiveNotifications
+    case reminderNotifications
     
     var settingsCellType: SettingsCellType {
         switch self {
-        case .receiveNotifications: return .onOffSwitch(HydrateSettings.notificationsEnabled)
+        case .reminderNotifications: return .onOffSwitch(HydrateSettings.notificationsEnabled)
         }
     }
     
     func updateValue(to value: Any) {
         switch self {
-        case .receiveNotifications: HydrateSettings.notificationsEnabled = value as! Bool
+        case .reminderNotifications: HydrateSettings.notificationsEnabled = value as! Bool
         }
     }
     
     var description: String {
         switch self {
-        case .receiveNotifications: return "Receive Notifications"
+        case .reminderNotifications: return "Reminder Notifications"
         }
     }
 }
@@ -165,14 +165,14 @@ enum AboutSettings: Int, CaseIterable, SettingOption {
 }
 
 enum NotificationSettingsExpanded: Int, CaseIterable, SettingOption {
-    case receiveNotifications
+    case reminderNotifications
     case notificationsPerDay
     case wakeUpTime
     case bedTime
     
     var settingsCellType: SettingsCellType {
         switch self {
-        case .receiveNotifications: return .onOffSwitch(HydrateSettings.notificationsEnabled)
+        case .reminderNotifications: return .onOffSwitch(HydrateSettings.notificationsEnabled)
 //        case .notificationsPerDay: return .stepperControl(Double(HydrateSettings.notificationsPerDay))
         case .notificationsPerDay: return .notificationsPerDayPicker(HydrateSettings.notificationsPerDay)
         case .wakeUpTime: return .timePicker(date(totalMinutes: HydrateSettings.wakeUpTime))
@@ -188,7 +188,7 @@ enum NotificationSettingsExpanded: Int, CaseIterable, SettingOption {
     
     func updateValue(to value: Any) {
         switch self {
-        case .receiveNotifications: HydrateSettings.notificationsEnabled = value as! Bool
+        case .reminderNotifications: HydrateSettings.notificationsEnabled = value as! Bool
         case .notificationsPerDay: HydrateSettings.notificationsPerDay = value as! Int
         case .wakeUpTime: HydrateSettings.wakeUpTime = value as! Int
         case .bedTime: HydrateSettings.bedTime = value as! Int
@@ -197,7 +197,7 @@ enum NotificationSettingsExpanded: Int, CaseIterable, SettingOption {
     
     var description: String {
         switch self {
-        case .receiveNotifications: return "Receive Notifications"
+        case .reminderNotifications: return "Reminder Notifications"
         case .notificationsPerDay: return "Notifications per day"
         case .wakeUpTime: return "Wake Up Time"
         case .bedTime: return "Bed Time"

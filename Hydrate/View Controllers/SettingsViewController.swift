@@ -348,7 +348,7 @@ extension SettingsViewController {
         let settingsAction = UIAlertAction(title: "Settings", style: .default, handler: { [weak self] _ in
             UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!) { _ in
                 let sectionIndex = SettingsSection.notifications.rawValue
-                let rowIndex = NotificationSettings.receiveNotifications.rawValue
+                let rowIndex = NotificationSettings.reminderNotifications.rawValue
                 let indexPath = IndexPath(row: rowIndex, section: sectionIndex)
                 
                 if let cell = self?.tableView.cellForRow(at: indexPath) as? SettingsCell {
@@ -359,7 +359,7 @@ extension SettingsViewController {
         
         let cancelAction = UIAlertAction(title: "Cancel", style: .default) { [weak self] _ in
             let sectionIndex = SettingsSection.notifications.rawValue
-            let rowIndex = NotificationSettings.receiveNotifications.rawValue
+            let rowIndex = NotificationSettings.reminderNotifications.rawValue
             let indexPath = IndexPath(row: rowIndex, section: sectionIndex)
             
             if let cell = self?.tableView.cellForRow(at: indexPath) as? SettingsCell {
