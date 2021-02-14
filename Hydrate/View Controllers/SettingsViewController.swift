@@ -130,6 +130,7 @@ class SettingsViewController: UIViewController {
         }
         
         alertController.addAction(saveAction)
+        alertController.preferredAction = saveAction
         present(alertController, animated: true)
     }
     

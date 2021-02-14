@@ -32,6 +32,7 @@ extension UIViewController {
         let style: UIAlertAction.Style = options.contains(.destructiveAction) ? .destructive : .default
         let primaryAction = UIAlertAction(title: actionButtonText, style: style, handler: actionButtonCompletionHandler)
         alert.addAction(primaryAction)
+        alert.preferredAction = primaryAction
         
         present(alert, animated: true, completion: nil)
     }
