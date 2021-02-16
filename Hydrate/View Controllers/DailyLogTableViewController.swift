@@ -165,12 +165,8 @@ class DailyLogTableViewController: UITableViewController {
     
     override func setEditing(_ editing: Bool, animated: Bool) {
         super.setEditing(editing, animated: animated)
-        
-        if editing {
-            self.navigationItem.leftBarButtonItem = self.addDataButton
-        } else {
-            self.navigationItem.leftBarButtonItem = nil
-        }
+        let leftBarButtonItem = editing ? self.addDataButton : nil
+        self.navigationItem.setLeftBarButton(leftBarButtonItem, animated: true)
     }
     
     private func configure(cell: UITableViewCell, for indexPath: IndexPath) {

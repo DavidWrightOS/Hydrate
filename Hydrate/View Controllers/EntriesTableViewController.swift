@@ -144,7 +144,8 @@ class EntriesTableViewController: UITableViewController {
     
     override func setEditing(_ editing: Bool, animated: Bool) {
         super.setEditing(editing, animated: animated)
-        self.navigationItem.leftBarButtonItem = editing ? self.addDataButton : nil
+        let leftBarButtonItem = editing ? self.addDataButton : nil
+        self.navigationItem.setLeftBarButton(leftBarButtonItem, animated: true)
     }
     
     func configure(cell: UITableViewCell, for indexPath: IndexPath) {
