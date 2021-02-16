@@ -21,6 +21,7 @@
 		63769DD8252B025C00E26A48 /* Notification+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63769DD7252B025C00E26A48 /* Notification+Extension.swift */; };
 		638A3C8E25D9AA52008931D1 /* HealthKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 638A3C8D25D9AA52008931D1 /* HealthKit.framework */; };
 		638A3C9325D9C734008931D1 /* HealthKitSetupAssistant.swift in Sources */ = {isa = PBXBuildFile; fileRef = 638A3C9225D9C734008931D1 /* HealthKitSetupAssistant.swift */; };
+		638A3C9D25DB074F008931D1 /* ProfileDataStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 638A3C9C25DB074F008931D1 /* ProfileDataStore.swift */; };
 		638DC5852516718200C4D1D9 /* DataViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 638DC5842516718200C4D1D9 /* DataViewController.swift */; };
 		638DC58925182EB900C4D1D9 /* DailyLogTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 638DC58825182EB900C4D1D9 /* DailyLogTableViewController.swift */; };
 		63A6A11C251051D9009417CB /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63A6A11B251051D9009417CB /* AppDelegate.swift */; };
@@ -56,6 +57,7 @@
 		638A3C8B25D9AA52008931D1 /* Hydrate.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Hydrate.entitlements; sourceTree = "<group>"; };
 		638A3C8D25D9AA52008931D1 /* HealthKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = HealthKit.framework; path = System/Library/Frameworks/HealthKit.framework; sourceTree = SDKROOT; };
 		638A3C9225D9C734008931D1 /* HealthKitSetupAssistant.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HealthKitSetupAssistant.swift; sourceTree = "<group>"; };
+		638A3C9C25DB074F008931D1 /* ProfileDataStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileDataStore.swift; sourceTree = "<group>"; };
 		638DC5842516718200C4D1D9 /* DataViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataViewController.swift; sourceTree = "<group>"; };
 		638DC58825182EB900C4D1D9 /* DailyLogTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DailyLogTableViewController.swift; sourceTree = "<group>"; };
 		63A6A118251051D9009417CB /* Hydrate.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Hydrate.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -130,6 +132,7 @@
 			isa = PBXGroup;
 			children = (
 				638A3C9225D9C734008931D1 /* HealthKitSetupAssistant.swift */,
+				638A3C9C25DB074F008931D1 /* ProfileDataStore.swift */,
 			);
 			path = Health;
 			sourceTree = "<group>";
@@ -301,6 +304,7 @@
 				635939C625188A7F00776BB9 /* CoreDataStack.swift in Sources */,
 				63BA790E25BA906F00ACCD95 /* UIViewController+Extension.swift in Sources */,
 				63769DC82523F2FB00E26A48 /* DailyLog+Convenience.swift in Sources */,
+				638A3C9D25DB074F008931D1 /* ProfileDataStore.swift in Sources */,
 				638DC5852516718200C4D1D9 /* DataViewController.swift in Sources */,
 				63A6A13725106964009417CB /* UIView+Extension.swift in Sources */,
 				63D2E29125D77CF200AE52FB /* LocalNotificationContentModel.swift in Sources */,
