@@ -130,7 +130,19 @@ class DailyLogTableViewController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         guard let sectionInfo = fetchedResultsController.sections?[section] else { return 0 }
-        return sectionInfo.numberOfObjects
+        let rowCount = sectionInfo.numberOfObjects
+        
+        if rowCount == 0 {
+            let title = "Daily Logs"
+            let subtitle = "You haven't logged any water intake data yet."
+            let image = UIImage(named: "waterDropWithRingsSymbol")
+            tableView.addSplashScreen(title: title, subtitle: subtitle, image: image)
+
+        } else {
+            tableView.removeSplashScreen()
+        }
+        
+        return rowCount
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
