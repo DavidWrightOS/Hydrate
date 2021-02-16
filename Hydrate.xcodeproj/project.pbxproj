@@ -22,6 +22,7 @@
 		638A3C8E25D9AA52008931D1 /* HealthKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 638A3C8D25D9AA52008931D1 /* HealthKit.framework */; };
 		638A3C9325D9C734008931D1 /* HealthKitSetupAssistant.swift in Sources */ = {isa = PBXBuildFile; fileRef = 638A3C9225D9C734008931D1 /* HealthKitSetupAssistant.swift */; };
 		638A3C9D25DB074F008931D1 /* ProfileDataStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 638A3C9C25DB074F008931D1 /* ProfileDataStore.swift */; };
+		638A3D0625DB62C2008931D1 /* UITableView+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 638A3D0525DB62C2008931D1 /* UITableView+Extension.swift */; };
 		638DC5852516718200C4D1D9 /* DataViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 638DC5842516718200C4D1D9 /* DataViewController.swift */; };
 		638DC58925182EB900C4D1D9 /* DailyLogTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 638DC58825182EB900C4D1D9 /* DailyLogTableViewController.swift */; };
 		63A6A11C251051D9009417CB /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63A6A11B251051D9009417CB /* AppDelegate.swift */; };
@@ -58,6 +59,7 @@
 		638A3C8D25D9AA52008931D1 /* HealthKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = HealthKit.framework; path = System/Library/Frameworks/HealthKit.framework; sourceTree = SDKROOT; };
 		638A3C9225D9C734008931D1 /* HealthKitSetupAssistant.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HealthKitSetupAssistant.swift; sourceTree = "<group>"; };
 		638A3C9C25DB074F008931D1 /* ProfileDataStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileDataStore.swift; sourceTree = "<group>"; };
+		638A3D0525DB62C2008931D1 /* UITableView+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UITableView+Extension.swift"; sourceTree = "<group>"; };
 		638DC5842516718200C4D1D9 /* DataViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataViewController.swift; sourceTree = "<group>"; };
 		638DC58825182EB900C4D1D9 /* DailyLogTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DailyLogTableViewController.swift; sourceTree = "<group>"; };
 		63A6A118251051D9009417CB /* Hydrate.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Hydrate.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -201,6 +203,7 @@
 				63A6A138251069E8009417CB /* Date+Extension.swift */,
 				63769DD7252B025C00E26A48 /* Notification+Extension.swift */,
 				63BA790D25BA906F00ACCD95 /* UIViewController+Extension.swift */,
+				638A3D0525DB62C2008931D1 /* UITableView+Extension.swift */,
 				63D2E28D25D594CE00AE52FB /* LocalNotificationManager.swift */,
 				63D2E29025D77CF200AE52FB /* LocalNotificationContentModel.swift */,
 			);
@@ -313,6 +316,7 @@
 				63769DC22522EF6000E26A48 /* EntriesTableViewController.swift in Sources */,
 				63BAC6CE2542990D00A53057 /* MeasurementMarkerView.swift in Sources */,
 				63EF334B25BEB3DB00880FA4 /* ConfettiView.swift in Sources */,
+				638A3D0625DB62C2008931D1 /* UITableView+Extension.swift in Sources */,
 				63A6A135251067F2009417CB /* UIColor+Extension.swift in Sources */,
 				635939C925188AE600776BB9 /* IntakeEntry+Convenience.swift in Sources */,
 				6339BFB2251B4E4600310D1D /* AnimatedLabel.swift in Sources */,
