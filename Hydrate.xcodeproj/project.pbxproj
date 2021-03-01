@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 52;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -159,7 +159,6 @@
 		63A6A11A251051D9009417CB /* Hydrate */ = {
 			isa = PBXGroup;
 			children = (
-				638A3C8B25D9AA52008931D1 /* Hydrate.entitlements */,
 				635939C0251888BA00776BB9 /* Models */,
 				63769DD22526F0AB00E26A48 /* Model Controllers */,
 				63A6A13A251070FC009417CB /* Views */,
@@ -178,6 +177,7 @@
 				63A6A11D251051D9009417CB /* SceneDelegate.swift */,
 				63A6A124251051DA009417CB /* Assets.xcassets */,
 				63A6A126251051DA009417CB /* LaunchScreen.storyboard */,
+				638A3C8B25D9AA52008931D1 /* Hydrate.entitlements */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -460,7 +460,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_ENTITLEMENTS = Hydrate/Hydrate.entitlements;
+				CODE_SIGN_ENTITLEMENTS = Hydrate/Resources/Hydrate.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 3BQB6FYF6S;
 				INFOPLIST_FILE = Hydrate/Resources/Info.plist;
@@ -479,7 +479,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_ENTITLEMENTS = Hydrate/Hydrate.entitlements;
+				CODE_SIGN_ENTITLEMENTS = Hydrate/Resources/Hydrate.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 3BQB6FYF6S;
 				INFOPLIST_FILE = Hydrate/Resources/Info.plist;
