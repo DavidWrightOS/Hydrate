@@ -118,13 +118,7 @@ class DataViewController: UIViewController {
     }
     
     @objc private func loadIntakeEntries() {
-        guard let hostingController = children.first as? UIHostingController<ChartView> else { return }
-        
-        let today = Date().startOfDay
-        let startOfLastSevenDays = Calendar.current.date(byAdding: .day, value: -6, to: today)!
-        let dailyLogsForLastSevenDays = dailyLogController.fetchDailyLogs(startingOn: startOfLastSevenDays, through: today)
-        hostingController.rootView.dailyLogs = dailyLogsForLastSevenDays
-        hostingController.rootView.updateDailyLogs()
+        chartView.reloadChart()
     }
     
     @objc private func doneButtonTapped() {
@@ -184,7 +178,6 @@ class DataViewController: UIViewController {
                   let amount = Int(amountText) else { return }
             
             self.dailyLogController.add(intakeAmount: amount, for: datePickerDate)
-            self.chartView.reloadChart()
             
             guard let navController = self.children.last as? UINavigationController else { return }
             
