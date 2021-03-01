@@ -15,6 +15,7 @@
 		635939C625188A7F00776BB9 /* CoreDataStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 635939C525188A7F00776BB9 /* CoreDataStack.swift */; };
 		635939C925188AE600776BB9 /* IntakeEntry+Convenience.swift in Sources */ = {isa = PBXBuildFile; fileRef = 635939C825188AE600776BB9 /* IntakeEntry+Convenience.swift */; };
 		635DA0042536C3280026D570 /* HydrateSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 635DA0032536C3280026D570 /* HydrateSettings.swift */; };
+		6364B85C25EC26950043698A /* CareKitUI in Frameworks */ = {isa = PBXBuildFile; productRef = 6364B85B25EC26950043698A /* CareKitUI */; };
 		63769DC22522EF6000E26A48 /* EntriesTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63769DC12522EF6000E26A48 /* EntriesTableViewController.swift */; };
 		63769DC82523F2FB00E26A48 /* DailyLog+Convenience.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63769DC72523F2FB00E26A48 /* DailyLog+Convenience.swift */; };
 		63769DD02526F08B00E26A48 /* DailyLogController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63769DCF2526F08B00E26A48 /* DailyLogController.swift */; };
@@ -86,6 +87,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6364B85C25EC26950043698A /* CareKitUI in Frameworks */,
 				638A3C8E25D9AA52008931D1 /* HealthKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -239,6 +241,9 @@
 			dependencies = (
 			);
 			name = Hydrate;
+			packageProductDependencies = (
+				6364B85B25EC26950043698A /* CareKitUI */,
+			);
 			productName = Hydrate;
 			productReference = 63A6A118251051D9009417CB /* Hydrate.app */;
 			productType = "com.apple.product-type.application";
@@ -267,6 +272,9 @@
 				Base,
 			);
 			mainGroup = 63A6A10F251051D9009417CB;
+			packageReferences = (
+				6364B85A25EC26950043698A /* XCRemoteSwiftPackageReference "CareKit" */,
+			);
 			productRefGroup = 63A6A119251051D9009417CB /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -516,6 +524,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		6364B85A25EC26950043698A /* XCRemoteSwiftPackageReference "CareKit" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/carekit-apple/CareKit.git";
+			requirement = {
+				branch = main;
+				kind = branch;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		6364B85B25EC26950043698A /* CareKitUI */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 6364B85A25EC26950043698A /* XCRemoteSwiftPackageReference "CareKit" */;
+			productName = CareKitUI;
+		};
+/* End XCSwiftPackageProductDependency section */
 
 /* Begin XCVersionGroup section */
 		635939C1251888EA00776BB9 /* Hydrate.xcdatamodeld */ = {
