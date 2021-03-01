@@ -41,7 +41,6 @@
 		63D2E28E25D594CE00AE52FB /* LocalNotificationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63D2E28D25D594CE00AE52FB /* LocalNotificationManager.swift */; };
 		63D2E29125D77CF200AE52FB /* LocalNotificationContentModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63D2E29025D77CF200AE52FB /* LocalNotificationContentModel.swift */; };
 		63EF334B25BEB3DB00880FA4 /* ConfettiView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63EF334A25BEB3DB00880FA4 /* ConfettiView.swift */; };
-		63EF335525BEBE6900880FA4 /* ChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63EF335425BEBE6900880FA4 /* ChartView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -81,7 +80,6 @@
 		63D2E28D25D594CE00AE52FB /* LocalNotificationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalNotificationManager.swift; sourceTree = "<group>"; };
 		63D2E29025D77CF200AE52FB /* LocalNotificationContentModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalNotificationContentModel.swift; sourceTree = "<group>"; };
 		63EF334A25BEB3DB00880FA4 /* ConfettiView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfettiView.swift; sourceTree = "<group>"; };
-		63EF335425BEBE6900880FA4 /* ChartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChartView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -222,7 +220,6 @@
 				63589F4F2521C3C1008CFD48 /* SettingsCell.swift */,
 				63BAC6CD2542990D00A53057 /* MeasurementMarkerView.swift */,
 				63EF334A25BEB3DB00880FA4 /* ConfettiView.swift */,
-				63EF335425BEBE6900880FA4 /* ChartView.swift */,
 				6364B85725EC25D60043698A /* ChartView2.swift */,
 			);
 			path = Views;
@@ -305,7 +302,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				635DA0042536C3280026D570 /* HydrateSettings.swift in Sources */,
-				63EF335525BEBE6900880FA4 /* ChartView.swift in Sources */,
 				63769DD02526F08B00E26A48 /* DailyLogController.swift in Sources */,
 				638DC58925182EB900C4D1D9 /* DailyLogTableViewController.swift in Sources */,
 				635939C3251888EA00776BB9 /* Hydrate.xcdatamodeld in Sources */,
