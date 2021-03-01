@@ -27,7 +27,12 @@ class DataViewController: UIViewController {
         return navigationBar
     }()
     
-    private lazy var chartView = ChartView(dailyLogController: dailyLogController)
+    private lazy var chartView: ChartView2 = {
+        let chartView = ChartView2()
+        chartView.dataSource = self
+        chartView.delegate = self
+        return chartView
+    }()
     
     private let containerView: UIView = {
         let containerView = UIView()
@@ -82,24 +87,21 @@ class DataViewController: UIViewController {
     }
     
     private func setupChartView() {
-        let today = Date().startOfDay
-        let sevenDaysAgo = Calendar.current.date(byAdding: .day, value: -6, to: today)!
-        chartView.dailyLogs = dailyLogController.fetchDailyLogs(startingOn: sevenDaysAgo, through: today)
-        chartView.updateDailyLogs()
         
-        let childView = UIHostingController(rootView: chartView)
-        addChild(childView)
-        childView.didMove(toParent: self)
+        chartView.reloadChart()
         
-        view.addSubview(childView.view)
-        childView.view.anchor(top: navigationBar.bottomAnchor,
-                              leading: view.leadingAnchor,
-                              bottom: nil,
-                              trailing: view.trailingAnchor,
-                              size: CGSize(width: view.bounds.width, height: 220))
+        let chartInsets = UIEdgeInsets(top: 0, left: 20, bottom: 0, right: 20)
+        
+        view.addSubview(chartView)
+        chartView.anchor(top: navigationBar.bottomAnchor,
+                         leading: view.leadingAnchor,
+                         bottom: nil,
+                         trailing: view.trailingAnchor,
+                         padding: chartInsets)
+        chartView.heightAnchor.constraint(equalTo: chartView.widthAnchor, multiplier: 4/5).isActive = true
         
         view.addSubview(containerView)
-        containerView.anchor(top: childView.view.bottomAnchor,
+        containerView.anchor(top: chartView.bottomAnchor,
                              leading: view.leadingAnchor,
                              bottom: view.bottomAnchor,
                              trailing: view.trailingAnchor)
@@ -182,6 +184,7 @@ class DataViewController: UIViewController {
                   let amount = Int(amountText) else { return }
             
             self.dailyLogController.add(intakeAmount: amount, for: datePickerDate)
+            self.chartView.reloadChart()
             
             guard let navController = self.children.last as? UINavigationController else { return }
             
@@ -196,6 +199,32 @@ class DataViewController: UIViewController {
         alertController.preferredAction = saveAction
         present(alertController, animated: true)
     }
+    
+    // MARK: - Date Formatters
+    
+    lazy var monthDayDateFormatter: DateFormatter = {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "MMM d"
+        return dateFormatter
+    }()
+    
+    lazy var monthDayYearDateFormatter: DateFormatter = {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "MMM d, yyyy"
+        return dateFormatter
+    }()
+    
+    lazy var dayYearDateFormatter: DateFormatter = {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "d, yyyy"
+        return dateFormatter
+    }()
+    
+    lazy var dayOfWeekFormatter: DateFormatter = {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "M/d"
+        return dateFormatter
+    }()
 }
 
 extension DataViewController: DailyLogTableViewControllerDelegate {
@@ -206,5 +235,117 @@ extension DataViewController: DailyLogTableViewControllerDelegate {
     
     func addDataButtonTapped(for date: Date) {
         presentAddDataAlert(for: date)
+    }
+}
+
+
+// MARK: - ChartViewDataSource
+
+extension DataViewController: ChartViewDataSource {
+    var chartValues: [CGFloat] {
+        dailyTotalsForWeek()
+    }
+}
+
+// MARK: - ChartViewDelegate
+
+extension DataViewController: ChartViewDelegate {
+    var chartTitle: String? {
+        "Daily Totals"
+    }
+    
+    var chartSubtitle: String? {
+        weeklyDateRangeString()
+    }
+    
+    var chartUnitTitle: String? {
+        HydrateSettings.unit.abbreviation
+    }
+    
+    var chartHorizontalAxisMarkers: [String]? {
+        horizontalAxisMarkers()
+    }
+}
+
+
+// MARK: - ChartView Helpers
+
+extension DataViewController {
+    
+    /// Return an array of CGFloat values representing the daily water intake over the last week
+    func dailyTotalsForWeek(lastDate: Date = Date()) -> [CGFloat] {
+        let calendar = Calendar.current
+        let today = Date().startOfDay
+        let sevenDaysAgo = calendar.date(byAdding: .day, value: -6, to: today)!
+        let dailyLogs = dailyLogController.fetchDailyLogs(startingOn: sevenDaysAgo, through: today)
+        
+        let lastSevenDailyLogs = Array(dailyLogs.suffix(7))
+        
+        var dayOfWeekLabels: [String] = []
+        var totalsToChart: [Int] = []
+        
+        for dayOffset in -6...0 {
+            let day = calendar.date(byAdding: .day, value: dayOffset, to: today)!
+            dayOfWeekLabels.append(dayOfWeekFormatter.string(from: day))
+            
+            let dailyLog = lastSevenDailyLogs.first(where: { $0.date == day })
+            let total = Int(dailyLog?.totalIntake ?? 0)
+            totalsToChart.append(total)
+        }
+        
+        return totalsToChart.map { CGFloat($0) }
+    }
+    
+    /// Return a string describing the date range of the chart for the last week. Example: "Jun 3 - Jun 10, 2020"
+    func weeklyDateRangeString(lastDate: Date = Date()) -> String {
+        let calendar = Calendar.current
+        let endOfWeekDate = lastDate
+        let startOfWeekDate = calendar.date(byAdding: .day, value: -6, to: endOfWeekDate)!
+        
+        var startDateString = monthDayDateFormatter.string(from: startOfWeekDate)
+        var endDateString = monthDayYearDateFormatter.string(from: endOfWeekDate)
+        
+        // If the start and end dates are in the same month.
+        if calendar.isDate(startOfWeekDate, equalTo: endOfWeekDate, toGranularity: .month) {
+            endDateString = dayYearDateFormatter.string(from: endOfWeekDate)
+        }
+        
+        // If the start and end dates are in different years.
+        if !calendar.isDate(startOfWeekDate, equalTo: endOfWeekDate, toGranularity: .year) {
+            startDateString = monthDayYearDateFormatter.string(from: startOfWeekDate)
+        }
+        
+        return String(format: "%@–%@", startDateString, endDateString)
+    }
+    
+    /// Returns an array of horizontal axis markers based on the desired time frame, where the last axis marker corresponds to `lastDate`
+    /// `useWeekdays` will use short day abbreviations (e.g. "Sun, "Mon", "Tue") instead.
+    /// Defaults to showing the current day as the last axis label of the chart and going back one week.
+    func horizontalAxisMarkers(lastDate: Date = Date(), useWeekdays: Bool = true) -> [String] {
+        let calendar: Calendar = .current
+        let weekdayTitles = calendar.shortWeekdaySymbols
+        
+        var titles: [String] = []
+        
+        if useWeekdays {
+            titles = weekdayTitles
+            
+            let weekday = calendar.component(.weekday, from: lastDate)
+            
+            return Array(titles[weekday..<titles.count]) + Array(titles[0..<weekday])
+            
+        } else {
+            let numberOfDaysInWeek = weekdayTitles.count
+            let startDate = calendar.date(byAdding: DateComponents(day: -(numberOfDaysInWeek - 1)), to: lastDate)!
+            
+            var date = startDate
+            
+            while date <= lastDate {
+                titles.append(monthDayDateFormatter.string(from: date))
+                date = calendar.date(byAdding: .day, value: 1, to: date)!
+            }
+            
+            return titles
+        }
     }
 }
