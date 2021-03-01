@@ -27,8 +27,8 @@ class DataViewController: UIViewController {
         return navigationBar
     }()
     
-    private lazy var chartView: ChartView2 = {
-        let chartView = ChartView2()
+    private lazy var chartView: ChartView = {
+        let chartView = ChartView()
         chartView.dataSource = self
         chartView.delegate = self
         return chartView

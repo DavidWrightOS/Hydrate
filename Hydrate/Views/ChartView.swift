@@ -1,5 +1,5 @@
 //
-//  ChartView2.swift
+//  ChartView.swift
 //  Hydrate
 //
 //  Created by David Wright on 2/28/21.
@@ -20,7 +20,7 @@ protocol ChartViewDelegate: class {
     var chartHorizontalAxisMarkers: [String]? { get }
 }
 
-class ChartView2: UIView {
+class ChartView: UIView {
     
     // MARK: - Properties
     
@@ -101,7 +101,7 @@ class ChartView2: UIView {
 
 // MARK: - Custom Color Style
 
-extension ChartView2 {
+extension ChartView {
     
     /// Apply alternate color configuration to set axes and style in a custom configuration.
     private func applyAlternateColorStyle() {
