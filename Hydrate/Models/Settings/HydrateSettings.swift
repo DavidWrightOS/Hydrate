@@ -195,6 +195,13 @@ enum Unit: Int, CaseIterable, CustomStringConvertible {
         }
     }
     
+    var abbreviationFull: String {
+        switch self {
+        case .fluidOunces: return "fl oz (US)"
+        default: return abbreviation
+        }
+    }
+    
     var conversionFactor: Double {
         switch self {
         case .milliliters: return 1.0

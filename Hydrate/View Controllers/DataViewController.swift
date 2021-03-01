@@ -259,7 +259,7 @@ extension DataViewController: ChartViewDelegate {
     }
     
     var chartUnitTitle: String? {
-        HydrateSettings.unit.abbreviation
+        HydrateSettings.unit.abbreviationFull
     }
     
     var chartHorizontalAxisMarkers: [String]? {
