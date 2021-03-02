@@ -24,6 +24,8 @@ class ChartView: UIView {
     
     // MARK: - Properties
     
+    var barWidth: CGFloat?
+    
     weak var dataSource: ChartViewDataSource?
     weak var delegate: ChartViewDelegate?
     
@@ -85,7 +87,12 @@ class ChartView: UIView {
         
         // Update graphView dataSeries
         let unitTitle = delegate?.chartUnitTitle ?? ""
-        let ockDataSeries = OCKDataSeries(values: values, title: unitTitle)
+        var ockDataSeries = OCKDataSeries(values: values, title: unitTitle)
+        
+        if let barWidth = barWidth {
+            ockDataSeries.size = barWidth
+        }
+    
         chartView.graphView.dataSeries = [ockDataSeries]
     }
     
@@ -127,5 +134,8 @@ extension ChartView {
         var shadowOpacity1: Float = 0
         var shadowRadius1: CGFloat = 0
         var shadowOffset1: CGSize = .zero
+        var lineWidth1: CGFloat = 20
+        var borderWidth1: CGFloat = 5
+        var borderWidth2: CGFloat = 5
     }
 }

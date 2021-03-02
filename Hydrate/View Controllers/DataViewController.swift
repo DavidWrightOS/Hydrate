@@ -31,6 +31,7 @@ class DataViewController: UIViewController {
         let chartView = ChartView()
         chartView.dataSource = self
         chartView.delegate = self
+        chartView.barWidth = 20
         return chartView
     }()
     
