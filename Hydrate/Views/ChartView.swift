@@ -26,6 +26,9 @@ class ChartView: UIView {
     
     var barWidth: CGFloat?
     
+    private var chartInsetX: CGFloat = 20
+    private var chartInsetY: CGFloat = 0
+    
     weak var dataSource: ChartViewDataSource?
     weak var delegate: ChartViewDelegate?
     
@@ -45,6 +48,7 @@ class ChartView: UIView {
     override init(frame: CGRect) {
         super.init(frame: frame)
         
+        backgroundColor = .backgroundColor
         tintColor = .actionColor
         setupView()
     }
@@ -61,10 +65,10 @@ class ChartView: UIView {
         
         addSubview(chartView)
         
-        let leading = chartView.leadingAnchor.constraint(equalTo: leadingAnchor)
-        let top = chartView.topAnchor.constraint(equalTo: topAnchor)
-        let trailing = chartView.trailingAnchor.constraint(equalTo: trailingAnchor)
-        let bottom = chartView.bottomAnchor.constraint(equalTo: bottomAnchor)
+        let leading = chartView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: chartInsetX)
+        let top = chartView.topAnchor.constraint(equalTo: topAnchor, constant: chartInsetY)
+        let trailing = chartView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -chartInsetX)
+        let bottom = chartView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -chartInsetY)
         
         trailing.priority -= 1
         bottom.priority -= 1

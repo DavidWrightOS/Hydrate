@@ -91,14 +91,11 @@ class DataViewController: UIViewController {
         
         chartView.reloadChart()
         
-        let chartInsets = UIEdgeInsets(top: 0, left: 20, bottom: 0, right: 20)
-        
         view.addSubview(chartView)
         chartView.anchor(top: navigationBar.bottomAnchor,
                          leading: view.leadingAnchor,
                          bottom: nil,
-                         trailing: view.trailingAnchor,
-                         padding: chartInsets)
+                         trailing: view.trailingAnchor)
         chartView.heightAnchor.constraint(equalTo: chartView.widthAnchor, multiplier: 4/5).isActive = true
         
         view.addSubview(containerView)
