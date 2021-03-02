@@ -114,7 +114,7 @@ extension ChartView {
     private func applyAlternateColorStyle() {
         chartView.customStyle = CustomStyle()
         chartView.tintColor = tintColor
-        chartView.headerView.detailLabel.textColor = .undeadWhite
+        chartView.headerView.detailLabel.textColor = .undeadWhite65
         chartView.graphView.numberFormatter = numberFormatter
         chartView.graphView.yMinimum = 0
     }
