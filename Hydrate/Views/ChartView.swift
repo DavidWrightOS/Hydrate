@@ -134,8 +134,5 @@ extension ChartView {
         var shadowOpacity1: Float = 0
         var shadowRadius1: CGFloat = 0
         var shadowOffset1: CGSize = .zero
-        var lineWidth1: CGFloat = 20
-        var borderWidth1: CGFloat = 5
-        var borderWidth2: CGFloat = 5
     }
 }
