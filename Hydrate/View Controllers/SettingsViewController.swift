@@ -101,7 +101,7 @@ class SettingsViewController: UIViewController {
         
         alertController.addTextField { textField in
             textField.placeholder = title
-            textField.text = String(currentValue)
+            textField.text = String(Int(currentValue))
             textField.font = .systemFont(ofSize: 16)
             textField.textColor = .actionColorHighContrast
             
@@ -123,7 +123,7 @@ class SettingsViewController: UIViewController {
         let saveAction = UIAlertAction(title: "Save", style: .default) { [weak self, weak alertController] _ in
             guard let alertController = alertController, let textField = alertController.textFields?.first else { return }
             
-            if let string = textField.text, let newValue = Int(string), newValue != currentValue {
+            if let string = textField.text, let newValue = Double(string), newValue != currentValue {
                 HydrateSettings.targetDailyIntake = newValue
                 self?.tableView.cellForRow(at: indexPath)?.detailTextLabel?.text = string
                 self?.tableView.deselectRow(at: indexPath, animated: false)

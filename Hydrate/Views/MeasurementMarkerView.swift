@@ -46,7 +46,7 @@ class MeasurementMarkerView: UIView {
     }
     
     private func setupMeasurementMarkers() {
-        let targetDailyIntake = HydrateSettings.targetDailyIntake
+        let targetDailyIntake = Int(HydrateSettings.targetDailyIntake)
         let topMarkerIntervalOffset = targetDailyIntake % markerIntervalSize
         var topMarkerInterval = (topMarkerIntervalOffset == 0) ? markerIntervalSize : topMarkerIntervalOffset
         var topMarkerIntervalHeight = bounds.height * CGFloat(topMarkerInterval) / CGFloat(targetDailyIntake)

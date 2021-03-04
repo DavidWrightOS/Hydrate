@@ -44,7 +44,7 @@ extension SettingsTracking {
 }
 
 @objc protocol SettingsConfigurable {
-    static var targetDailyIntake: Int { get set }
+    static var targetDailyIntake: Double { get set }
     static var unitRawValue: Int { get set }
     static var notificationsEnabled: Bool { get set }
     static var wakeUpTime: Int { get set } // minutes from 12:00 AM
@@ -57,8 +57,8 @@ extension SettingsTracking {
 
 class HydrateSettings: NSObject, SettingsConfigurable {
     
-    static var targetDailyIntake: Int {
-        get { HydrateSettings.value(for: #keyPath(targetDailyIntake)) ?? 96 } // 96 is the default value
+    static var targetDailyIntake: Double {
+        get { HydrateSettings.value(for: #keyPath(targetDailyIntake)) ?? 96.0 } // 96 is the default value
         set {
             guard newValue != targetDailyIntake else { return }
             HydrateSettings.updateDefaults(for: #keyPath(targetDailyIntake), value: newValue)

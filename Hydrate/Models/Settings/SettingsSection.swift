@@ -76,14 +76,14 @@ enum GeneralSettings: Int, CaseIterable, SettingOption {
     
     var settingsCellType: SettingsCellType {
         switch self {
-        case .targetDailyIntake: return .detailLabel(String(HydrateSettings.targetDailyIntake))
+        case .targetDailyIntake: return .detailLabel(String(Int(HydrateSettings.targetDailyIntake)))
         case .unit: return .detailLabel(HydrateSettings.unit.abbreviation)
         }
     }
     
     func updateValue(to value: Any) {
         switch self {
-        case .targetDailyIntake: HydrateSettings.targetDailyIntake = value as! Int
+        case .targetDailyIntake: HydrateSettings.targetDailyIntake = value as! Double
         case .unit: HydrateSettings.unit = value as! Unit
         }
     }

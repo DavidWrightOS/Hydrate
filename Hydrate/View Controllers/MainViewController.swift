@@ -16,7 +16,7 @@ class MainViewController: UIViewController {
     
     private let notificationManager = LocalNotificationManager()
     
-    private var targetDailyIntake: Int = 96
+    private var targetDailyIntake: Double = 96.0
     
     private var units = HydrateSettings.unit
     
@@ -330,7 +330,7 @@ class MainViewController: UIViewController {
     private func addWater(_ intakeAmount: Int, selectedButtonIndex: Int? = nil) {
         guard intakeAmount != 0 else { return }
         
-        if totalIntake < targetDailyIntake, totalIntake + intakeAmount >= targetDailyIntake {
+        if Double(totalIntake) < targetDailyIntake, Double(totalIntake + intakeAmount) >= targetDailyIntake {
             showConfettiAnimation()
         }
         
