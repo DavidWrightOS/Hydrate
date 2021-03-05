@@ -25,6 +25,7 @@
 		638A3C9325D9C734008931D1 /* HealthKitSetupAssistant.swift in Sources */ = {isa = PBXBuildFile; fileRef = 638A3C9225D9C734008931D1 /* HealthKitSetupAssistant.swift */; };
 		638A3C9D25DB074F008931D1 /* ProfileDataStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 638A3C9C25DB074F008931D1 /* ProfileDataStore.swift */; };
 		638A3D0625DB62C2008931D1 /* UITableView+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 638A3D0525DB62C2008931D1 /* UITableView+Extension.swift */; };
+		638BE40425F1EA6D00DB1CA8 /* Double+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 638BE40325F1EA6D00DB1CA8 /* Double+Extension.swift */; };
 		638DC5852516718200C4D1D9 /* DataViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 638DC5842516718200C4D1D9 /* DataViewController.swift */; };
 		638DC58925182EB900C4D1D9 /* DailyLogTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 638DC58825182EB900C4D1D9 /* DailyLogTableViewController.swift */; };
 		63A6A11C251051D9009417CB /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63A6A11B251051D9009417CB /* AppDelegate.swift */; };
@@ -62,6 +63,7 @@
 		638A3C9225D9C734008931D1 /* HealthKitSetupAssistant.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HealthKitSetupAssistant.swift; sourceTree = "<group>"; };
 		638A3C9C25DB074F008931D1 /* ProfileDataStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileDataStore.swift; sourceTree = "<group>"; };
 		638A3D0525DB62C2008931D1 /* UITableView+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UITableView+Extension.swift"; sourceTree = "<group>"; };
+		638BE40325F1EA6D00DB1CA8 /* Double+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Double+Extension.swift"; sourceTree = "<group>"; };
 		638DC5842516718200C4D1D9 /* DataViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataViewController.swift; sourceTree = "<group>"; };
 		638DC58825182EB900C4D1D9 /* DailyLogTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DailyLogTableViewController.swift; sourceTree = "<group>"; };
 		63A6A118251051D9009417CB /* Hydrate.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Hydrate.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -208,6 +210,7 @@
 				638A3D0525DB62C2008931D1 /* UITableView+Extension.swift */,
 				63D2E28D25D594CE00AE52FB /* LocalNotificationManager.swift */,
 				63D2E29025D77CF200AE52FB /* LocalNotificationContentModel.swift */,
+				638BE40325F1EA6D00DB1CA8 /* Double+Extension.swift */,
 			);
 			path = Utilities;
 			sourceTree = "<group>";
@@ -307,6 +310,7 @@
 				635939C3251888EA00776BB9 /* Hydrate.xcdatamodeld in Sources */,
 				638A3C9325D9C734008931D1 /* HealthKitSetupAssistant.swift in Sources */,
 				63A6A13225105EF2009417CB /* MainViewController.swift in Sources */,
+				638BE40425F1EA6D00DB1CA8 /* Double+Extension.swift in Sources */,
 				63589F4C2521C037008CFD48 /* SettingsSection.swift in Sources */,
 				63A6A11C251051D9009417CB /* AppDelegate.swift in Sources */,
 				63A6A11E251051D9009417CB /* SceneDelegate.swift in Sources */,
