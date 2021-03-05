@@ -10,10 +10,7 @@ import Foundation
 
 extension Double {
     var roundedString: String {
-        if self == floor(self) {
-            return String(format: "%.0f", self)
-        } else {
-            return String(format: "%.1f", self)
-        }
+        let number = NSNumber(value: self)
+        return Format.numberFormatter.string(from: number)!
     }
 }
