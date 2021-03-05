@@ -150,8 +150,8 @@ class SettingsViewController: UIViewController {
             let action = UIAlertAction(title: actionTitle, style: .default) { [weak self] (action) in
                 if unit != currentUnit {
                     HydrateSettings.unit = unit
-                    self?.tableView.cellForRow(at: indexPath)?.detailTextLabel?.text = unit.abbreviation
                     self?.tableView.deselectRow(at: indexPath, animated: false)
+                    self?.tableView.reloadSections([SettingsSection.general.rawValue], with: .fade)
                 }
             }
             
