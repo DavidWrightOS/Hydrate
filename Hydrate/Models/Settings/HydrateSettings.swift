@@ -58,9 +58,14 @@ extension SettingsTracking {
 class HydrateSettings: NSObject, SettingsConfigurable {
     
     static var targetDailyIntake: Double {
-        get { HydrateSettings.value(for: #keyPath(targetDailyIntake)) ?? 96.0 } // 96 is the default value
+        get {
+            let targetInMilliliters = HydrateSettings.value(for: #keyPath(targetDailyIntake)) ?? 2366.0
+            let targetInCurrentUnit = targetInMilliliters * unit.conversionFactor
+            return targetInCurrentUnit
+        }
         set {
-            guard newValue != targetDailyIntake else { return }
+            let newTarget = newValue / unit.conversionFactor
+            guard newTarget != targetDailyIntake else { return }
             HydrateSettings.updateDefaults(for: #keyPath(targetDailyIntake), value: newValue)
         }
     }
@@ -205,8 +210,8 @@ enum Unit: Int, CaseIterable, CustomStringConvertible {
     var conversionFactor: Double {
         switch self {
         case .milliliters: return 1.0
-        case .fluidOunces: return 29.5735
-        case .cups: return 240
+        case .fluidOunces: return 0.033814
+        case .cups: return 0.00422675
         }
     }
 }

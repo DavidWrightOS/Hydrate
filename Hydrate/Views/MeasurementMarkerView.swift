@@ -12,7 +12,13 @@ class MeasurementMarkerView: UIView {
     
     // MARK: - Public
     
-    var markerIntervalSize = 8 // number of water units (i.e. ounces) between measurement markers
+    var markerIntervalSize: Int { // number of water units (ex: ounces) between measurement markers
+        switch HydrateSettings.unit {
+        case .milliliters: return 250
+        case .fluidOunces: return 8
+        case .cups: return 1
+        }
+    }
     var unitsString: String?
     var markerTextColor = UIColor.markerLabelColor
     var markerLineColor = UIColor.markerLineColor
@@ -46,7 +52,7 @@ class MeasurementMarkerView: UIView {
     }
     
     private func setupMeasurementMarkers() {
-        var targetDailyIntake = Int(HydrateSettings.targetDailyIntake.rounded())
+        let targetDailyIntake = Int(HydrateSettings.targetDailyIntake.rounded())
         
         let topMarkerIntervalOffset = targetDailyIntake % markerIntervalSize
         var topMarkerInterval = (topMarkerIntervalOffset == 0) ? markerIntervalSize : topMarkerIntervalOffset

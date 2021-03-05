@@ -16,7 +16,7 @@ class MainViewController: UIViewController {
     
     private let notificationManager = LocalNotificationManager()
     
-    private var targetDailyIntake: Double = 96.0
+    private var targetDailyIntake: Double = HydrateSettings.targetDailyIntake
     
     private var units = HydrateSettings.unit
     
@@ -50,7 +50,7 @@ class MainViewController: UIViewController {
     }()
     
     private var totalIntake: Double {
-        dailyLogController.dailyLog?.totalIntake ?? 0
+        (dailyLogController.dailyLog?.totalIntake ?? 0) * units.conversionFactor
     }
     
     private var waterLevel: CGFloat {
@@ -340,7 +340,8 @@ class MainViewController: UIViewController {
             showConfettiAnimation()
         }
         
-        dailyLogController.add(intakeAmount: intakeAmount)
+        let normalizedIntakeAmount = (Double(intakeAmount) / units.conversionFactor).rounded()
+        dailyLogController.add(intakeAmount: normalizedIntakeAmount)
         
         let buttonIndex = selectedButtonIndex ?? 2
         var buttonCenter = addWaterIntakeButton.center
@@ -358,11 +359,12 @@ class MainViewController: UIViewController {
         let amount = dailyLogController.undoLastIntakeEntry()
         guard amount != 0 else { return }
         
+        let amountInCurrentUnit = Int((amount * units.conversionFactor).rounded())
         var buttonCenter = addWaterIntakeButton.center
         buttonCenter.x += intakeButtonOffsets[2].x
         buttonCenter.y += intakeButtonOffsets[2].y
         
-        addWaterLabelAnimation(withText: "\(-amount)", startingCenterPoint: buttonCenter, textColor: .negativeNumberRed)
+        addWaterLabelAnimation(withText: "\(-amountInCurrentUnit)", startingCenterPoint: buttonCenter, textColor: .negativeNumberRed)
         
         updateViews()
     }
@@ -544,7 +546,7 @@ extension MainViewController: ConfettiViewDelegate {
 // MARK: - SettingsTracking
 
 extension MainViewController: SettingsTracking {
-
+    
     func settingsDataChanged() {
         updateViews()
     }
