@@ -173,7 +173,7 @@ class DataViewController: UIViewController {
                   let alertController = alertController,
                   let datePickerDate = datePicker?.date,
                   let amountText = alertController.textFields?.first?.text,
-                  let amount = Int(amountText) else { return }
+                  let amount = Double(amountText) else { return }
             
             self.dailyLogController.add(intakeAmount: amount, for: datePickerDate)
             

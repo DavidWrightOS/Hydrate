@@ -20,7 +20,13 @@ class MainViewController: UIViewController {
     
     private var units = HydrateSettings.unit
     
-    private var intakeButtonAmounts = [8, 12, 16, 20, 32]
+    private var intakeButtonAmounts: [Double] {
+        switch units {
+        case .milliliters: return [125, 250, 500, 750, 1000]
+        case .fluidOunces: return [8, 12, 16, 20, 32]
+        case .cups: return [1, 2, 3, 4, 5]
+        }
+    }
     
     private lazy var intakeButtonOffsets: [CGPoint] = {
         var offsets: [CGPoint] = []
@@ -43,8 +49,8 @@ class MainViewController: UIViewController {
         return offsets
     }()
     
-    private var totalIntake: Int {
-        Int(dailyLogController.dailyLog?.totalIntake ?? 0)
+    private var totalIntake: Double {
+        dailyLogController.dailyLog?.totalIntake ?? 0
     }
     
     private var waterLevel: CGFloat {
@@ -81,7 +87,7 @@ class MainViewController: UIViewController {
             button.backgroundColor = .intakeButtonColor
             button.alpha = 0.0
             button.setTitleColor(.intakeButtonTextColor, for: .normal)
-            button.setTitle("\(intakeButtonAmounts[index]) \(units.abbreviation)", for: .normal)
+            button.setTitle("\(intakeButtonAmounts[index].roundedString) \(units.abbreviation)", for: .normal)
             button.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .bold)
             button.titleLabel?.lineBreakMode = .byWordWrapping
             button.titleLabel?.numberOfLines = 0
@@ -241,7 +247,7 @@ class MainViewController: UIViewController {
                 self.measurementMarkersView.unitsString = self.units.abbreviation
                 
                 self.customWaterButtons.forEach {
-                    $0.setTitle("\(self.intakeButtonAmounts[$0.tag]) \(self.units.abbreviation)", for: .normal)
+                    $0.setTitle("\(self.intakeButtonAmounts[$0.tag].roundedString) \(self.units.abbreviation)", for: .normal)
                 }
             }
             
@@ -327,10 +333,10 @@ class MainViewController: UIViewController {
                                       padding: .init(top: 36, left: 16, bottom: 0, right: 16))
     }
     
-    private func addWater(_ intakeAmount: Int, selectedButtonIndex: Int? = nil) {
+    private func addWater(_ intakeAmount: Double, selectedButtonIndex: Int? = nil) {
         guard intakeAmount != 0 else { return }
         
-        if Double(totalIntake) < targetDailyIntake, Double(totalIntake + intakeAmount) >= targetDailyIntake {
+        if totalIntake < targetDailyIntake, totalIntake + intakeAmount >= targetDailyIntake {
             showConfettiAnimation()
         }
         

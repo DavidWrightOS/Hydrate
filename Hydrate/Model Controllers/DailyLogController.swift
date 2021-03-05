@@ -117,14 +117,14 @@ class DailyLogController {
         }
     }
     
-    func add(intakeAmount: Int) {
+    func add(intakeAmount: Double) {
         IntakeEntry(intakeAmount: intakeAmount)
         coreDataStack.saveContext()
         dailyLog = fetchDailyLog()
         sendNotificationIfNeeded()
     }
     
-    func add(intakeAmount: Int, for date: Date = Date()) {
+    func add(intakeAmount: Double, for date: Date = Date()) {
         let intakeEntry = IntakeEntry(intakeAmount: intakeAmount, timestamp: date)
         coreDataStack.saveContext()
         if intakeEntry.dailyLog == dailyLog {
@@ -142,9 +142,9 @@ class DailyLogController {
         sendNotificationIfNeeded()
     }
     
-    func undoLastIntakeEntry() -> Int {
+    func undoLastIntakeEntry() -> Double {
         guard let dailyLog = dailyLog, let intakeEntry = lastIntakeEntryAddedToday else { return 0 }
-        let intakeAmount = Int(intakeEntry.amount)
+        let intakeAmount = intakeEntry.amount
         coreDataStack.mainContext.delete(intakeEntry)
         
         if dailyLog.intakeEntries?.count == 0 {

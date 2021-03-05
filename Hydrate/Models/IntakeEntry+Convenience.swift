@@ -12,14 +12,14 @@ import CoreData
 extension IntakeEntry {
     
     @discardableResult
-    convenience init(intakeAmount: Int,
+    convenience init(intakeAmount: Double,
                      dailyLog: DailyLog? = nil,
                      timestamp: Date = Date(),
                      identifier: UUID = UUID(),
                      context: NSManagedObjectContext = CoreDataStack.shared.mainContext) {
         
         self.init(context: context)
-        self.amount = Int64(intakeAmount)
+        self.amount = intakeAmount
         self.timestamp = timestamp
         self.day = timestamp.startOfDay
         self.identifier = identifier
