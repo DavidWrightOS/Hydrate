@@ -45,9 +45,9 @@ extension UIColor {
     static let ravenClawBlue30 = #colorLiteral(red: 0.7628498673, green: 0.7729310393, blue: 0.7983916402, alpha: 1) //UIColor(hex: 0xC3C5CB)
     static let ravenClawBlue20 = #colorLiteral(red: 0.8373538852, green: 0.8474456668, blue: 0.8643111587, alpha: 1) //UIColor(hex: 0xD6D8DC)
     static let ravenClawBlue10 = #colorLiteral(red: 0.9205921292, green: 0.9257187843, blue: 0.9383630157, alpha: 1) //UIColor(hex: 0xEBECEF)
-    static let disabledButtonColor = UIColor(hex: 0x5D5F66)
-    static let negativeNumberRed = UIColor(hex: 0xBE4357)
     
+    static let disabledButtonColor = UIColor(hex: 0x5D5F66)
+    static let negativeNumberRed = #colorLiteral(red: 0.7490196078, green: 0.1843137255, blue: 0.2549019608, alpha: 1) //UIColor(hex: 0xBF2F41)
     static let backgroundColor = ravenClawBlue
     static let markerLabelColor = undeadWhite.withAlphaComponent(0.4)
     static let markerLineColor = undeadWhite.withAlphaComponent(0.2)
