@@ -177,41 +177,6 @@ class HydrateSettings: NSObject, SettingsConfigurable {
         let notification = Notification(name: .notificationSettingsChanged)
         NotificationQueue.default.enqueue(notification, postingStyle: .asap, coalesceMask: .onName, forModes: [.common])
     }
-}
-
-enum Unit: Int, CaseIterable, CustomStringConvertible {
-    case milliliters
-    case fluidOunces
-    case cups
     
-    var description: String {
-        switch self {
-        case .milliliters: return "milliliters"
-        case .fluidOunces: return "fluid ounces"
-        case .cups: return "cups"
-        }
-    }
-    
-    var abbreviation: String {
-        switch self {
-        case .milliliters: return "mL"
-        case .fluidOunces: return "oz"
-        case .cups: return "cups"
-        }
-    }
-    
-    var abbreviationFull: String {
-        switch self {
-        case .fluidOunces: return "fl oz (US)"
-        default: return abbreviation
-        }
-    }
-    
-    var conversionFactor: Double {
-        switch self {
-        case .milliliters: return 1.0
-        case .fluidOunces: return 0.033814
-        case .cups: return 0.00422675
-        }
     }
 }

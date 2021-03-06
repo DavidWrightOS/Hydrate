@@ -144,8 +144,7 @@ class SettingsViewController: UIViewController {
         let currentUnit = HydrateSettings.unit
         
         for unit in Unit.allCases {
-            let actionTitle = unit.abbreviation != unit.description ?
-                "\(unit.abbreviation) (\(unit.description))" : "\(unit.abbreviation)"
+            let actionTitle = "\(unit.abbreviationFull)"
             
             let action = UIAlertAction(title: actionTitle, style: .default) { [weak self] (action) in
                 if unit != currentUnit {
