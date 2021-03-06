@@ -349,7 +349,7 @@ class MainViewController: UIViewController {
         buttonCenter.y += intakeButtonOffsets[buttonIndex].y
         
         let color: UIColor? = intakeAmount < 0 ? .negativeNumberRed : nil
-        let amountText = intakeAmount < 0 ? "\(intakeAmount)" : "+\(intakeAmount)"
+        let amountText = intakeAmount < 0 ? "\(intakeAmount.roundedString)" : "+\(intakeAmount.roundedString)"
         addWaterLabelAnimation(withText: amountText, startingCenterPoint: buttonCenter, textColor: color)
         
         updateViews()
