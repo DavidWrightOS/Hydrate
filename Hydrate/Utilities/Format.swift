@@ -9,10 +9,17 @@
 import Foundation
 
 class Format {
-    static let numberFormatter: NumberFormatter = {
+    static let numberFormatterRoundingToOneDecimal: NumberFormatter = {
         let formatter = NumberFormatter()
         formatter.numberStyle = .decimal
         formatter.maximumFractionDigits = 1
+        return formatter
+    }()
+    
+    static let numberFormatterRoundingToZeroDecimals: NumberFormatter = {
+        let formatter = NumberFormatter()
+        formatter.numberStyle = .decimal
+        formatter.maximumFractionDigits = 0
         return formatter
     }()
 }

@@ -11,6 +11,11 @@ import Foundation
 extension Double {
     var roundedString: String {
         let number = NSNumber(value: self)
-        return Format.numberFormatter.string(from: number)!
+        
+        if self < 100 {
+            return Format.numberFormatterRoundingToOneDecimal.string(from: number)!
+        } else {
+            return Format.numberFormatterRoundingToZeroDecimals.string(from: number)!
+        }
     }
 }
