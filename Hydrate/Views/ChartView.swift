@@ -99,14 +99,6 @@ class ChartView: UIView {
     
         chartView.graphView.dataSeries = [ockDataSeries]
     }
-    
-    // MARK: - Formatters
-    
-    private let numberFormatter: NumberFormatter = {
-        let numberFormatter = NumberFormatter()
-        numberFormatter.numberStyle = .none
-        return numberFormatter
-    }()
 }
 
 
@@ -119,7 +111,7 @@ extension ChartView {
         chartView.customStyle = CustomStyle()
         chartView.tintColor = tintColor
         chartView.headerView.detailLabel.textColor = .undeadWhite65
-        chartView.graphView.numberFormatter = numberFormatter
+        chartView.graphView.numberFormatter = Format.numberFormatterRoundingToZeroDecimals
         chartView.graphView.yMinimum = 0
     }
     
