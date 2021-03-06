@@ -13,6 +13,8 @@ class DataViewController: UIViewController {
     
     var dailyLogController: DailyLogController
     
+    private let unit = HydrateSettings.unit
+    
     // MARK: - UI Components
     
     private let navigationBar: UINavigationBar = {
@@ -273,14 +275,14 @@ extension DataViewController {
         let lastSevenDailyLogs = Array(dailyLogs.suffix(7))
         
         var dayOfWeekLabels: [String] = []
-        var totalsToChart: [Int] = []
+        var totalsToChart: [Double] = []
         
         for dayOffset in -6...0 {
             let day = calendar.date(byAdding: .day, value: dayOffset, to: today)!
             dayOfWeekLabels.append(dayOfWeekFormatter.string(from: day))
             
             let dailyLog = lastSevenDailyLogs.first(where: { $0.date == day })
-            let total = Int(dailyLog?.totalIntake ?? 0)
+            let total = (dailyLog?.totalIntake ?? 0) * unit.conversionFactor
             totalsToChart.append(total)
         }
         

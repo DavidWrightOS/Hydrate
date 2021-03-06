@@ -25,6 +25,8 @@ class EntriesTableViewController: UITableViewController {
     
     private var dailyLog: DailyLog!
     
+    private let unit = HydrateSettings.unit
+    
     private lazy var fetchedResultsController: NSFetchedResultsController<IntakeEntry> = {
         let fetchRequest: NSFetchRequest<IntakeEntry> = IntakeEntry.fetchRequest()
         fetchRequest.sortDescriptors = [NSSortDescriptor(key: #keyPath(IntakeEntry.timestamp), ascending: false)]
@@ -150,12 +152,14 @@ class EntriesTableViewController: UITableViewController {
     
     func configure(cell: UITableViewCell, for indexPath: IndexPath) {
         let intakeEntry = fetchedResultsController.object(at: indexPath)
+        let intakeAmount = intakeEntry.amount * unit.conversionFactor
+        cell.textLabel?.text = "\(intakeAmount.roundedString) \(unit.abbreviation)"
+        
         if let timestamp = intakeEntry.timestamp {
             cell.detailTextLabel?.text = timeFormatter.string(from: timestamp)
         } else {
             cell.detailTextLabel?.text = "--"
         }
-        cell.textLabel?.text = "\(intakeEntry.amount) \(HydrateSettings.unit.abbreviation)"
     }
     
     @objc private func addDataButtonTapped() {

@@ -22,6 +22,8 @@ class DailyLogTableViewController: UITableViewController {
     
     private let dailyLogController = DailyLogController()
     
+    private let unit = HydrateSettings.unit
+    
     private lazy var coreDataStack = CoreDataStack.shared
     
     private lazy var fetchedResultsController: NSFetchedResultsController<DailyLog> = {
@@ -137,7 +139,6 @@ class DailyLogTableViewController: UITableViewController {
             let subtitle = "You haven't logged any water intake data yet."
             let image = UIImage(named: "waterDropWithRingsSymbol")
             tableView.addSplashScreen(title: title, subtitle: subtitle, image: image)
-
         } else {
             tableView.removeSplashScreen()
         }
@@ -171,7 +172,8 @@ class DailyLogTableViewController: UITableViewController {
     
     private func configure(cell: UITableViewCell, for indexPath: IndexPath) {
         let dailyLog = fetchedResultsController.object(at: indexPath)
-        cell.textLabel?.text = "\(dailyLog.totalIntake) \(HydrateSettings.unit.abbreviation)"
+        let totalIntake = dailyLog.totalIntake * unit.conversionFactor
+        cell.textLabel?.text = "\(totalIntake.roundedString) \(unit.abbreviation)"
         cell.detailTextLabel?.text = dateFormatter.string(from: dailyLog.date!)
     }
     

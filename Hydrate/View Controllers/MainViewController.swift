@@ -340,7 +340,7 @@ class MainViewController: UIViewController {
             showConfettiAnimation()
         }
         
-        let normalizedIntakeAmount = (Double(intakeAmount) / units.conversionFactor).rounded()
+        let normalizedIntakeAmount = intakeAmount / units.conversionFactor
         dailyLogController.add(intakeAmount: normalizedIntakeAmount)
         
         let buttonIndex = selectedButtonIndex ?? 2
