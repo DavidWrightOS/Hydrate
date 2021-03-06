@@ -105,10 +105,12 @@ class AnimatedLabel: UILabel {
     }
     
     private func setTextValue(value: Float) {
+        let number = NSNumber(value: value)
+        let numberString = Format.numberFormatterRoundingToZeroDecimals.string(from: number)!
         if let unitsString = unitsString {
-            text = "\(Int(value)) \(unitsString)"
+            text = "\(numberString) \(unitsString)"
         } else {
-            text = "\(Int(value))"
+            text = "\(numberString)"
         }
     }
 }

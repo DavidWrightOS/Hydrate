@@ -111,10 +111,13 @@ class MeasurementMarkerView: UIView {
         label.font = markerLabelFont
         label.textColor = markerTextColor
         
+        let number = NSNumber(value: displayNumber)
+        let numberString = Format.numberFormatterRoundingToOneDecimal.string(from: number)!
+        
         if let unitsString = unitsString {
-            label.text = "\(displayNumber) \(unitsString)"
+            label.text = "\(numberString) \(unitsString)"
         } else {
-            label.text = "\(displayNumber)"
+            label.text = "\(numberString)"
         }
         
         lineView.backgroundColor = markerLineColor
