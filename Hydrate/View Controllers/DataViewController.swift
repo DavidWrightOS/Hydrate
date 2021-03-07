@@ -177,7 +177,8 @@ class DataViewController: UIViewController {
                   let amountText = alertController.textFields?.first?.text,
                   let amount = Double(amountText) else { return }
             
-            self.dailyLogController.add(intakeAmount: amount, for: datePickerDate)
+            let normalizedAmount = amount / self.unit.conversionFactor
+            self.dailyLogController.add(intakeAmount: normalizedAmount, for: datePickerDate)
             
             guard let navController = self.children.last as? UINavigationController else { return }
             
