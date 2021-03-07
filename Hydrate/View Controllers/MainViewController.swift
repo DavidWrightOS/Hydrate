@@ -529,7 +529,7 @@ class MainViewController: UIViewController {
     }
     
     @objc private func handleShowSettingsTapped() {
-        let svc = SettingsViewController()
+        let svc = SettingsViewController(notificationManager: notificationManager)
         present(svc, animated: true, completion: nil)
     }
 }

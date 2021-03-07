@@ -12,6 +12,8 @@ class SettingsViewController: UIViewController {
     
     // MARK: - Properties
     
+    private let notificationManager: LocalNotificationManager
+    
     private var isNotificationSectionExpanded: Bool {
         tableView.numberOfRows(inSection: SettingsSection.notifications.rawValue) > NotificationSettings.allCases.count
     }
@@ -55,6 +57,17 @@ class SettingsViewController: UIViewController {
         tableView.tableFooterView = UIView()
         return tableView
     }()
+    
+    // MARK: - Initializers
+
+    init(notificationManager: LocalNotificationManager) {
+        self.notificationManager = notificationManager
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     // MARK: - Lifecycle
 
