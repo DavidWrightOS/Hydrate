@@ -16,6 +16,7 @@ class SettingsViewController: UIViewController {
     
     private let notificationManager: LocalNotificationManager
     
+    /// Returns `True ` if the tableView's Notifications section is currently in the expanded state
     private var isNotificationSectionExpanded: Bool {
         tableView.numberOfRows(inSection: SettingsSection.notifications.rawValue) > NotificationSettings.allCases.count
     }
@@ -27,7 +28,7 @@ class SettingsViewController: UIViewController {
         
         for row in NotificationSettingsExpanded.allCases.dropFirst(numberOfRowsBeforeExpanding) {
             let rowIndex = row.rawValue
-            let indexPath = IndexPath(row: row.rawValue, section: sectionIndex)
+            let indexPath = IndexPath(row: rowIndex, section: sectionIndex)
             indexPaths.append(indexPath)
         }
         return indexPaths
@@ -76,7 +77,8 @@ class SettingsViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        NotificationCenter.default.addObserver(self, selector: #selector(notificationsEnabledSettingChanged),
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(notificationsEnabledSettingChanged),
                                                name: .notificationsEnabledSettingChanged,
                                                object: nil)
         
@@ -165,7 +167,7 @@ class SettingsViewController: UIViewController {
                 if unit != currentUnit {
                     HydrateSettings.unit = unit
                     self?.tableView.deselectRow(at: indexPath, animated: false)
-                    self?.tableView.reloadSections([SettingsSection.general.rawValue], with: .fade)
+                    self?.tableView.reloadSections([SettingsSection.general.rawValue], with: .none)
                 }
             }
             
@@ -209,12 +211,8 @@ class SettingsViewController: UIViewController {
     }
     
     @objc func notificationsEnabledSettingChanged() {
-        let notificationsEnabled = HydrateSettings.notificationsEnabled
-        
-        guard notificationsEnabled != isNotificationSectionExpanded else { return }
-        
-        if notificationsEnabled {
-            let notificationManager = LocalNotificationManager()
+        if HydrateSettings.notificationsEnabled {
+            
             notificationManager.requestAuthorization() { [weak self] granted in
                 if granted {
                     self?.showNotificationsSectionDetails()
@@ -228,8 +226,10 @@ class SettingsViewController: UIViewController {
     }
     
     private func showNotificationsSectionDetails() {
+        settings[SettingsSection.notifications.rawValue] = NotificationSettingsExpanded.allCases
+        
         guard !isNotificationSectionExpanded else { return }
-
+                        
         tableView.beginUpdates()
         tableView.insertRows(at: expandedNotificationsSectionIndexPaths, with: .automatic)
         tableView.endUpdates()
@@ -256,6 +256,7 @@ extension SettingsViewController: UITableViewDelegate {
         let label = UILabel()
         label.font = UIFont.systemFont(ofSize: 12)
         label.textColor = UIColor.undeadWhite.withAlphaComponent(0.5)
+        
         if let text = SettingsSection(rawValue: section)?.headerText {
             label.text = text.uppercased()
         }
@@ -279,9 +280,11 @@ extension SettingsViewController: UITableViewDelegate {
         label.text = SettingsSection(rawValue: section)?.footerText
         
         view.addSubview(label)
-        label.anchor(top: view.topAnchor, leading: view.leadingAnchor,
-                       bottom: view.bottomAnchor, trailing: view.trailingAnchor,
-                       padding: UIEdgeInsets(top: 4, left: 16, bottom: 16, right: 16))
+        label.anchor(top: view.topAnchor,
+                     leading: view.leadingAnchor,
+                     bottom: view.bottomAnchor,
+                     trailing: view.trailingAnchor,
+                     padding: UIEdgeInsets(top: 4, left: 16, bottom: 16, right: 16))
         
         return view
     }
@@ -329,9 +332,7 @@ extension SettingsViewController: UITableViewDataSource {
     }
     
     func dequeueReusableSettingsCell(in tableView: UITableView, indexPath: IndexPath) -> SettingsCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: SettingsCell.reuseIdentifier, for: indexPath) as? SettingsCell else {
-            fatalError("Failed to dequeue a SettingsCell.")
-        }
+        let cell = tableView.dequeueReusableCell(withIdentifier: SettingsCell.reuseIdentifier, for: indexPath) as? SettingsCell ?? SettingsCell()
         cell.textLabel?.text = nil
         cell.detailTextLabel?.text = nil
         cell.accessoryType = .none

@@ -32,8 +32,6 @@ class LocalNotificationManager: NSObject {
             
             if let error = error {
                 NSLog("Error requesting local notification authorization: \(error.localizedDescription)")
-                completion(false)
-                return
             }
             
             DispatchQueue.main.async {
