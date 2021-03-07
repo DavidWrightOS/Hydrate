@@ -31,14 +31,14 @@ enum SettingsCellType {
 enum SettingsSection: Int, CaseIterable, CustomStringConvertible {
     case general
     case notifications
-    case appSettings
+    case integrations
     case about
     
     var description: String {
         switch self {
         case .general: return "General"
         case .notifications: return "Notifications"
-        case .appSettings: return "App Settings"
+        case .integrations: return "Integrations"
         case .about: return "About"
         }
     }
@@ -61,7 +61,7 @@ enum SettingsSection: Int, CaseIterable, CustomStringConvertible {
         switch self {
         case .general: return GeneralSettings.allCases
         case .notifications: return HydrateSettings.notificationsEnabled ? NotificationSettingsExpanded.allCases : NotificationSettings.allCases
-        case .appSettings: return AppSettings.allCases
+        case .integrations: return Integrations.allCases
         case .about: return AboutSettings.allCases
         }
     }
@@ -118,33 +118,19 @@ enum NotificationSettings: Int, CaseIterable, SettingOption {
     }
 }
 
-enum AppSettings: Int, CaseIterable, SettingOption {
-    case inAppSounds
-    case hapticFeedback
+enum Integrations: Int, CaseIterable, SettingOption {
     case addToHealthApp
     
     var settingsCellType: SettingsCellType {
-        switch self {
-        case .inAppSounds: return .onOffSwitch(HydrateSettings.inAppSoundsEnabled)
-        case .hapticFeedback: return .onOffSwitch(HydrateSettings.hapticFeedbackEnabled)
-        case .addToHealthApp: return .onOffSwitch(HydrateSettings.appleHealthIntegrationEnabled)
-        }
+        .onOffSwitch(HydrateSettings.appleHealthIntegrationEnabled)
     }
     
     func updateValue(to value: Any) {
-        switch self {
-        case .inAppSounds: HydrateSettings.inAppSoundsEnabled = value as! Bool
-        case .hapticFeedback: HydrateSettings.hapticFeedbackEnabled = value as! Bool
-        case .addToHealthApp: HydrateSettings.appleHealthIntegrationEnabled = value as! Bool
-        }
+        HydrateSettings.appleHealthIntegrationEnabled = value as! Bool
     }
     
     var description: String {
-        switch self {
-        case .inAppSounds: return "In App Sounds"
-        case .hapticFeedback: return "Haptic Feedback"
-        case .addToHealthApp: return "Add to Health App"
-        }
+        "Add to Health App"
     }
 }
 
