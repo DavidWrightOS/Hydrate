@@ -12,6 +12,8 @@ class SettingsViewController: UIViewController {
     
     // MARK: - Properties
     
+    private var settings: [[SettingOption]] = SettingsSection.allCases.map { $0.settingOptions }
+    
     private let notificationManager: LocalNotificationManager
     
     private var isNotificationSectionExpanded: Bool {
@@ -234,6 +236,8 @@ class SettingsViewController: UIViewController {
     }
     
     private func hideNotificationsSectionDetails() {
+        settings[SettingsSection.notifications.rawValue] = NotificationSettings.allCases
+        
         guard isNotificationSectionExpanded else { return }
         
         tableView.beginUpdates()
@@ -283,34 +287,24 @@ extension SettingsViewController: UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        guard let section = SettingsSection(rawValue: indexPath.section),
-              indexPath.row < section.settingOptions.count else { return }
-                
-        switch section {
-        case .general:
-            if let setting = section.settingOptions[indexPath.row] as? GeneralSettings {
-                switch setting {
-                case .targetDailyIntake: presentTargetIntakeSelectionView(for: indexPath)
-                case .unit: presentUnitSelectionView(for: indexPath)
-                }
+        let settingOption = settings[indexPath.section][indexPath.row]
+        
+        if let setting = settingOption as? GeneralSettings {
+            switch setting {
+            case .targetDailyIntake: presentTargetIntakeSelectionView(for: indexPath)
+            case .unit: presentUnitSelectionView(for: indexPath)
             }
-        case .notifications:
-            if let setting = section.settingOptions[indexPath.row] as? NotificationSettingsExpanded {
-                switch setting {
-                case .notificationsPerDay: tableView.cellForRow(at: indexPath)?.becomeFirstResponder()
-                default: break
-                }
+        } else if let setting = settingOption as? NotificationSettingsExpanded {
+            switch setting {
+            case .notificationsPerDay: tableView.cellForRow(at: indexPath)?.becomeFirstResponder()
+            default: break
             }
-        case .about:
-            if let setting = section.settingOptions[indexPath.row] as? AboutSettings {
-                switch setting {
-                case .reportIssue: handleReportIssue()
-                case .rateApp: handleRateApp()
-                case .aboutUs: handleAboutUs()
-                }
+        } else if let setting = settingOption as? AboutSettings {
+            switch setting {
+            case .reportIssue: handleReportIssue()
+            case .rateApp: handleRateApp()
+            case .aboutUs: handleAboutUs()
             }
-        default:
-            break
         }
     }
 }
@@ -319,20 +313,17 @@ extension SettingsViewController: UITableViewDelegate {
 
 extension SettingsViewController: UITableViewDataSource {
     func numberOfSections(in tableView: UITableView) -> Int {
-        SettingsSection.allCases.count
+        settings.count
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        guard let section = SettingsSection(rawValue: section) else { return 0 }
-        return section.settingOptions.count
+        settings[section].count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = dequeueReusableSettingsCell(in: tableView, indexPath: indexPath)
-        guard let section = SettingsSection(rawValue: indexPath.section),
-              indexPath.row < section.settingOptions.count else { return UITableViewCell() }
         
-        cell.setting = section.settingOptions[indexPath.row]
+        cell.setting = settings[indexPath.section][indexPath.row]
         
         return cell
     }
