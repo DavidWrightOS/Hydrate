@@ -16,6 +16,8 @@ class SettingsViewController: UIViewController {
     
     private let notificationManager: LocalNotificationManager
     
+    private var shouldEnableNotificationsIfAuthorized: Bool = false
+    
     /// Returns `True ` if the tableView's Notifications section is currently in the expanded state
     private var isNotificationSectionExpanded: Bool {
         tableView.numberOfRows(inSection: SettingsSection.notifications.rawValue) > NotificationSettings.allCases.count
@@ -77,16 +79,55 @@ class SettingsViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        NotificationCenter.default.addObserver(self,
-                                               selector: #selector(notificationsEnabledSettingChanged),
-                                               name: .notificationsEnabledSettingChanged,
-                                               object: nil)
+        let notificationCenter = NotificationCenter.default
+        
+        notificationCenter.addObserver(self,
+                                       selector: #selector(notificationsEnabledSettingChanged),
+                                       name: .notificationsEnabledSettingChanged,
+                                       object: nil)
+        
+        notificationCenter.addObserver(self,
+                                       selector: #selector(healthIntegrationSettingChanged),
+                                       name: .healthIntegrationSettingChanged,
+                                       object: nil)
+        
+        notificationCenter.addObserver(self,
+                                       selector: #selector(appWillEnterForeground),
+                                       name: UIApplication.willEnterForegroundNotification,
+                                       object: nil)
         
         view.backgroundColor = .ravenClawBlue
         configureNavigationBar()
         configureTableView()
     }
-
+    
+    @objc private func appWillEnterForeground() {
+        if shouldEnableNotificationsIfAuthorized {
+            shouldEnableNotificationsIfAuthorized = false
+            
+            notificationManager.requestAuthorization() { [weak self] granted in
+                HydrateSettings.notificationsEnabled = granted
+                self?.setNotificationsEnabledSwitchIsOn(granted, animated: false)
+            }
+        } else {
+            checkNotificationsAuthorizationAndUpdateUI()
+        }
+    }
+    
+    private func checkNotificationsAuthorizationAndUpdateUI() {
+        if HydrateSettings.notificationsEnabled {
+            notificationManager.requestAuthorization() { [weak self] granted in
+                if granted {
+                    self?.showNotificationsSectionDetails()
+                } else {
+                    self?.presentNotificationPermissionsAlert()
+                }
+            }
+        } else {
+            hideNotificationsSectionDetails()
+        }
+    }
+    
     // MARK: - Helpers
     
     private func configureNavigationBar() {
@@ -211,18 +252,7 @@ class SettingsViewController: UIViewController {
     }
     
     @objc func notificationsEnabledSettingChanged() {
-        if HydrateSettings.notificationsEnabled {
-            
-            notificationManager.requestAuthorization() { [weak self] granted in
-                if granted {
-                    self?.showNotificationsSectionDetails()
-                } else {
-                    self?.presentNotificationPermissionsAlert()
-                }
-            }
-        } else {
-            hideNotificationsSectionDetails()
-        }
+        checkNotificationsAuthorizationAndUpdateUI()
     }
     
     private func showNotificationsSectionDetails() {
@@ -353,25 +383,13 @@ extension SettingsViewController {
         let alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
         
         let settingsAction = UIAlertAction(title: "Settings", style: .default, handler: { [weak self] _ in
-            UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!) { _ in
-                let sectionIndex = SettingsSection.notifications.rawValue
-                let rowIndex = NotificationSettings.reminderNotifications.rawValue
-                let indexPath = IndexPath(row: rowIndex, section: sectionIndex)
-                
-                if let cell = self?.tableView.cellForRow(at: indexPath) as? SettingsCell {
-                    cell.switchControl.isOn = false
-                }
-            }
+            self?.shouldEnableNotificationsIfAuthorized = true
+            UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!)
         })
         
         let cancelAction = UIAlertAction(title: "Cancel", style: .default) { [weak self] _ in
-            let sectionIndex = SettingsSection.notifications.rawValue
-            let rowIndex = NotificationSettings.reminderNotifications.rawValue
-            let indexPath = IndexPath(row: rowIndex, section: sectionIndex)
-            
-            if let cell = self?.tableView.cellForRow(at: indexPath) as? SettingsCell {
-                cell.switchControl.isOn = false
-            }
+            self?.setNotificationsEnabledSwitchIsOn(false)
+            HydrateSettings.notificationsEnabled = false
         }
         
         alertController.addAction(cancelAction)
@@ -386,5 +404,15 @@ extension SettingsViewController {
         subview.backgroundColor = .ravenClawBlue
         
         present(alertController, animated: true, completion: nil)
+    }
+    
+    private func setNotificationsEnabledSwitchIsOn(_ on: Bool, animated: Bool = true) {
+        let sectionIndex = SettingsSection.notifications.rawValue
+        let rowIndex = NotificationSettings.reminderNotifications.rawValue
+        let indexPath = IndexPath(row: rowIndex, section: sectionIndex)
+        
+        if let cell = tableView.cellForRow(at: indexPath) as? SettingsCell {
+            cell.switchControl.setOn(on, animated: animated)
+        }
     }
 }
