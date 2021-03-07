@@ -389,6 +389,7 @@ extension SettingsViewController {
         
         let cancelAction = UIAlertAction(title: "Cancel", style: .default) { [weak self] _ in
             self?.setNotificationsEnabledSwitchIsOn(false)
+            self?.hideNotificationsSectionDetails()
             HydrateSettings.notificationsEnabled = false
         }
         
