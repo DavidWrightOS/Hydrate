@@ -66,7 +66,7 @@ class HydrateSettings: NSObject, SettingsConfigurable {
         set {
             let newTarget = newValue / unit.conversionFactor
             guard newTarget != targetDailyIntake else { return }
-            HydrateSettings.updateDefaults(for: #keyPath(targetDailyIntake), value: newValue)
+            HydrateSettings.updateDefaults(for: #keyPath(targetDailyIntake), value: newTarget)
         }
     }
     
