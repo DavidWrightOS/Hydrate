@@ -206,9 +206,7 @@ class MainViewController: UIViewController {
     private func presentUndoAlert() {
         guard dailyLogController.lastIntakeEntryAddedToday != nil else { return }
         
-        if HydrateSettings.hapticFeedbackEnabled {
-            UINotificationFeedbackGenerator().notificationOccurred(.warning)
-        }
+        UINotificationFeedbackGenerator().notificationOccurred(.warning)
         
         presentAlert(title: "Undo Last Intake",
                      message: nil,
@@ -501,9 +499,7 @@ class MainViewController: UIViewController {
             self.addWaterIntakeButton.transform = .identity
         }
         
-        if HydrateSettings.hapticFeedbackEnabled {
-            UIImpactFeedbackGenerator(style: .medium).impactOccurred()
-        }
+        UIImpactFeedbackGenerator(style: .medium).impactOccurred()
         
         if isShowingIntakeButtons {
             hideIntakeButtons(staggerAnimationsBy: 0.05)

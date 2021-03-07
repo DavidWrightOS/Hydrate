@@ -50,8 +50,6 @@ extension SettingsTracking {
     static var wakeUpTime: Int { get set } // minutes from 12:00 AM
     static var bedTime: Int { get set } // minutes from 12:00 AM
     static var notificationsPerDay: Int { get set }
-    static var inAppSoundsEnabled: Bool { get set }
-    static var hapticFeedbackEnabled: Bool { get set }
     static var appleHealthIntegrationEnabled: Bool { get set }
 }
 
@@ -118,27 +116,11 @@ class HydrateSettings: NSObject, SettingsConfigurable {
         }
     }
     
-    static var inAppSoundsEnabled: Bool {
-        get { HydrateSettings.value(for: #keyPath(inAppSoundsEnabled)) ?? false }
-        set {
-            guard newValue != inAppSoundsEnabled else { return }
-            HydrateSettings.updateDefaults(for: #keyPath(inAppSoundsEnabled), value: newValue)
-        }
-    }
-    
     static var appleHealthIntegrationEnabled: Bool {
         get { HydrateSettings.value(for: #keyPath(appleHealthIntegrationEnabled)) ?? false }
         set {
             guard newValue != appleHealthIntegrationEnabled else { return }
             HydrateSettings.updateDefaults(for: #keyPath(appleHealthIntegrationEnabled), value: newValue)
-        }
-    }
-    
-    static var hapticFeedbackEnabled: Bool {
-        get { HydrateSettings.value(for: #keyPath(hapticFeedbackEnabled)) ?? false }
-        set {
-            guard newValue != hapticFeedbackEnabled else { return }
-            HydrateSettings.updateDefaults(for: #keyPath(hapticFeedbackEnabled), value: newValue)
         }
     }
     
