@@ -244,7 +244,7 @@ extension DataViewController: ChartViewDataSource {
 
 extension DataViewController: ChartViewDelegate {
     var chartTitle: String? {
-        "Daily Totals"
+        "Last Seven Days"
     }
     
     var chartSubtitle: String? {
