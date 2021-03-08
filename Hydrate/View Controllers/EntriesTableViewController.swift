@@ -136,9 +136,10 @@ class EntriesTableViewController: UITableViewController {
         return cell
     }
     
+    // MARK: - Table view delegate
+    
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
-            
             let intakeEntry = fetchedResultsController.object(at: indexPath)
             dailyLogController.delete(intakeEntry)
         }
@@ -150,10 +151,20 @@ class EntriesTableViewController: UITableViewController {
         self.navigationItem.setLeftBarButton(leftBarButtonItem, animated: true)
     }
     
+    override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        unit.abbreviationFull
+    }
+    
+    override func tableView(_ tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
+        if let header = view as? UITableViewHeaderFooterView {
+            header.textLabel?.textColor = UIColor.undeadWhite.withAlphaComponent(0.5)
+        }
+    }
+    
     func configure(cell: UITableViewCell, for indexPath: IndexPath) {
         let intakeEntry = fetchedResultsController.object(at: indexPath)
         let intakeAmount = intakeEntry.amount * unit.conversionFactor
-        cell.textLabel?.text = "\(intakeAmount.roundedString) \(unit.abbreviation)"
+        cell.textLabel?.text = "\(intakeAmount.roundedString)"
         
         if let timestamp = intakeEntry.timestamp {
             cell.detailTextLabel?.text = timeFormatter.string(from: timestamp)
