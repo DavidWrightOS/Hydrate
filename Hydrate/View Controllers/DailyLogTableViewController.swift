@@ -65,7 +65,7 @@ class DailyLogTableViewController: UITableViewController {
         cell.tintColor = .sicklySmurfBlue
         cell.textLabel?.textColor = .undeadWhite
         cell.detailTextLabel?.textColor = UIColor.undeadWhite.withAlphaComponent(0.65)
-        cell.addDisclosureIndicator(color: .actionColor)
+        cell.addDisclosureIndicator()
         cell.selectionStyle = .none
         return cell
     }
@@ -196,13 +196,13 @@ class DailyLogTableViewController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
         if let header = view as? UITableViewHeaderFooterView {
-            header.textLabel?.textColor = .undeadWhite50
+            header.textLabel?.textColor = UIColor.undeadWhite.withAlphaComponent(0.5)
         }
     }
 }
 
 extension UITableViewCell {
-    func addDisclosureIndicator(color: UIColor) {
+    func addDisclosureIndicator(color: UIColor = UIColor.undeadWhite.withAlphaComponent(0.35)) {
         let chevronConfig = UIImage.SymbolConfiguration(pointSize: 14, weight: .semibold)
         let chevronImg = UIImage(systemName: "chevron.right", withConfiguration: chevronConfig)?
             .withTintColor(color, renderingMode: .alwaysTemplate)

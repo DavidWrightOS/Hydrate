@@ -185,17 +185,17 @@ extension SettingsCell {
             stepperControl.value = stepperValue
         case .notificationsPerDayPicker(let notificationsPerDay):
             selectionStyle = .default
-            addDisclosureIndicator(color: .actionColor)
+            addDisclosureIndicator()
             detailTextLabel?.text = String(notificationsPerDay)
         case .timePicker(let date):
             timePicker.isHidden = false
             timePicker.date = date
         case .detailLabel(let detailString):
             selectionStyle = .default
-            addDisclosureIndicator(color: .actionColor)
+            addDisclosureIndicator()
             detailTextLabel?.text = detailString
         default:
-            addDisclosureIndicator(color: .actionColor)
+            addDisclosureIndicator()
         }
     }
 }
