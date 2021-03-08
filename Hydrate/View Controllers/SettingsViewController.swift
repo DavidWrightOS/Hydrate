@@ -279,44 +279,25 @@ class SettingsViewController: UIViewController {
 // MARK: - UITableViewDelegate
 
 extension SettingsViewController: UITableViewDelegate {
-    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        let view = UIView()
-        view.backgroundColor = .ravenClawBlue
-        
-        let label = UILabel()
-        label.font = UIFont.systemFont(ofSize: 12)
-        label.textColor = UIColor.undeadWhite.withAlphaComponent(0.5)
-        
-        if let text = SettingsSection(rawValue: section)?.headerText {
-            label.text = text.uppercased()
-        }
-        
-        view.addSubview(label)
-        label.translatesAutoresizingMaskIntoConstraints = false
-        label.centerYAnchor.constraint(equalTo: view.centerYAnchor).isActive = true
-        label.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 16).isActive = true
-        
-        return view
+    
+    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        SettingsSection(rawValue: section)?.headerText
     }
     
-    func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
-        let view = UIView()
-        view.backgroundColor = .ravenClawBlue
-        
-        let label = UILabel()
-        label.font = UIFont.systemFont(ofSize: 12)
-        label.numberOfLines = 0
-        label.textColor = UIColor.undeadWhite.withAlphaComponent(0.5)
-        label.text = SettingsSection(rawValue: section)?.footerText
-        
-        view.addSubview(label)
-        label.anchor(top: view.topAnchor,
-                     leading: view.leadingAnchor,
-                     bottom: view.bottomAnchor,
-                     trailing: view.trailingAnchor,
-                     padding: UIEdgeInsets(top: 4, left: 16, bottom: 16, right: 16))
-        
-        return view
+    func tableView(_ tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
+        if let header = view as? UITableViewHeaderFooterView {
+            header.textLabel?.textColor = UIColor.undeadWhite.withAlphaComponent(0.5)
+        }
+    }
+    
+    func tableView(_ tableView: UITableView, titleForFooterInSection section: Int) -> String? {
+        SettingsSection(rawValue: section)?.footerText
+    }
+    
+    func tableView(_ tableView: UITableView, willDisplayFooterView view: UIView, forSection section: Int) {
+        if let footer = view as? UITableViewHeaderFooterView {
+            footer.textLabel?.textColor = UIColor.undeadWhite.withAlphaComponent(0.5)
+        }
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
