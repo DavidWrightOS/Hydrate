@@ -173,7 +173,7 @@ class DailyLogTableViewController: UITableViewController {
     private func configure(cell: UITableViewCell, for indexPath: IndexPath) {
         let dailyLog = fetchedResultsController.object(at: indexPath)
         let totalIntake = dailyLog.totalIntake * unit.conversionFactor
-        cell.textLabel?.text = "\(totalIntake.roundedString) \(unit.abbreviation)"
+        cell.textLabel?.text = "\(totalIntake.roundedString)"
         cell.detailTextLabel?.text = dateFormatter.string(from: dailyLog.date!)
     }
     
@@ -188,6 +188,16 @@ class DailyLogTableViewController: UITableViewController {
         let entryTableVC = EntriesTableViewController(for: dailyLog)
         entryTableVC.delegate = self
         navigationController?.pushViewController(entryTableVC, animated: true)
+    }
+    
+    override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        unit.abbreviationFull
+    }
+    
+    override func tableView(_ tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
+        if let header = view as? UITableViewHeaderFooterView {
+            header.textLabel?.textColor = .undeadWhite50
+        }
     }
 }
 
