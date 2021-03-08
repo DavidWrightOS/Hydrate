@@ -8,12 +8,6 @@
 
 import Foundation
 
-extension Notification.Name {
-    static let settingsChanged = Notification.Name("SettingsChanged")
-    static let notificationsEnabledSettingChanged = Notification.Name("notificationsEnabledSettingChanged")
-    static let notificationSettingsChanged = Notification.Name("NotificationSettingsChanged")
-}
-
 @objc protocol SettingsTracking {
     @objc func settingsDataChanged()
     @objc func notificationSettingsDataChanged()
@@ -43,106 +37,117 @@ extension SettingsTracking {
     }
 }
 
-@objc protocol SettingsConfigurable {
-    static var targetDailyIntake: Double { get set }
-    static var unitRawValue: Int { get set }
-    static var notificationsEnabled: Bool { get set }
-    static var wakeUpTime: Int { get set } // minutes from 12:00 AM
-    static var bedTime: Int { get set } // minutes from 12:00 AM
-    static var notificationsPerDay: Int { get set }
-    static var appleHealthIntegrationEnabled: Bool { get set }
+extension UserDefaults {
+    enum Key: String {
+        case targetDailyIntake
+        case unitRawValue
+        case notificationsEnabled
+        case wakeUpTime
+        case bedTime
+        case notificationsPerDay
+        case appleHealthIntegrationEnabled
+    }
 }
 
-class HydrateSettings: NSObject, SettingsConfigurable {
+class HydrateSettings {
     
     static var targetDailyIntake: Double {
         get {
-            let targetInMilliliters = HydrateSettings.value(for: #keyPath(targetDailyIntake)) ?? 2366.0
+            let targetInMilliliters = HydrateSettings.value(for: .targetDailyIntake) ?? 2366.0
             let targetInCurrentUnit = targetInMilliliters * unit.conversionFactor
             return targetInCurrentUnit
         }
         set {
             let newTarget = newValue / unit.conversionFactor
             guard newTarget != targetDailyIntake else { return }
-            HydrateSettings.updateDefaults(for: #keyPath(targetDailyIntake), value: newTarget)
-        }
-    }
-    
-    static var unitRawValue: Int {
-        get { HydrateSettings.value(for: #keyPath(unitRawValue)) ?? 1 }
-        set {
-            guard newValue != unitRawValue else { return }
-            HydrateSettings.updateDefaults(for: #keyPath(unitRawValue), value: newValue)
+            HydrateSettings.updateDefaults(for: .targetDailyIntake, value: newTarget)
         }
     }
     
     static var unit: Unit {
-        get { Unit(rawValue: HydrateSettings.unitRawValue)! }
+        get {
+            let unitRawValue = HydrateSettings.value(for: .unitRawValue) ?? 1
+            return Unit(rawValue: unitRawValue)! }
         set {
             guard newValue != unit else { return }
-            unitRawValue = newValue.rawValue
+            HydrateSettings.updateDefaults(for: .unitRawValue, value: newValue.rawValue)
         }
     }
     
     static var notificationsEnabled: Bool {
-        get { HydrateSettings.value(for: #keyPath(notificationsEnabled)) ?? false }
+        get { HydrateSettings.value(for: .notificationsEnabled) ?? false }
         set {
             guard newValue != notificationsEnabled else { return }
-            HydrateSettings.updateDefaults(for: #keyPath(notificationsEnabled), value: newValue)
+            HydrateSettings.updateDefaults(for: .notificationsEnabled, value: newValue)
         }
     }
     
+    /// time of day measured in minutes from 12:00 AM
     static var wakeUpTime: Int {
-        get { HydrateSettings.value(for: #keyPath(wakeUpTime)) ?? 540 } // default is 540 minutes (9:00 AM)
+        get { HydrateSettings.value(for: .wakeUpTime) ?? 540 } // default is 540 minutes (9:00 AM)
         set {
             guard newValue != wakeUpTime else { return }
-            HydrateSettings.updateDefaults(for: #keyPath(wakeUpTime), value: newValue)
+            HydrateSettings.updateDefaults(for: .wakeUpTime, value: newValue)
         }
     }
     
+    /// time of day measured in minutes from 12:00 AM
     static var bedTime: Int {
-        get { HydrateSettings.value(for: #keyPath(bedTime)) ?? 1320 } // default is 1320 minutes (10:00 PM)
+        get { HydrateSettings.value(for: .bedTime) ?? 1320 } // default is 1320 minutes (10:00 PM)
         set {
             guard newValue != bedTime else { return }
-            HydrateSettings.updateDefaults(for: #keyPath(bedTime), value: newValue)
+            HydrateSettings.updateDefaults(for: .bedTime, value: newValue)
         }
     }
     
     static var notificationsPerDay: Int {
-        get { HydrateSettings.value(for: #keyPath(notificationsPerDay)) ?? 8 }
+        get { HydrateSettings.value(for: .notificationsPerDay) ?? 8 }
         set {
             guard newValue != notificationsPerDay else { return }
-            HydrateSettings.updateDefaults(for: #keyPath(notificationsPerDay), value: newValue)
+            HydrateSettings.updateDefaults(for: .notificationsPerDay, value: newValue)
         }
     }
     
     static var appleHealthIntegrationEnabled: Bool {
-        get { HydrateSettings.value(for: #keyPath(appleHealthIntegrationEnabled)) ?? false }
+        get { HydrateSettings.value(for: .appleHealthIntegrationEnabled) ?? false }
         set {
             guard newValue != appleHealthIntegrationEnabled else { return }
-            HydrateSettings.updateDefaults(for: #keyPath(appleHealthIntegrationEnabled), value: newValue)
+            HydrateSettings.updateDefaults(for: .appleHealthIntegrationEnabled, value: newValue)
         }
     }
     
     // MARK: - Private Methods
     
-    private static func updateDefaults(for key: String, value: Any) {
-        UserDefaults.standard.set(value, forKey: key)
-        
+    private static func updateDefaults(for key: UserDefaults.Key, value: Any) {
+        UserDefaults.standard.set(value, forKey: key.rawValue)
+        sendNotification(for: key)
+    }
+    
+    private static func value<T>(for key: UserDefaults.Key) -> T? {
+        UserDefaults.standard.value(forKey: key.rawValue) as? T
+    }
+}
+
+
+// MARK: - Notifications
+
+extension Notification.Name {
+    static let settingsChanged = Notification.Name("SettingsChanged")
+    static let notificationsEnabledSettingChanged = Notification.Name("notificationsEnabledSettingChanged")
+    static let notificationSettingsChanged = Notification.Name("NotificationSettingsChanged")
+}
+
+extension HydrateSettings {
+    
+    private static func sendNotification(for key: UserDefaults.Key) {
         switch key {
-        case #keyPath(notificationsEnabled):
+        case .notificationsEnabled:
             sendNotificationsEnabledSettingChangedNotification()
-        case #keyPath(notificationsPerDay),
-             #keyPath(wakeUpTime),
-             #keyPath(bedTime):
+        case .notificationsPerDay, .wakeUpTime, .bedTime:
             sendNotificationSettingsChangedNotification()
         default:
             sendSettingsChangedNotification()
         }
-    }
-    
-    private static func value<T>(for key: String) -> T? {
-        UserDefaults.standard.value(forKey: key) as? T
     }
     
     private static func sendSettingsChangedNotification() {
